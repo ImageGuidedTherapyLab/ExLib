@@ -1,0 +1,20 @@
+#cubit -nographics -batch -input reverse.jou
+## /opt/apps/cubit_beta/11.1/bin/clarox
+## Cubit Version 11.1b
+## Cubit Build 299
+## Revised 03/04/2008 15:22:22 MST
+## Running 09/08/2008 03:28:27 PM
+## Command Options:
+## -warning = On
+## -information = On
+reset
+brick x 1 y 1 z 1
+volume 1 size 1
+mesh volume 1
+sideset 3 surface 4
+sideset 2 surface 6
+sideset 4 surface 1 2 3 5
+undo group begin
+set large exodus file off
+export mesh "one_box.e" dimension 3 overwrite
+undo group end
