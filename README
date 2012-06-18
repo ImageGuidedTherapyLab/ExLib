@@ -1,0 +1,206 @@
+
+This readme is intended for the MATLAB Compiler 4.3.
+
+Copyright 1997-2006 The MathWorks, Inc.
+$Revision: 1.4.6.6 $  $Date: 2009/05/18 19:50:07 $
+
+                               README
+
+The files in this directory fall into two categories:
+
+   * Example source code files; some are written as M-files and 
+     some are written in the C language. 
+   * Files to help you build and configure the source code files into 
+     stand-alone external applications.
+
+The "MATLAB Compiler User's Guide" details most of the files in this
+directory.  
+
+
+                   *******************************
+                      EXAMPLE SOURCE CODE FILES
+                   *******************************
+
+The Makefile (Makefile.nmake) found in this directory can be used to 
+build the examples.  The user needs to modify the MATLABROOT
+environment variable found in the makefiles to indicate the appropriate
+location of the root directory of MATLAB.
+
+You can use the following commands to build and test the examples:
+
+On Windows:
+-----------
+1. To build and test all the examples (except mrankwin) in one step:
+         nmake /f Makefile.nmake MATLABROOT=<matlabroot> bnt_exes 
+2. To only build the examples (all except mrankwin):
+         nmake /f Makefile.nmake MATLABROOT=<matlabroot> build_all
+3. To clean the targets:
+         nmake /f Makefile.nmake clean
+4. To build and test mrankwin:
+	nmake /f Makefile.nmake run_mrankwin
+5. To only build mrankwin:
+	nmake /f Makefile.nmake mrankwin.exe
+
+
+On Unix:
+--------
+1. To build and test all the examples in one step:
+         gmake -f Makefile MATLABROOT=<matlabroot> bnt_exes 
+2. To only build the examples:
+         gmake -f Makefile MATLABROOT=<matlabroot> build_all
+3. To run all the examples built previously:
+         gmake -f Makefile MATLABROOT=<matlabroot> exes
+4. To clean the targets:
+         gmake -f Makefile clean
+
+Note: <matlabroot> is the actual directory (without the trailing "slash"
+(backwards or forwards)) where MATLAB is installed.
+
+To build each example individually, you have to provide the name of the
+final executable as the target to gmake (nmake on Windows). For various
+target names, refer to the Makefile (Makefile.nmake on Windows).
+
+
+The following section explains each example in brief.
+
+hello.m - A Basic Stand-Alone Application
+----------------------------------------
+This example shows how to create a basic non-graphics based stand-alone
+application. The sample M-file needed for this example is hello.m.
+To create the stand-alone application, use:
+
+    mcc -m hello.m
+
+This will create a stand-alone application, hello (hello.exe on Windows).
+See "MATLAB Compiler User's Guide" on how to execute the stand-alone on a 
+target machine.
+
+magicsquare.m - A Stand-Alone Application that Takes an Input from the User
+--------------------------------------------------------------------------
+This example shows how to create and run a stand-alone application that
+takes user input. The sample M-file needed for this example is 
+magicsquare.m. To create the stand-alone application, use:
+
+     mcc -m magicsquare.m
+
+To run this example, execute the following from the shell prompt (DOS prompt
+on Windows):
+
+     magicsquare 4
+
+
+flames.m and flames.mat Graphics Example with a MAT-File
+--------------------------------------------------------
+
+The "MATLAB Compiler User's Guide" describes an example of creating a 
+stand-alone application from a single M-file that uses MATLAB graphics 
+and a MAT file. The sample M-file and the MAT-file are:
+
+  * flames.m, which is a function M-file that uses flames.mat.
+  * flames.mat, which is a MATLAB data file that contains the data for
+    the graphic that is displayed.
+
+main.m and mrank.m: Build Two M-Files Into a Stand-Alone External Application
+-----------------------------------------------------------------------------
+
+The "MATLAB Compiler User's Guide" explains how to build 
+two M-files into a stand-alone external application.  The two sample
+M-files are: 
+
+   * main.m, which is a function M-file that calls mrank.
+   * mrank.m, which is a function M-file that calculates the rank of
+     n magic squares.
+
+See the "MATLAB Compiler User's Guide" for details on building this 
+application.
+
+
+mrank.m, printmatrix.m and mrankp.c: Build an M-File and C file into a Stand-Alone
+----------------------------------------------------------------------------------
+
+The "MATLAB Compiler User's Guide" explains how to build an M-file and 
+C-file into a stand-alone external application. A simple example M-file 
+and C file combination is: 
+
+   * mrankp.c, which is a main C function that calls mrank and prints the
+     results returned by mrank.
+   * mrank.m, which is a function M-file that calculates the rank of
+     n magic squares.
+   * printmatrix.m, which takes in a matrix and prints its value.
+
+See the "MATLAB Compiler User's Guide" for details on building this 
+application.
+
+
+multargp.c, multarg.m, printmatrix.m: Advanced Example
+------------------------------------------------------
+
+The "MATLAB Compiler User's Guide" describes a more complicated example 
+of coding a stand-alone external application.  The sample files in this 
+example are:
+
+   * multargp.c, which is a C function that calls multarg and prints
+     the results returned by multarg.
+   * multarg.m, which is a function M-file that contains two input and 
+     two output arguments.
+   * printmatrix.m, which takes in a matrix and prints its value.
+
+See the "MATLAB Compiler User's Guide" for details on building this 
+application.
+
+
+matrixdriver.c, addmatrix.m, multiplymatrix.m, eigmatrix.m: Advanced Example
+----------------------------------------------------------------------------
+The "MATLAB Compiler User's Guide" describes a more complicated example 
+of creating a C-shared library with MATLAB Compiler and linking it against
+a wrapper code to create an executable.  The sample files in this example 
+are:
+
+   * matrixdriver.c, which is a C function that calls the various M-files 
+     listed above and prints the results.
+   * addmatrix.m, which is a function M-file that takes two matrices and 
+     returns the sum of the two matrices.
+   * multiplymatrix.m, which is a function M-file that takes two matrices and 
+     returns the product of the two matrices.
+   * eigmatrix.m, which is a function M-file that takes a matrix and 
+     returns the eigenvalues of the same.
+
+See the "MATLAB Compiler User's Guide" for details on building this 
+application.
+
+
+triangle.c, main_for_lib.c main_for_lib.h, sierpinski.m: Graphics Shared Library
+--------------------------------------------------------------------------------
+This example shows how to create a graphics-based shared libary using the MATLAB
+Compiler. The files needed to compile and run this example are listed above.
+Use the following command should be used to create a C shared library and 
+link the same against the external C code.
+
+    mcc -l -o libtriangle sierpinski.m
+    mbuild triangle.c main_for_lib.c -L. -ltriangle (on UNIX)
+    mbuild triangle.c main_for_lib.c libtriangle.lib (on Windows)
+
+You can also create a C++ shared library from the same M-code and then use it 
+with C++ wrapper code. Use the following command:
+
+    mcc -W cpplib:libtrianglep sierpinski.m
+    mbuild triangle.cpp main_for_lib.c -L. -ltrianglep -output trianglep
+    mbuild triangle.cpp main_for_lib.c libtrianglep.lib -output trianglep
+
+This will create a stand-alone called trianglep (trianglep.exe on Windows).
+
+Data_Handling/ex_loadsave.m: Data Handling example
+-------------------------------------------------------------------------------
+This example shows the "load/save" function on data files in deployed mode.
+There are three source data files:
+    user_data.mat 
+    userdata/extra_data.mat 
+    ../externdata/extern_data.mat
+
+Compile this example with mcc command: 
+    mcc -mvC ex_loadsave.m -a 'user_data.mat' -a
+    './userdata/extra_data.mat' -a '../externdata/extern_data.mat'
+
+This creates a stand-alone called ex_loadsave (ex_loadsave.exe on Windows).
+When you execute this application, it loads three data files and saves the 
+result to "./output/saved_data.mat" file.
