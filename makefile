@@ -86,7 +86,7 @@ mrank:  main.m mrank.m
 	@rm -f *.o*
 
 driver:  driver.m 
-	$(MCC) -m $^ -o $@
+	$(MCC) -m -R -nojvm -R -nodisplay -v $^ -o $@
 	#@rm -f *.o*
 
 flames:  flames.m flames.mat
