@@ -1,0 +1,8 @@
+
+To compile the driver executable type:
+
+   make MATLABROOT=/opt/matlab2009b  driver
+
+Where the MATLABROOT directory may be different on your machine
+
+
