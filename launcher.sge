@@ -17,7 +17,7 @@
 #$ -j y #combine stderr and stdout
 # total # of jobs  = nprocs / 12 * nway
 #$ -pe 12way 12 
-#$ -q normal
+#$ -q development
 #$ -o Parametric.o$JOB_ID
 #$ -l h_rt=00:25:00
 #$ -V
@@ -36,8 +36,9 @@
 #	   NOTE: The env variable $JOB_ID contains the job id. 
 #
 module load launcher
-setenv EXECUTABLE     $TACC_LAUNCHER_DIR/launcher      
-setenv CONTROL_FILE   ./paramlist
+setenv EXECUTABLE     $TACC_LAUNCHER_DIR/init_launcher
+setenv CONTROL_FILE   paramlist
+setenv WORKDIR        .
 # 
 # Variable description:
 #
@@ -89,8 +90,12 @@ endif
 echo $PE_HOSTFILE |xargs cat
 # echo directory stripe info
 # http://en.wikipedia.org/wiki/Data_striping 
-lfs getstripe $WORKDIR/realization
+lfs getstripe $WORKDIR
 cd $WORKDIR/
 echo " WORKING DIR:   $WORKDIR/"
 
 $TACC_LAUNCHER_DIR/paramrun $EXECUTABLE $CONTROL_FILE
+
+echo " "
+echo " Parameteric Job Complete"
+echo " "

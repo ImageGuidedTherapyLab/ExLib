@@ -1,8 +1,33 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Step 1: Compile .m files into executable
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-To compile the driver executable type:
-
-   make MATLABROOT=/opt/matlab2009b  driver
-
-Where the MATLABROOT directory may be different on your machine
-
-
+      To compile the driver executable type:
+      
+         make MATLABROOT=/opt/matlab2009b  driver
+      
+      Where the MATLABROOT directory may be different on your machine
+      
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Step 2: Setup Runtime environment to run executable
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+      
+      matlab runtime environment needs to be set
+      
+      whatis("loads the Matlab r2009b ")
+      prepend_path("PATH", "/work/00131/fuentes/LIBRARIES/MATLAB/R2009b//bin")
+      prepend_path("LD_LIBRARY_PATH", "/work/00131/fuentes/LIBRARIES/MATLAB/R2009b//runtime/glnxa64")
+      prepend_path("LD_LIBRARY_PATH", "/work/00131/fuentes/LIBRARIES/MATLAB/R2009b//bin/glnxa64")
+      prepend_path("LD_LIBRARY_PATH", "/work/00131/fuentes/LIBRARIES/MATLAB/R2009b//sys/java/jre/glnxa64/jre/lib/amd64/server")
+      help([[ This module loads Matlab r2009b
+      
+      ]])
+      
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Step 3: Run Executable
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+      
+      Driver routine expecting two arguments for file and parameters. 
+      To run type:
+      
+         ./driver DataFile ParameterFile
