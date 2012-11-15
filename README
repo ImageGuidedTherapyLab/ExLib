@@ -1,0 +1,19 @@
+
+initial petsc ex47cu.cu example build with:
+
+SCRGP2$ module show petsc/3.3/gcc-4.4.3-mpich2-1.2-epd-sm_10-dbg 
+-------------------------------------------------------------------
+/usr/local/Modules/3.2.8/modulefiles/petsc/3.3/gcc-4.4.3-mpich2-1.2-epd-sm_10-dbg:
+
+module-whatis            download petsc with
+module-whatis            wget http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-3.3-p4.tar.gz
+module-whatis            petsc configured with
+module-whatis            config/configure.py --with-precision=single --with-clanguage=C++ --with-mpi-dir=/usr --with-shared-libraries --CFLAGS='-O0' --CXXFLAGS='-O0' --CUDAFLAGS='-O0' --with-etags=1 --with-mpi4py=0 --with-blas-lapack-lib=[/opt/apps/EPD/epd-7.3-1-rh5-x86_64/lib/libmkl_rt.so,/opt/apps/EPD/epd-7.3-1-rh5-x86_64/lib/libmkl_intel_thread.so,/opt/apps/EPD/epd-7.3-1-rh5-x86_64/lib/libmkl_core.so,/opt/apps/EPD/epd-7.3-1-rh5-x86_64/lib/libiomp5.so] --download-metis --with-cuda=1 --with-cusp=1 --with-thrust=1 --with-cuda-dir=$CUDA_DIR  --with-boost=1 --with-boost-dir=/usr --download-fiat=yes --download-generator --download-scientificpython
+module-whatis            cd $PETSC_DIR/externalpackages/petsc4py-1.2; python setup.py build ; python setup.py install --home=$PETSC_DIR/$PETSC_ARCH
+module           load epd/7.3.1
+module           load cuda/4.2
+setenv           PETSC_ARCH gcc-4.4.3-mpich2-1.2-epd-sm_10-dbg
+setenv           PETSC_DIR /opt/apps/PETSC/petsc-3.3-p4
+prepend-path     PYTHONPATH /opt/apps/PETSC/petsc-3.3-p4/gcc-4.4.3-mpich2-1.2-epd-sm_10-dbg/lib/python
+prepend-path     PYTHONPATH /opt/apps/PETSC/petsc-3.3-p4/gcc-4.4.3-mpich2-1.2-epd-sm_10-dbg/lib/python2.7/site-packages
+-------------------------------------------------------------------
