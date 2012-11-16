@@ -10,6 +10,7 @@ static char help[] = "Solves -Laplacian u - exp(u) = 0,  0 < x < 1 using GPU\n\n
 
 extern PetscErrorCode ComputeFunction(SNES,Vec,Vec,void*), ComputeJacobian(SNES,Vec,Mat*,Mat*,MatStructure*,void*);
 PetscBool  useCUSP = PETSC_FALSE;
+PetscBool  jacobianComputed = PETSC_FALSE;
 PetscLogEvent LogFunction = 0;
 __device__ PetscInt *cudaTest;
 
@@ -228,7 +229,11 @@ int main(int argc,char **argv)
   ierr = SNESSetFunction(snes,f,ComputeFunction,da);CHKERRQ(ierr);
   ierr = SNESSetJacobian(snes,J,J,ComputeJacobian,da);CHKERRQ(ierr);
   ierr = SNESSetFromOptions(snes);CHKERRQ(ierr);
-  ierr = ComputeFunction(snes,x,f,(void *)da);
+  for (PetscInt iii = 0 ; iii < 1 ; iii++)
+    {
+     ierr = PetscPrintf(PETSC_COMM_WORLD, "gpu check %d \n",iii);CHKERRQ(ierr);
+     ierr = ComputeFunction(snes,x,f,(void *)da);
+    }
   ierr = SNESSolve(snes,PETSC_NULL,x);CHKERRQ(ierr);
 
   ierr = MatDestroy(&J);CHKERRQ(ierr);
@@ -363,6 +368,8 @@ PetscErrorCode ComputeJacobian(SNES snes,Vec x,Mat *J,Mat *B,MatStructure *flag,
   DM             da = (DM) ctx; 
   Vec            xlocal;
   PetscErrorCode ierr;
+  if(jacobianComputed) return 0;
+  jacobianComputed = PETSC_TRUE;
 
   ierr = DMGetLocalVector(da,&xlocal);DMGlobalToLocalBegin(da,x,INSERT_VALUES,xlocal);CHKERRQ(ierr);
   ierr = DMGlobalToLocalEnd(da,x,INSERT_VALUES,xlocal);CHKERRQ(ierr);
@@ -416,5 +423,6 @@ PetscErrorCode ComputeJacobian(SNES snes,Vec x,Mat *J,Mat *B,MatStructure *flag,
   ierr = MatAssemblyEnd(*J,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
   *flag = SAME_NONZERO_PATTERN;
   ierr = DMRestoreLocalVector(da,&xlocal);CHKERRQ(ierr);
-  return 0;}
+  return 0;
+}
 
