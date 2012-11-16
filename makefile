@@ -21,12 +21,13 @@ EXAMPLESFH       = ex5f.h
 EXAMPLESMATLAB   = ex5m.m  ex61genm.m ex61m.m
 DIRS		 = ex10d
 
+all: FocusUltraSoundModel
 include ${PETSC_DIR}/conf/variables
 include ${PETSC_DIR}/conf/rules
 
-ex47cu: ex47cu.o  chkopts
-	-${CLINKER} -o ex47cu ex47cu.o ${PETSC_SNES_LIB}
-	${RM} ex47cu.o
+FocusUltraSoundModel: FocusUltraSoundModel.o  chkopts
+	-${CLINKER} -o FocusUltraSoundModel FocusUltraSoundModel.o ${PETSC_SNES_LIB}
+	${RM} FocusUltraSoundModel.o
 
 ex1: ex1.o  chkopts
 	-${CLINKER} -o ex1 ex1.o ${PETSC_SNES_LIB}
