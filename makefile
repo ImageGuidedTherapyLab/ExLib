@@ -29,6 +29,9 @@ FocusUltraSoundModel: FocusUltraSoundModel.o  chkopts
 	-${CLINKER} -o FocusUltraSoundModel FocusUltraSoundModel.o ${PETSC_SNES_LIB}
 	${RM} FocusUltraSoundModel.o
 
+tags:
+	ctags -f petsc_tags -R --langmap=c++:+.inl --langmap=c:+.cu --langmap=python:+.pxi --langmap=c++:+.txx --languages=c,c++,python,fortran $(PETSC_DIR) .
+
 ex1: ex1.o  chkopts
 	-${CLINKER} -o ex1 ex1.o ${PETSC_SNES_LIB}
 	${RM} ex1.o
