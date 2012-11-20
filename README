@@ -1,4 +1,25 @@
 
+PYCLEWN debug: 
+
+(1) start inferior_tty
+(2) attach pyclewn to  inferior_tty
+
+SCRGP2$ inferior_tty.py
+'inferior_tty' two characters sequence commands:
+    'C-a q' exit immediately
+    'C-a c' close the slave pseudo terminal and exit after the gdb inferior has
+            terminated
+    'C-a a' send a 'C-a' character
+
+/dev/pts/15 pseudo terminal has been created.
+Set the tty for the program being debugged with the gdb commands:
+set inferior-tty /dev/pts/1
+set environment TERM = screen
+
+SCRGP2$ pyclewn --tty=/dev/pts/1 -a '--args ./FocusUltraSoundModel -snes_monitor -da_vec_type cusp -snes_converged_reason -ksp_monitor -log_summary -pc_type jacobi -dm_mat_type seqaijcusp'
+
+
+
 initial petsc ex47cu.cu example build with:
 
 SCRGP2$ module show petsc/3.3/gcc-4.4.3-mpich2-1.2-epd-sm_10-dbg 

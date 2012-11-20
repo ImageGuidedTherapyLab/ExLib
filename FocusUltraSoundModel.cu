@@ -14,6 +14,20 @@ PetscBool  jacobianComputed = PETSC_FALSE;
 PetscLogEvent LogFunction = 0;
 __device__ PetscInt *cudaTest;
 
+// https://groups.google.com/forum/?fromgroups=#!topic/thrust-users/mqYDi2X7xmA
+//
+// An object's data members exist wherever the compiler decides to place
+// them, given some constraints.  For functors used with Thrust, data
+// members get copied around to different memory spaces.  A functor (and
+// its data) begin on the host, probably implemented by the compiler in
+// CPU registers.  A Thrust algorithm will receive a copy of the user's
+// functor and eventually package it up in something passed as a
+// __global__ function argument.  Depending on various particulars of the
+// compiler, GPU, and size, __global__ function arguments may be
+// implemented in either __shared__ memory, __constant__ memory, or
+// global device memory.  When a __global__ function executes, its
+// parameters (including any copies of user functors) typically get
+// copied into GPU registers.  Does that make sense?
 struct StarStencil
 {
   PetscInt       m_rank,m_deviceNum; //device info
