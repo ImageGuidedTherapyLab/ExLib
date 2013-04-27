@@ -1,0 +1,21 @@
+
+#
+# Copyright 2009 Children's Hospital Boston
+#
+# crlViz environment variable settings, for Mac OS X and linux.
+# http://www.crl.med.harvard.edu
+#
+# source this file from ~/.bashrc or ~/.profile:
+# source /path/to/location/crkit-env.sh
+#
+
+# BASH_SOURCE tells us where this file is located.
+# Modify to hold explicit path for use with other shells.
+BUNDLE="`dirname "$BASH_SOURCE" `"/..
+
+export PATH=$BUNDLE/MacOS:$BUNDLE/bin:$PATH
+
+export LD_LIBRARY_PATH=$BUNDLE/Frameworks/InsightToolkit:$BUNDLE/Frameworks/@VTK_COMPONENT_NAME@:$BUNDLE/Frameworks/@QT_COMPONENT_NAME@/lib:$BUNDLE/lib:$BUNDLE/bin:$LD_LIBRARY_PATH
+
+export DYLD_LIBRARY_PATH=$BUNDLE/Frameworks/InsightToolkit:$BUNDLE/Frameworks/@VTK_COMPONENT_NAME@:$BUNDLE/Frameworks/@QT_COMPONENT_NAME@/lib:$BUNDLE/lib:$BUNDLE/bin:$DYLD_LIBRARY_PATH
+

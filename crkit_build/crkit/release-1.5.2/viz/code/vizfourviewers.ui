@@ -1,0 +1,743 @@
+<ui version="4.0" >
+ <class>VizFourViewers</class>
+ <widget class="QMainWindow" name="VizFourViewers" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>540</width>
+    <height>741</height>
+   </rect>
+  </property>
+  <property name="acceptDrops" >
+   <bool>true</bool>
+  </property>
+  <property name="windowTitle" >
+   <string>crlViz Viewer</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <layout class="QVBoxLayout" >
+    <property name="spacing" >
+     <number>6</number>
+    </property>
+    <property name="margin" >
+     <number>9</number>
+    </property>
+    <item>
+     <widget class="QFrame" name="viewFrame" >
+      <property name="sizePolicy" >
+       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+        <horstretch>0</horstretch>
+        <verstretch>9</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize" >
+       <size>
+        <width>512</width>
+        <height>600</height>
+       </size>
+      </property>
+      <property name="maximumSize" >
+       <size>
+        <width>1024</width>
+        <height>1024</height>
+       </size>
+      </property>
+      <property name="acceptDrops" >
+       <bool>true</bool>
+      </property>
+      <property name="frameShape" >
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow" >
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="lineWidth" >
+       <number>1</number>
+      </property>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>3</number>
+       </property>
+       <property name="spacing" >
+        <number>3</number>
+       </property>
+       <item row="0" column="0" >
+        <widget class="QVTKWidget" native="1" name="qvtkWidget1" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+           <horstretch>0</horstretch>
+           <verstretch>9</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize" >
+          <size>
+           <width>256</width>
+           <height>256</height>
+          </size>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>1024</width>
+           <height>1024</height>
+          </size>
+         </property>
+         <property name="baseSize" >
+          <size>
+           <width>256</width>
+           <height>256</height>
+          </size>
+         </property>
+         <property name="acceptDrops" >
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QVTKWidget" native="1" name="qvtkWidget2" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+           <horstretch>0</horstretch>
+           <verstretch>9</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize" >
+          <size>
+           <width>256</width>
+           <height>256</height>
+          </size>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>1024</width>
+           <height>1024</height>
+          </size>
+         </property>
+         <property name="baseSize" >
+          <size>
+           <width>256</width>
+           <height>256</height>
+          </size>
+         </property>
+         <property name="acceptDrops" >
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QFrame" name="frame_210" >
+         <property name="maximumSize" >
+          <size>
+           <width>16777215</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="frameShape" >
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow" >
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" >
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <property name="margin" >
+           <number>3</number>
+          </property>
+          <item>
+           <widget class="QScrollBar" name="sliceScrollBar1" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <horstretch>90</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="sliceSpinBox1" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <horstretch>10</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QFrame" name="frame_211" >
+         <property name="maximumSize" >
+          <size>
+           <width>16777215</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="frameShape" >
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow" >
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" >
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <property name="margin" >
+           <number>3</number>
+          </property>
+          <item>
+           <widget class="QScrollBar" name="sliceScrollBar2" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <horstretch>90</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="sliceSpinBox2" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <horstretch>10</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0" >
+        <widget class="QVTKWidget" native="1" name="qvtkWidget3" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+           <horstretch>0</horstretch>
+           <verstretch>9</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize" >
+          <size>
+           <width>256</width>
+           <height>256</height>
+          </size>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>1024</width>
+           <height>1024</height>
+          </size>
+         </property>
+         <property name="baseSize" >
+          <size>
+           <width>256</width>
+           <height>256</height>
+          </size>
+         </property>
+         <property name="acceptDrops" >
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" >
+        <widget class="QVTKWidget" native="1" name="qvtkWidget4" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+           <horstretch>0</horstretch>
+           <verstretch>9</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize" >
+          <size>
+           <width>256</width>
+           <height>256</height>
+          </size>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>1024</width>
+           <height>1024</height>
+          </size>
+         </property>
+         <property name="baseSize" >
+          <size>
+           <width>256</width>
+           <height>256</height>
+          </size>
+         </property>
+         <property name="acceptDrops" >
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" >
+        <widget class="QFrame" name="frame_230" >
+         <property name="maximumSize" >
+          <size>
+           <width>16777215</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="frameShape" >
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow" >
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" >
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <property name="margin" >
+           <number>3</number>
+          </property>
+          <item>
+           <widget class="QScrollBar" name="sliceScrollBar3" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <horstretch>90</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="sliceSpinBox3" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <horstretch>10</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="1" >
+        <widget class="QFrame" name="frame_231" >
+         <property name="maximumSize" >
+          <size>
+           <width>16777215</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="frameShape" >
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow" >
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" >
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <property name="margin" >
+           <number>3</number>
+          </property>
+          <item>
+           <widget class="QScrollBar" name="sliceScrollBar4" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <horstretch>90</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="sliceSpinBox4" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <horstretch>10</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame" >
+      <property name="sizePolicy" >
+       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+        <horstretch>0</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize" >
+       <size>
+        <width>16</width>
+        <height>70</height>
+       </size>
+      </property>
+      <property name="frameShape" >
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow" >
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" >
+       <property name="spacing" >
+        <number>1</number>
+       </property>
+       <property name="margin" >
+        <number>3</number>
+       </property>
+       <item>
+        <widget class="QFrame" name="frame_3" >
+         <property name="maximumSize" >
+          <size>
+           <width>16777215</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="frameShape" >
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow" >
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="lineWidth" >
+          <number>0</number>
+         </property>
+         <layout class="QHBoxLayout" >
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <property name="margin" >
+           <number>3</number>
+          </property>
+          <item>
+           <widget class="QGroupBox" name="groupBox_3" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize" >
+             <size>
+              <width>250</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>16777215</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="title" >
+             <string>Image Type</string>
+            </property>
+            <widget class="QRadioButton" name="lutGreyscale" >
+             <property name="geometry" >
+              <rect>
+               <x>0</x>
+               <y>10</y>
+               <width>81</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="text" >
+              <string>Greyscale</string>
+             </property>
+             <property name="checked" >
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="lutSegmentation" >
+             <property name="geometry" >
+              <rect>
+               <x>280</x>
+               <y>10</y>
+               <width>100</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="text" >
+              <string>Segmentation</string>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="lutProbabilityMap" >
+             <property name="geometry" >
+              <rect>
+               <x>130</x>
+               <y>10</y>
+               <width>130</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="text" >
+              <string>Probability Map</string>
+             </property>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="blendingSlider" >
+         <property name="maximum" >
+          <number>100</number>
+         </property>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="tickPosition" >
+          <enum>QSlider::NoTicks</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>540</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>File</string>
+    </property>
+    <addaction name="actionRemove_Overlay_Image" />
+    <addaction name="actionRemove_Tensors" />
+    <addaction name="actionDisplay_Cursor" />
+    <addaction name="separator" />
+    <addaction name="actionExit" />
+   </widget>
+   <widget class="QMenu" name="menuPoints" >
+    <property name="title" >
+     <string>Points</string>
+    </property>
+    <addaction name="actionSave_Points" />
+    <addaction name="actionClear_Points" />
+   </widget>
+   <widget class="QMenu" name="menuGroup" >
+    <property name="title" >
+     <string>Group</string>
+    </property>
+    <addaction name="actionGroup1" />
+    <addaction name="actionGroup2" />
+    <addaction name="actionGroup3" />
+    <addaction name="separator" />
+    <addaction name="actionNo_Group" />
+   </widget>
+   <widget class="QMenu" name="menuView" >
+    <property name="title" >
+     <string>View</string>
+    </property>
+    <addaction name="actionShow_Marker" />
+    <addaction name="actionShow_Bounding_Box" />
+    <addaction name="actionShow_Orientation_Cube" />
+    <addaction name="actionSmall_Cube" />
+   </widget>
+   <widget class="QMenu" name="menuBackground" >
+    <property name="title" >
+     <string>Background</string>
+    </property>
+    <addaction name="actionBlack" />
+    <addaction name="actionWhite" />
+   </widget>
+   <addaction name="menuFile" />
+   <addaction name="menuView" />
+   <addaction name="menuBackground" />
+   <addaction name="menuGroup" />
+   <addaction name="menuPoints" />
+  </widget>
+  <widget class="QStatusBar" name="statusbar" />
+  <action name="actionOpen_Scene" >
+   <property name="text" >
+    <string>Open Scene</string>
+   </property>
+  </action>
+  <action name="actionSave_Scene" >
+   <property name="text" >
+    <string>Save Scene</string>
+   </property>
+  </action>
+  <action name="actionAdd_Volume" >
+   <property name="text" >
+    <string>Add &amp;Volume</string>
+   </property>
+   <property name="shortcut" >
+    <string>V</string>
+   </property>
+   <property name="shortcutContext" >
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAdd_Model" >
+   <property name="text" >
+    <string>Add Model</string>
+   </property>
+  </action>
+  <action name="actionExit" >
+   <property name="text" >
+    <string>Close</string>
+   </property>
+  </action>
+  <action name="actionAbout_Viz" >
+   <property name="text" >
+    <string>About Viz</string>
+   </property>
+  </action>
+  <action name="actionKeyboard_shortcuts" >
+   <property name="text" >
+    <string>Keyboard shortcuts</string>
+   </property>
+  </action>
+  <action name="actionRemove_Overlay_Image" >
+   <property name="text" >
+    <string>Remove Overlay Image</string>
+   </property>
+  </action>
+  <action name="actionRemove_Tensors" >
+   <property name="text" >
+    <string>Remove Tensors</string>
+   </property>
+  </action>
+  <action name="actionGroup1" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>1</string>
+   </property>
+  </action>
+  <action name="actionGroup2" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>2</string>
+   </property>
+  </action>
+  <action name="actionGroup3" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>3</string>
+   </property>
+  </action>
+  <action name="actionDisplay_Cursor" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Display Cursor</string>
+   </property>
+   <property name="shortcut" >
+    <string>C</string>
+   </property>
+  </action>
+  <action name="actionSave_Points" >
+   <property name="text" >
+    <string>Save Points...</string>
+   </property>
+  </action>
+  <action name="actionClear_Points" >
+   <property name="text" >
+    <string>Clear Points...</string>
+   </property>
+  </action>
+  <action name="actionNo_Group" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>No Group</string>
+   </property>
+  </action>
+  <action name="actionShow_Marker" >
+   <property name="text" >
+    <string>Show Marker</string>
+   </property>
+  </action>
+  <action name="actionShow_Bounding_Box" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show Bounding Box</string>
+   </property>
+  </action>
+  <action name="actionShow_Orientation_Cube" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show Orientation Cube</string>
+   </property>
+  </action>
+  <action name="actionSmall_Cube" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Small Cube</string>
+   </property>
+  </action>
+  <action name="actionBlack" >
+   <property name="text" >
+    <string>Black</string>
+   </property>
+  </action>
+  <action name="actionWhite" >
+   <property name="text" >
+    <string>White</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QVTKWidget</class>
+   <extends>QWidget</extends>
+   <header>QVTKWidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

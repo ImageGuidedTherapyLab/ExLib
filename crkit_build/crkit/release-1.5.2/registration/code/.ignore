@@ -1,0 +1,6 @@
+build
+buildx86
+buildx86_64
+testdata
+docs
+#svn propset svn:ignore -F .ignore .

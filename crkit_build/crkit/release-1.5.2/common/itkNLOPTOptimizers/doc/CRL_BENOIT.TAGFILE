@@ -1,0 +1,870 @@
+<?xml version='1.0' encoding='ISO-8859-1' standalone='yes' ?>
+<tagfile>
+  <compound kind="page">
+    <name>main</name>
+    <title></title>
+    <filename>main</filename>
+    <docanchor file="main">Example</docanchor>
+    <docanchor file="main">Attribution</docanchor>
+    <docanchor file="main">ITK</docanchor>
+    <docanchor file="main">License</docanchor>
+  </compound>
+  <compound kind="class">
+    <name>itk::NLOPTOptimizers</name>
+    <filename>classitk_1_1NLOPTOptimizers.html</filename>
+    <class kind="struct">itk::NLOPTOptimizers::ConstraintType</class>
+    <member kind="typedef">
+      <type>SmartPointer&lt; const Self &gt;</type>
+      <name>ConstPointer</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a6bb8ce74b094a3d4c8b4f2ae67b442bf</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>CostFunctionType::Pointer</type>
+      <name>CostFunctionPointer</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>ae9cea9667509717dfd249b0c8bd08fbb</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>SingleValuedCostFunction</type>
+      <name>CostFunctionType</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a35dcfb4cf863fcf2de54e2a55d60b018</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumeration">
+      <name>nlopt_algorithm</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_GN_DIRECT</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a507163c90f9f7c1d0f29129ea5d6a9c9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_GN_DIRECT_L</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a14546ed5a9c9e4eef93bb5b154655a4d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_GN_DIRECT_L_RAND</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a078a56d8ff4a357f6cc805b6dc230ef3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_GN_DIRECT_NOSCAL</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a320ab43baad55f0d62ee0b2191114e4e</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_GN_DIRECT_L_NOSCAL</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434ad3a758b8bf5ffd86403a638288697528</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_GN_DIRECT_L_RAND_NOSCAL</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434af3a1bc11a09856385f051bbcaa26fd21</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_GN_ORIG_DIRECT</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a53f38e85039bb56387b8667cb968b7b6</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_GN_ORIG_DIRECT_L</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434ab37cdea27c9a91dd007eeb9f21b9f75d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_GD_STOGO</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a6f3c263127024e896296c95142109fe9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_GD_STOGO_RAND</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434ad8929bdd251bf4ed5e9da21f59cc9cff</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LD_LBFGS_NOCEDAL</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434aa7ce05165c4645c26f94548f35b4075e</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LD_LBFGS</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a65b81aa209286d716d87bfbc104fa504</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LN_PRAXIS</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434ab97ea834ce528bc317b2e150ab0f89d3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LD_VAR1</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a1fb574407e06fdeb2566dd7e0052feed</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LD_VAR2</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434aef37b5f43d3e764f4d005cff19a1b97d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LD_TNEWTON</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a83543453d57b62f32e25e28f09889383</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LD_TNEWTON_RESTART</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434ae6e819c9c2ea9a8a90496dfed1a27463</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LD_TNEWTON_PRECOND</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434af99a2bcd2e9e9d79fb202dd07afe54c8</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LD_TNEWTON_PRECOND_RESTART</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434ad77f9dfe7ca170dc22dc285e6394f1fb</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_GN_CRS2_LM</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434aeb571e81e07562cc5eefe6ebff561758</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_GN_MLSL</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434aba82cdeafbb7df270c34598a072c2011</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_GD_MLSL</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a5eea1a52ae563f04d53b75bf12ae10b2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_GN_MLSL_LDS</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434acd0f9c7e5165b248715127c4eb028d9d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_GD_MLSL_LDS</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434af5fb4165516e73b8e5a449522fb9ca3e</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LD_MMA</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a614ab3c7bb986611eddb0646203670e5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LN_COBYLA</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434ae0d862009830c91811153f8554e79c63</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LN_NEWUOA</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a8f242028c0db4b1de7158d7050c8c1c3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LN_NEWUOA_BOUND</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434af0d0e38f43533e0e33f75bb60639622e</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LN_NELDERMEAD</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a09ce4b9f1a322a546ae12216ffbf84be</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LN_SBPLX</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434ab3fe63534ab6d26cc6fe3c854bd66392</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LN_AUGLAG</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a526623b9acd396c0d4995ef5df1f8a03</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LD_AUGLAG</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434ad5502d752c89bf2396de9c5658c0100a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LN_AUGLAG_EQ</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a91ab32673984169a90689a99f5389578</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LD_AUGLAG_EQ</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434abdaf6370da6186adbffb2e3778d19776</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LN_BOBYQA</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a0b53577242058e181ac2b0ac5c658f5f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_GN_ISRES</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a753e2d1b35fb69e4861fe55e531f7fd3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_AUGLAG</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a7406997c087c52720724932729d05995</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_AUGLAG_EQ</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a87f4d4fa8433a385b5dfba0b88214af6</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_G_MLSL</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434aa0c66d8538edd34dffd9d587c95b80f7</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_G_MLSL_LDS</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434a6c41b1b09b8d24076ee84eddde8c1b82</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_LD_SLSQP</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a42192b34d49a7671fac096917a92f434ac70c5c478ce0695fcc4a158bb94fd870</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumeration">
+      <name>nlopt_result</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa9015218a36c72729ce7a86081d6e9a5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_FAILURE</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa9015218a36c72729ce7a86081d6e9a5a67694ab0cb7c1ac83acf6d0642fa81d9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_INVALID_ARGS</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa9015218a36c72729ce7a86081d6e9a5a5d2b3620398ccb8f4eab8796152a28a0</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_OUT_OF_MEMORY</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa9015218a36c72729ce7a86081d6e9a5aa92f0f9ed4b626d2e0bb85e9a7509a59</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_ROUNDOFF_LIMITED</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa9015218a36c72729ce7a86081d6e9a5ab88e68306aec627d7a5cd2e1ce511183</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_FORCED_STOP</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa9015218a36c72729ce7a86081d6e9a5a57c37c603588fbe426b16610b7cfff24</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_SUCCESS</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa9015218a36c72729ce7a86081d6e9a5a2cf8073b73d700e66fa63bbb60864fb3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_STOPVAL_REACHED</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa9015218a36c72729ce7a86081d6e9a5afbb9414311e2d7163463c05c847f146c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_FTOL_REACHED</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa9015218a36c72729ce7a86081d6e9a5a66c4471608fcd43e396a0aec14899da4</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_XTOL_REACHED</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa9015218a36c72729ce7a86081d6e9a5acf0874df8391211a0737da83535b49d9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_MAXEVAL_REACHED</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa9015218a36c72729ce7a86081d6e9a5a5939734a564733d008600843a8ad8340</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NLOPT_MAXTIME_REACHED</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa9015218a36c72729ce7a86081d6e9a5a6c3a5c738223d048cf88415dba08df64</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>SingleValuedNonLinearOptimizer::ParametersType</type>
+      <name>ParametersType</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a345bd68f0e989befecf3ff24757a036d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>SmartPointer&lt; Self &gt;</type>
+      <name>Pointer</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa4f3da7daf994b97f57c0e6031e22d74</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>NLOPTOptimizers</type>
+      <name>Self</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a4f9da19b180c07d1aed034d5f7de6601</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>SingleValuedNonLinearOptimizer</type>
+      <name>Superclass</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa073da2a1940b7ba78659bc45066ba6c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>AddEqualityConstraint</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aaa3bfee07bfdcabc9bb1b7da2bf896ca</anchor>
+      <arglist>(nlopt_func fct, double tol)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>AddInequalityConstraint</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa08aa777b4ce64f707b69845066bac02</anchor>
+      <arglist>(nlopt_func fct, double tol)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ClearEqualityConstraints</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>ad43752a2cc4fe9208ec8901fc5578f75</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ClearInequalityConstraints</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a0b81956a189f07e7efc17f83fa638068</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>std::string</type>
+      <name>GetErrorCodeDescription</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a50c9a7b2703cea7cc9046a8de54d25af</anchor>
+      <arglist>() const </arglist>
+    </member>
+    <member kind="function">
+      <type>MeasureType</type>
+      <name>GetValue</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa0fb6fcaeca4f11e81771649f7d3f5cb</anchor>
+      <arglist>() const </arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>isSuccessful</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a823ae4cb6accd8286ee26fd84a06ca27</anchor>
+      <arglist>() const </arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkGetConstReferenceMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a59dad8ed3a6d2f64e3e051648fefd2fd</anchor>
+      <arglist>(TimeForOptimization, double)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkGetConstReferenceMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>ada3c40f551136746d84f23bc7bc49447</anchor>
+      <arglist>(MaxTime, double)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkGetConstReferenceMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a6c17aab8eb1fe723f8912335e22b2b38</anchor>
+      <arglist>(MaxEval, int)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkGetConstReferenceMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a9c25e40e2afb9a2e2fcf9153e8d75d49</anchor>
+      <arglist>(XTolAbs, double)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkGetConstReferenceMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>ae2c20806f5678a7491eb94a86d93b4be</anchor>
+      <arglist>(XTolRel, double)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkGetConstReferenceMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a66f5bd216a5db1f7ad28f51a78795a7c</anchor>
+      <arglist>(FTolAbs, double)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkGetConstReferenceMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a5f55d9d0e0a06b2adf7361fe040a8227</anchor>
+      <arglist>(FTolRel, double)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkGetConstReferenceMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a824ebb20b28c46198d080cc01e377439</anchor>
+      <arglist>(StopVal, double)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkGetConstReferenceMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>ac4983e033fc69970e747606f39864d28</anchor>
+      <arglist>(Maximize, bool)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkGetConstReferenceMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a4415d161189454728a0b40db4816e5f1</anchor>
+      <arglist>(UpperBoundParameters, ParametersType)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkGetConstReferenceMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a32bcff2bc55e96fdfcae64dba3f71d3b</anchor>
+      <arglist>(LowerBoundParameters, ParametersType)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkGetConstReferenceMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>acb3005de2e15b3863ce2936b33868c72</anchor>
+      <arglist>(CurrentCost, MeasureType)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkGetConstReferenceMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a6ab4f843c27437413e002d870980d1e6</anchor>
+      <arglist>(ErrorCode, nlopt_result)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkGetConstReferenceMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a02643bd617b35bfa2ed51754e46d2774</anchor>
+      <arglist>(Algorithm, nlopt_algorithm)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkGetMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>abdbcfcc33e72003cc3f71af5365b0e28</anchor>
+      <arglist>(VerboseLevel, unsigned int)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkNewMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a24537b5b70ce8781801610237e643cee</anchor>
+      <arglist>(Self)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkSetMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa1faf12eb8b0889f430e706b4380aecb</anchor>
+      <arglist>(VerboseLevel, unsigned int)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkSetMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a4303163758a8be360c9507493de42b8c</anchor>
+      <arglist>(TimeForOptimization, double)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkSetMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a8eccbb342d2afdafdefb8e652b884807</anchor>
+      <arglist>(MaxTime, double)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkSetMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>ac6ca143c50a85bcd5d6936c99c3b8cf5</anchor>
+      <arglist>(MaxEval, int)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkSetMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a19cc70cbfe4e47d8c73fd3d3c4d0e788</anchor>
+      <arglist>(XTolAbs, double)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkSetMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>acac8a64a43c2f5d85f97fe2d24fd8dd9</anchor>
+      <arglist>(XTolRel, double)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkSetMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa49e46dacf7bad8974f56b65d27f26c5</anchor>
+      <arglist>(FTolAbs, double)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkSetMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a3c0c136bbe3476f88657436615472d4b</anchor>
+      <arglist>(FTolRel, double)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkSetMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa44be157f897fbc714a1b4a612ba0ac7</anchor>
+      <arglist>(Maximize, bool)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkSetMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a1c92b02806548bc1f6533841668f2516</anchor>
+      <arglist>(UpperBoundParameters, ParametersType)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkSetMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a280dfe9922f2cc76d3c57c1f697c8956</anchor>
+      <arglist>(LowerBoundParameters, ParametersType)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkSetMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>ad3ffe5c2af938f0f5e5a77369a95dded</anchor>
+      <arglist>(ErrorCode, nlopt_result)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkSetMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aa3d47df560f683bd4a25f3e1efa9ee82</anchor>
+      <arglist>(Algorithm, nlopt_algorithm)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>itkTypeMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a751be1615e5cad777bca5d0d975c0f16</anchor>
+      <arglist>(NLOPTOptimizers, SingleValuedNonLinearOptimizer)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>SetStopVal</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a59302a7f6af9e518efc53206d7d858ba</anchor>
+      <arglist>(double stopval)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>StartOptimization</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a3496599052bdc38fcb2d77f8dea421ee</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>StopOptimization</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a227c4ba246a509cb0579b5552f162a9d</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type></type>
+      <name>itkSetMacro</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a96a0310f35e5c264c293adfdbed54bd4</anchor>
+      <arglist>(CurrentCost, double)</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type></type>
+      <name>NLOPTOptimizers</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a536771929672e352a7144b362c162685</anchor>
+      <arglist>(const NLOPTOptimizers &amp;)</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type></type>
+      <name>NLOPTOptimizers</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>ab8876b26b3d1dbe9512e3b3a8ffa7581</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>PrintSelf</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a5501ed28f568263786648a20efb11122</anchor>
+      <arglist>(std::ostream &amp;os, Indent indent) const </arglist>
+    </member>
+    <member kind="function" protection="protected" virtualness="virtual">
+      <type>virtual</type>
+      <name>~NLOPTOptimizers</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a49f3754fc1a84f71cff64bd6fa93a5f6</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected" static="yes">
+      <type>static double</type>
+      <name>NloptFunctionWrapper</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a8c71be2fffc2dfc1bafc5a04813300f7</anchor>
+      <arglist>(unsigned n, const double *x, double *grad, void *data)</arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>nlopt_algorithm</type>
+      <name>m_Algorithm</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a090a028ec0fe80a3d79b3d2285b92c15</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>MeasureType</type>
+      <name>m_CurrentCost</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a00ecdd54ca132728fa40dd9511df19df</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; ConstraintType &gt;</type>
+      <name>m_EqualityConstaint</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>ac59275c445850d88820ae0f2904032d1</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>nlopt_result</type>
+      <name>m_ErrorCode</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a69b6e46912ad866aaa5908ceed9b6203</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>bool</type>
+      <name>m_ForceStop</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a5e3493aa67d0240c6f3880e6fef5e10f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>double</type>
+      <name>m_FTolAbs</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a496c6b39f3b1a8a9cc6091197b3b238d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>double</type>
+      <name>m_FTolRel</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a0e7ad42185d62a6d452f048b334f5037</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; ConstraintType &gt;</type>
+      <name>m_InequalityConstaint</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>acdcb92d325c2da5265809a0b0ed37684</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>ParametersType</type>
+      <name>m_LowerBoundParameters</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a3570dde03bd03ef32fc57e4948e2fc2c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>int</type>
+      <name>m_MaxEval</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a97dcb3b7351dcc24e770502b98a1a841</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>bool</type>
+      <name>m_Maximize</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a3ad3fc1dcee1369842e8548ae1ae0e93</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>double</type>
+      <name>m_MaxTime</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>ab2aa7354a3b9dafec1e1933254032fd5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>nlopt_opt</type>
+      <name>m_NloptOptions</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a3f99b439b76269c6b6587ce907c10a94</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>double</type>
+      <name>m_StopVal</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a56b853de6c7baf755fabce2384d8d387</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>bool</type>
+      <name>m_StopValSet</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>aceb4e38514be20164783dc80c25a11be</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>double</type>
+      <name>m_TimeForOptimization</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a5a03e87090df080db4f5b2caaedacb27</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>ParametersType</type>
+      <name>m_UpperBoundParameters</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>afebb8dece2d6a308c96fe126f3c30e40</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>unsigned int</type>
+      <name>m_VerboseLevel</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a61056538a20e52fc410e53be401d2639</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>double</type>
+      <name>m_XTolAbs</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a6e5ba7f17c572b13128af602bc8a4885</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>double</type>
+      <name>m_XTolRel</name>
+      <anchorfile>classitk_1_1NLOPTOptimizers.html</anchorfile>
+      <anchor>a498df5b9dfb0bc44812394035fe59da7</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>itk::NLOPTOptimizers::ConstraintType</name>
+    <filename>structitk_1_1NLOPTOptimizers_1_1ConstraintType.html</filename>
+    <member kind="variable">
+      <type>nlopt_func</type>
+      <name>fct</name>
+      <anchorfile>structitk_1_1NLOPTOptimizers_1_1ConstraintType.html</anchorfile>
+      <anchor>a94759140ba9a5674a86e7e1d1ac21feb</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double</type>
+      <name>tol</name>
+      <anchorfile>structitk_1_1NLOPTOptimizers_1_1ConstraintType.html</anchorfile>
+      <anchor>a1f7197de73fc6c21fa4983519f669a57</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+</tagfile>

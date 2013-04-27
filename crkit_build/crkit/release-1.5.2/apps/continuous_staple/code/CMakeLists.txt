@@ -1,0 +1,34 @@
+PROJECT(CONTINUOUS_STAPLE)
+
+ FIND_PACKAGE(ITK)
+  IF(ITK_FOUND)
+    INCLUDE(${ITK_USE_FILE})
+  ELSE(ITK_FOUND)
+    MESSAGE(FATAL_ERROR
+            "Cannot build without ITK. " )
+  ENDIF(ITK_FOUND)
+
+INCLUDE_DIRECTORIES(
+  ${CRKIT_BINARY_DIR}
+  ${CRKIT_SOURCE_DIR}/common/external
+)
+
+IF (ITK_FOUND)
+
+  ADD_EXECUTABLE (crlContinuousSTAPLE
+    itkContinuousSTAPLEImageFilter.cxx
+    itkContinuousSTAPLE.cxx
+  )
+
+  TARGET_LINK_LIBRARIES(crlContinuousSTAPLE
+    ITKNumerics
+    ITKBasicFilters
+    ITKIO
+  )
+
+INSTALL(TARGETS 
+crlContinuousSTAPLE 
+RUNTIME DESTINATION bin
+)
+
+ENDIF (ITK_FOUND)

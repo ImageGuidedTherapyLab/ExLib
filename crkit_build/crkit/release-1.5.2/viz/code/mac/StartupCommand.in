@@ -1,0 +1,24 @@
+#!/bin/sh
+#
+# Copyright 2009 Children's Hospital Boston
+#
+# crlViz startup command for Mac OS X
+# http://www.crl.med.harvard.edu
+#
+#
+
+BUNDLE="`echo "$0" | sed -e 's/\/Contents\/MacOS\/CRKit//'`"
+RESOURCES="$BUNDLE/Contents/Resources"
+
+# echo "BUNDLE : $BUNDLE"
+# echo "RESOURCES : $RESOURCES"
+
+export DYLD_LIBRARY_PATH=$RESOURCES/lib:$RESOURCES/../Frameworks:$RESOURCES/Frameworks/InsightToolkit:$RESOURCES/Frameworks/@VTK_COMPONENT_NAME@:$RESOURCES/Frameworks/@QT_COMPONENT_NAME@/lib:$RESOURCES/bin:$RESOURCES/../MacOS:$DYLD_LIBRARY_PATH
+# echo "DYLD_LIBRARY_PATH : $DYLD_LIBRARY_PATH"
+# Used to be: echo "To exec : $BUNDLE/Contents/Resources/bin/crlViz"
+# Now it is:
+# echo "To exec : $BUNDLE/Contents/MacOS/crlViz"
+
+exec $BUNDLE/Contents/MacOS/crlViz
+
+exit 0

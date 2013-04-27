@@ -1,0 +1,22 @@
+compile_me    % command for compiling the C code
+
+main.c  % example call of genus0().  Read it (and genus0.h) for more info.
+
+genus0.c    % the code
+genus0.h    % header file.  Read it for information on calling genus0()
+tricases.h  % header file for Marching Cubes
+
+MakeTorus.m       % makes a torus as a binary image volume (for testing)
+MakeTorus2.m      % makes another torus as a binary image volume
+
+ShowSurf.m  % shows the resulting surface.  Writes OutSurf.vtk too.
+ShowVol.m   % shows adjusted binaray volume
+
+imv.m       % pretty much the same as matlab image() function
+ts.m        % pretty much the same as matlab trisurf() function
+write_vtk.m % writes a vtk triagulated surface model
+
+Run compile_me, then run a.exe or a.out, then run ShowSurf and ShowVol to
+look at the result.
+
+-Steve

@@ -1,0 +1,5 @@
+
+PROJECT(REGISTRATION)
+
+SUBDIRS(code)
+

@@ -1,0 +1,8 @@
+NDims = 2
+DimSize = 256 256
+ElementSpacing = 0.468750 0.468750
+Position = 0 0
+ElementByteOrderMSB = True
+ElementType = MET_USHORT
+HeaderSize = -1
+ElementDataFile = seg003.raw

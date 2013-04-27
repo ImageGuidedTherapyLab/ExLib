@@ -1,0 +1,20 @@
+#!/bin/sh
+#
+# Copyright 2009-2011 Children's Hospital Boston
+#
+# crlViz startup command for linux.
+# http://www.crl.med.harvard.edu
+#
+
+BUNDLE="`dirname "$0" `"/..
+
+#BUNDLE=@CRKIT_BINARY_DIR@
+
+export PATH=$BUNDLE/MacOS:$BUNDLE/bin:$PATH
+
+export LD_LIBRARY_PATH=$BUNDLE/lib:$BUNDLE/bin:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$BUNDLE/Frameworks/InsightToolkit:$BUNDLE/Frameworks/@VTK_COMPONENT_NAME@:$BUNDLE/Frameworks/@QT_COMPONENT_NAME@/lib:$LD_LIBRARY_PATH
+
+exec crlViz
+exit 0
+

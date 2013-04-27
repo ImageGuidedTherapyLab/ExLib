@@ -1,0 +1,2 @@
+gcc -Wall  -O3 -c genus0.c
+gcc -Wall genus0.o -lm main2.c

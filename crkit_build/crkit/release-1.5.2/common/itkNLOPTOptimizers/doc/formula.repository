@@ -1,0 +1,4 @@
+\form#0:$ fc(x) <= 0 $
+\form#1:$ fc(x) <= tol $
+\form#2:$ h(x) = 0 $
+\form#3:$ |h(x)| <= tol $

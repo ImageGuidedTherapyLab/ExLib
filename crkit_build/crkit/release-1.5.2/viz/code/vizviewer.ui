@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>VizViewer</class>
+ <widget class="QMainWindow" name="VizViewer">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>540</width>
+    <height>694</height>
+   </rect>
+  </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
+  <property name="windowTitle">
+   <string>crlViz Viewer</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout">
+    <property name="spacing">
+     <number>6</number>
+    </property>
+    <property name="margin">
+     <number>9</number>
+    </property>
+    <item>
+     <widget class="QFrame" name="viewFrame">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>9</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>1024</width>
+        <height>1024</height>
+       </size>
+      </property>
+      <property name="acceptDrops">
+       <bool>true</bool>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
+      </property>
+      <layout class="QGridLayout">
+       <property name="margin">
+        <number>3</number>
+       </property>
+       <property name="spacing">
+        <number>3</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QVTKWidget" name="qvtkWidget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>9</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>1024</width>
+           <height>1024</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>256</width>
+           <height>256</height>
+          </size>
+         </property>
+         <property name="acceptDrops">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>16</width>
+        <height>110</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout">
+       <property name="spacing">
+        <number>1</number>
+       </property>
+       <property name="margin">
+        <number>3</number>
+       </property>
+       <item>
+        <widget class="QFrame" name="frame_2">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="margin">
+           <number>3</number>
+          </property>
+          <item>
+           <widget class="QScrollBar" name="sliceScrollBar">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>90</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="sliceSpinBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>10</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_3">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="lineWidth">
+          <number>0</number>
+         </property>
+         <layout class="QHBoxLayout">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="margin">
+           <number>3</number>
+          </property>
+          <item>
+           <widget class="QGroupBox" name="groupBox">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="title">
+             <string>Mode</string>
+            </property>
+            <widget class="QRadioButton" name="interactor3D">
+             <property name="geometry">
+              <rect>
+               <x>60</x>
+               <y>10</y>
+               <width>41</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>3D</string>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="interactor2D">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>41</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>2D</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_3">
+            <property name="minimumSize">
+             <size>
+              <width>250</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="title">
+             <string>Image Type</string>
+            </property>
+            <widget class="QRadioButton" name="lutSegmentation">
+             <property name="geometry">
+              <rect>
+               <x>180</x>
+               <y>10</y>
+               <width>61</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Segm.</string>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="lutProbabilityMap">
+             <property name="geometry">
+              <rect>
+               <x>90</x>
+               <y>10</y>
+               <width>81</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Prob. Map</string>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="lutGreyscale">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>10</y>
+               <width>81</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Greyscale</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_2">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="title">
+             <string>Orientation</string>
+            </property>
+            <widget class="QRadioButton" name="orientationXZ">
+             <property name="geometry">
+              <rect>
+               <x>50</x>
+               <y>10</y>
+               <width>41</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Y</string>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="orientationXY">
+             <property name="geometry">
+              <rect>
+               <x>90</x>
+               <y>10</y>
+               <width>31</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Z</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="orientationYZ">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>31</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>X</string>
+             </property>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="blendingSlider">
+         <property name="maximum">
+          <number>100</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="tickPosition">
+          <enum>QSlider::NoTicks</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>540</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuGroup">
+    <property name="title">
+     <string>Group</string>
+    </property>
+    <addaction name="actionGroup1"/>
+    <addaction name="actionGroup2"/>
+    <addaction name="actionGroup3"/>
+    <addaction name="separator"/>
+    <addaction name="actionNo_Group"/>
+   </widget>
+   <widget class="QMenu" name="menuPoints">
+    <property name="title">
+     <string>Points</string>
+    </property>
+    <addaction name="actionSave_Points"/>
+    <addaction name="actionLoad_Points"/>
+    <addaction name="actionClear_Points"/>
+   </widget>
+   <widget class="QMenu" name="menuROI">
+    <property name="title">
+     <string>ROI</string>
+    </property>
+    <addaction name="actionSelect_ROI"/>
+    <addaction name="actionSave_ROI"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionRemove_Overlay_Image"/>
+    <addaction name="actionRemove_Tensors"/>
+    <addaction name="actionSave_Screenshot"/>
+    <addaction name="actionSave_Movie"/>
+    <addaction name="actionSave_OBJ_File"/>
+    <addaction name="actionSave_RIB_File"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuBackground">
+    <property name="title">
+     <string>Background</string>
+    </property>
+    <addaction name="actionBlack"/>
+    <addaction name="actionWhite"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionShow_Marker"/>
+    <addaction name="actionShow_Bounding_Box"/>
+    <addaction name="actionShow_Orientation_Cube"/>
+    <addaction name="actionSmall_Cube"/>
+    <addaction name="separator"/>
+    <addaction name="actionDisplay_Cursor"/>
+    <addaction name="actionShow_Mouse_Pointer"/>
+    <addaction name="actionSpecial_Label_Blending"/>
+   </widget>
+   <widget class="QMenu" name="menuIGT">
+    <property name="title">
+     <string>IGT</string>
+    </property>
+    <addaction name="actionShow_Tool"/>
+    <addaction name="actionDisplay_in_VectorVision"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuView"/>
+   <addaction name="menuBackground"/>
+   <addaction name="menuGroup"/>
+   <addaction name="menuPoints"/>
+   <addaction name="menuROI"/>
+   <addaction name="menuIGT"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionOpen_Scene">
+   <property name="text">
+    <string>Open Scene</string>
+   </property>
+  </action>
+  <action name="actionSave_Scene">
+   <property name="text">
+    <string>Save Scene</string>
+   </property>
+  </action>
+  <action name="actionAdd_Volume">
+   <property name="text">
+    <string>Add &amp;Volume</string>
+   </property>
+   <property name="shortcut">
+    <string>V</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionAdd_Model">
+   <property name="text">
+    <string>Add Model</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </action>
+  <action name="actionAbout_Viz">
+   <property name="text">
+    <string>About Viz</string>
+   </property>
+  </action>
+  <action name="actionKeyboard_shortcuts">
+   <property name="text">
+    <string>Keyboard shortcuts</string>
+   </property>
+  </action>
+  <action name="actionRemove_Overlay_Image">
+   <property name="text">
+    <string>Remove Overlay Images</string>
+   </property>
+  </action>
+  <action name="actionRemove_Tensors">
+   <property name="text">
+    <string>Remove Tensors</string>
+   </property>
+  </action>
+  <action name="actionGroup1">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1</string>
+   </property>
+  </action>
+  <action name="actionGroup2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>2</string>
+   </property>
+  </action>
+  <action name="actionGroup3">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>3</string>
+   </property>
+  </action>
+  <action name="actionDisplay_Cursor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display Cursor</string>
+   </property>
+   <property name="shortcut">
+    <string>C</string>
+   </property>
+  </action>
+  <action name="actionSave_Points">
+   <property name="text">
+    <string>Save Points...</string>
+   </property>
+  </action>
+  <action name="actionClear_Points">
+   <property name="text">
+    <string>Clear Points...</string>
+   </property>
+  </action>
+  <action name="actionSelect_ROI">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Select ROI</string>
+   </property>
+  </action>
+  <action name="actionSave_ROI">
+   <property name="text">
+    <string>Save ROI...</string>
+   </property>
+  </action>
+  <action name="actionSave_Screenshot">
+   <property name="text">
+    <string>Save Screenshot...</string>
+   </property>
+   <property name="iconText">
+    <string>Save Screenshot</string>
+   </property>
+   <property name="toolTip">
+    <string>Save Screenshot</string>
+   </property>
+  </action>
+  <action name="actionNo_Group">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>No Group</string>
+   </property>
+  </action>
+  <action name="actionShow_Marker">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Show Marker</string>
+   </property>
+  </action>
+  <action name="actionBlack">
+   <property name="text">
+    <string>Black</string>
+   </property>
+  </action>
+  <action name="actionWhite">
+   <property name="text">
+    <string>White</string>
+   </property>
+  </action>
+  <action name="actionShow_Bounding_Box">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Show Bounding Box</string>
+   </property>
+  </action>
+  <action name="actionShow_Orientation_Cube">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Show Orientation Cube</string>
+   </property>
+  </action>
+  <action name="actionSmall_Cube">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Small Cube</string>
+   </property>
+  </action>
+  <action name="actionSave_RIB_File">
+   <property name="text">
+    <string>Save RIB File...</string>
+   </property>
+  </action>
+  <action name="actionCrosshairs">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Crosshairs</string>
+   </property>
+  </action>
+  <action name="actionSpheres">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Spheres</string>
+   </property>
+  </action>
+  <action name="actionLoad_Points">
+   <property name="text">
+    <string>Load Points...</string>
+   </property>
+  </action>
+  <action name="actionShow_Mouse_Pointer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Mouse Pointer</string>
+   </property>
+  </action>
+  <action name="actionSpecial_Label_Blending">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Special Label Blending</string>
+   </property>
+  </action>
+  <action name="actionShow_Tool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Tool</string>
+   </property>
+  </action>
+  <action name="actionDisplay_in_VectorVision">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display in VectorVision</string>
+   </property>
+  </action>
+  <action name="actionSave_OBJ_File">
+   <property name="text">
+    <string>Save OBJ File...</string>
+   </property>
+  </action>
+  <action name="actionSave_Movie">
+   <property name="text">
+    <string>Save Movie...</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QVTKWidget</class>
+   <extends>QWidget</extends>
+   <header>QVTKWidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

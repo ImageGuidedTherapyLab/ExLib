@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<executable>
+<title>Tensor Scalar Parameter calculation</title>
+<description>Computes scalar parameters from tensor images.</description>
+<documentation-url>
+http://crl.med.harvard.edu/software/
+</documentation-url>
+<license>
+Copyright Simon K. Warfield 2007, 
+simon.warfield@childrens.harvard.edu 
+Children's Hospital Boston.
+</license>
+<contributor>
+Simon K. Warfield
+</contributor>
+<acknowledgements>
+This publication was made possible by Grant Number R01 RR021885 from the
+National Center for Research Resources (NCRR), a component of the
+National Institutes of Health (NIH), 
+and by the Computational Radiology Laboratory in the 
+Department of Radiology at Children's Hospital Boston.
+</acknowledgements>
+
+  <parameters>
+  <label>Output Images</label>
+  <description>Types of parametric scalar images that can be computed.
+  </description>
+<string>fractionalAnisotropyImage
+  <channel>output</channel>
+  <description>Computes and writes Fractional Anisotropy Image</description>
+  <flag>f</flag>
+  <longflag>fractionalAnistropy</longflag>
+</string>
+
+  </parameters>
+
+</executable>
+
+
