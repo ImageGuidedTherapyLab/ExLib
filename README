@@ -1,3 +1,56 @@
+SCRGP2$ module load staple
+SCRGP2$ module show staple
+-------------------------------------------------------------------
+/usr/local/Modules/3.2.8/modulefiles/staple/1.5.2:
+
+module-whatis    STAPLE from http://www.crl.med.harvard.edu
+
+module-whatis    https://github.com/ImageGuidedTherapyLab/staple
+
+module           load qt/4.8.4
+prepend-path     LD_LIBRARY_PATH /opt/apps/staple/1.5.2/crkit_build/install//Frameworks/InsightToolkit
+prepend-path     LD_LIBRARY_PATH /opt/apps/staple/1.5.2/crkit_build/install//Frameworks/vtk-5.6
+prepend-path     LD_LIBRARY_PATH /opt/apps/staple/1.5.2/crkit_build/install//Frameworks/qt/4.8.4/lib
+prepend-path     LD_LIBRARY_PATH /opt/apps/staple/1.5.2/crkit_build/install//lib
+prepend-path     LD_LIBRARY_PATH /opt/apps/staple/1.5.2/crkit_build/install//bin
+prepend-path     PATH /opt/apps/staple/1.5.2/crkit_build/install//MacOS
+prepend-path     PATH /opt/apps/staple/1.5.2/crkit_build/install//bin
+prepend-path     DYLD_LIBRARY_PATH /opt/apps/staple/1.5.2/crkit_build/install//Frameworks/InsightToolkit
+prepend-path     DYLD_LIBRARY_PATH /opt/apps/staple/1.5.2/crkit_build/install//Frameworks/vtk-5.6
+prepend-path     DYLD_LIBRARY_PATH /opt/apps/staple/1.5.2/crkit_build/install//Frameworks/qt/4.8.4/lib
+prepend-path     DYLD_LIBRARY_PATH /opt/apps/staple/1.5.2/crkit_build/install//lib
+prepend-path     DYLD_LIBRARY_PATH /opt/apps/staple/1.5.2/crkit_build/install//bin
+-------------------------------------------------------------------
+
+SCRGP2$ which crlSTAPLE
+/opt/apps/staple/1.5.2/crkit_build/install//bin/crlSTAPLE
+SCRGP2$ crlSTAPLE --help | more
+
+USAGE:
+
+   crlSTAPLE  [-b <optional beta parameter>] [-a <optional alpha
+              parameter>] [-m] [--assignConsensusVoxels <Determines if
+              voxels with label estimates that are the same amongst all
+              inputs are assigned directly or used in the computation.>]
+              [--startAtMStep] [--startAtEStep] [-c] [-i <optional maximum
+              number of iterations>] [-w <optional stationary prior
+              weight>] [-r <optional relative convergence threshold>] [-u
+              <optional: Controls computation with none, some, or extremely
+              extended precision. Useful with large numbers of input
+              segmentations.>] [-f <optional: file Dimensionality (2 for 2D
+              , 3 for 3D)>] [--initialExpertPerformance <optional: Provide
+              the initial on-diagonal performance parameter for each input
+              segmentation.>] [-s <optional: Provide the stationary prior
+              for each tissue class label from 0 to the largest in the
+              input files.>] -o <Output Image File Name> [--] [--version]
+              [-h] <Input segmentation files: file1 file2 ... fileN> ...
+.
+.
+.
+.
+
+
+------------------------------------------------------------------
 
 Please find attached a script for Linux or Mac OS X that will download, build and install version 1.5.2 of CRKit, including STAPLE. The implementation is based on the paper by (Warfield, Zou, Wells IEEE TMI 2004) and can be acknowledged in a publication by citing the paper and including the following text:
 

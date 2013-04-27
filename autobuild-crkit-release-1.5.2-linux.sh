@@ -52,7 +52,7 @@ logfile=$basedir/buildlog
 unset VTK_DIR
 unset QT_DIR
 unset ITK_DIR
-PATH=/bin:/usr/bin
+#PATH=/bin:/usr/bin
 
 # Versions for the supporting software we are expecting. 
 CMAKE_VERSION=2.8.3
@@ -67,6 +67,8 @@ VTK_VERSION=${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}
 QT_VERSION=4.7.4
 CRKIT_VERSION=release-1.5.2
 CRKIT_FORCE_REBUILD=true
+# number of procs to use in the build
+NUMPROC=12
 
 if [ "x`uname`" == "xDarwin" ] ; then
   QTPLATFORM="mac-opensource"
@@ -138,7 +140,7 @@ function get_cmake {
   echo "Building CMake"
   cd $basedir/cmake/CMake
   ./configure --prefix=$instdir/cmake >> $logfile
-  make -j 2 >> $logfile
+  make -j ${NUMPROC} >> $logfile
   make install >> $logfile
 
   # Test to see if everything is ok
@@ -212,9 +214,11 @@ function get_vtk {
     -DVTK_USE_RENDERING:BOOL=ON \
     -DVTK_USE_PATENTED:BOOL=ON \
     -DCMAKE_CXX_FLAGS_RELEASE:STRING="-O3 -DNDEBUG" \
+    -DOPENGL_INCLUDE_DIR:PATH=/usr/include/nvidia-current \
+    -DOPENGL_gl_LIBRARY=/usr/lib/nvidia-current/libGL.so \
     -DCMAKE_INSTALL_PREFIX:PATH=$instdir/vtk \
     $basedir/vtk/VTK >> $logfile
-  make -j 2 >> $logfile
+  make -j ${NUMPROC} >> $logfile
   make install >> $logfile
 
   if [ ! -f ${VTK_DIR}/UseVTK.cmake ] ; then
@@ -264,7 +268,7 @@ function get_itk {
     -DCMAKE_CXX_FLAGS_RELEASE:STRING="-O3 -DNDEBUG" \
     -DCMAKE_INSTALL_PREFIX:PATH=$instdir/itk \
     $basedir/itk/Insight >> $logfile
-  make -j 2 >> $logfile
+  make -j ${NUMPROC} >> $logfile
   make install >> $logfile
 
   # Check whether the necessary libraries built
@@ -386,6 +390,7 @@ function get_crkit {
     -DBUILD_TESTING:BOOL=OFF \
     -DCMAKE_BUILD_TYPE:STRING=Release \
     -DCMAKE_CXX_FLAGS_RELEASE:STRING="-O3 -DNDEBUG" \
+    -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
     -DUSE_ITK:BOOL=ON \
     -DUSE_VTK:BOOL=ON \
     -DUSE_QT:BOOL=ON \
@@ -398,7 +403,7 @@ function get_crkit {
     ${CRKIT_SOURCE} >> $logfile
 
   # Make only in the CRKit directory
-  make 2>&1 >> $logfile
+  make -j ${NUMPROC} 2>&1 >> $logfile
   make install >> $logfile
 
   if [ ! -f $instdir/bin/crlSTAPLE ]

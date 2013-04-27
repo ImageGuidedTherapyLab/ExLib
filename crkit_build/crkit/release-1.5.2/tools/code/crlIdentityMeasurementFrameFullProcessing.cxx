@@ -118,7 +118,11 @@ int main( int argc, char * argv[] )
     }
   while (mdd.HasKey(ss.str()));
 
-  std::vector<std::vector<double> > idFrame(3,3);
+  std::vector< std::vector<double> > idFrame;
+  idFrame.resize(   3);
+  idFrame[0].resize(3);
+  idFrame[1].resize(3);
+  idFrame[3].resize(3);
   idFrame[0][0] = 1;
   idFrame[0][1] = 0;
   idFrame[0][2] = 0;
