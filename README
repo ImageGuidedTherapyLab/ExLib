@@ -1,0 +1,25 @@
+
+Please find attached a script for Linux or Mac OS X that will download, build and install version 1.5.2 of CRKit, including STAPLE. The implementation is based on the paper by (Warfield, Zou, Wells IEEE TMI 2004) and can be acknowledged in a publication by citing the paper and including the following text:
+
+This research was supported in part by NIH R01 RR021885 from the National Center for Research Resources, and by an award from the Neuroscience Blueprint I/C through R01 EB008015 from the National Institute of Biomedical Imaging and Bioengineering.
+
+The software is designed to operate as a command line tool, with a graphical user interface for visualization.
+
+An example of using crlSTAPLE to analyse segmentations of the prostate is included in this directory: apps/staple/data/prostate/staple and other examples with synthetic phantoms are included.
+
+A detailed tutorial description of how to use the software is available in the distribution and online here:
+
+http://www.crl.med.harvard.edu/software/TutorialIntroductionToSTAPLE.pdf
+
+
+Let me know if you have any questions using the software.
+
+The software requires some time and disk space to build successfully. Let me know if you prefer a binary distribution for Linux, Mac OS X or Windows.
+
+
+Alireza Akhondi-Asl, Ph.D.
+Postdoctoral Associate, Harvard Medical School.
+Research Fellow, Computational Radiology Laboratory.
+Dept. of Radiology, Children's hospital,
+300 Longwood Ave. Boston, MA 02115.
+
