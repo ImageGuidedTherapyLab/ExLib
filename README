@@ -1,0 +1,2 @@
+/opt/apps/ANTS/ANTs-dev/Scripts/antsIntroduction.sh -d 3 -r fixed.nii.gz -i target.nii.gz > log.txt 2>&1
+/opt/apps/ANTS/ANTs-dev-bin/bin/WarpImageMultiTransform 3 target.nii.gz targetdeformed.nii.gz targetWarp.nii.gz targetAffine.txt -r fixed.nii.gz >> log.txt 2>&1
