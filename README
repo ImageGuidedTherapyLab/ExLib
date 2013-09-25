@@ -10,6 +10,7 @@ http://sourceforge.net/projects/advants/files/ANTS/
 script for dir:
 /Path/To/Install/antsIntroduction.sh -d 3 -r fixed.nii.gz -i target.nii.gz > log.txt 2>&1
 
+     -OR-
 
 command line functions: (1) Generate Deformation Field  (2) Apply Deformation Field to image
 
