@@ -1,0 +1,7 @@
+
+   mexGPUArray   from    $(MATLABROOT)/toolbox/distcomp/gpu/extern/src/mex/mexGPUExample.cu
+
+
+
+$ make -n MATLABROOT=/opt/apps/MATLAB/R2013a/
+/opt/apps/MATLAB/R2013a//bin/mex -v -f glnxa64/mexopts.sh mexGPUExample.cu
