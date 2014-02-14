@@ -1,0 +1,293 @@
+input files: checking
+/opt/apps/ANTS/ANTs-dev/Scripts/antsIntroduction.sh: line 418: [: -ne: unary operator expected
+input files: check passed
+--------------------------------------------------------------------------------------
+Mapping parameters
+--------------------------------------------------------------------------------------
+ANTSPATH is /opt/apps/ANTS/ANTs-dev-bin//bin/
+
+Dimensionality:				3
+Fixed image:				fixed.nii.gz
+Moving image:				target.nii.gz
+Use label image:			0
+N4BiasFieldCorrection:			0
+DoANTS Quality Check: 			0
+Similarity Metric:			PR
+Transformation:				GR
+Regularization:				Gauss[3,0]
+MaxIterations:				30x90x20
+Number Of MultiResolution Levels:	3
+OutputName prefix:			basename target
+--------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------
+ANTS command:
+/opt/apps/ANTS/ANTs-dev-bin//bin/ANTS 3 -m  PR[fixed.nii.gz,target.nii.gz,1,4] -t SyN[0.25] -r Gauss[3,0] -o basename target -i 30x90x20 --use-Histogram-Matching  --number-of-affine-iterations 10000x10000x10000x10000x10000 --MI-option 32x16000  
+--------------------------------------------------------------------------------------
+ Run Reg 
+ values 1
+  Fixed image file: fixed.nii.gz
+  Moving image file: target.nii.gz
+Metric 0:  Not a Point-set
+  Fixed image file: fixed.nii.gz
+  Moving image file: target.nii.gz
+  similarity metric weight: 1
+  Radius: [4, 4, 4]
+  radius: [4, 4, 4]
+ use Histogram Matching 
+Use identity affine transform as initial affine para.
+aff_init.IsNull()==1
+Use identity affine transform as initial fixed affine para.
+fixed_aff_init.IsNull()==1
+Continue affine registration from the input
+affine_opt.use_rotation_header = 0
+affine_opt.ignore_void_orgin = 0
+transform_initial: IsNotNull():0
+OptAffine: metric_type=AffineWithMutualInformation
+MI_bins=32 MI_samples=16000
+number_of_seeds=0 time_seed=1378421607
+number_of_levels=5
+number_of_iteration_list=[10000,10000,10000,10000,10000]
+graident_scales=[1,1,1,1,1,1,1,1,1,1,0.0001,0.0001,0.0001]
+is_rigid = 0
+mask null: 1
+maximum_step_length=0.1
+relaxation_factor=0.5
+minimum_step_length=0.0001
+translation_scales=0.0001
+opt.transform_initial.IsNull(): 1
+ opt.use_rotation_header: 0
+ opt.ignore_void_orgin: 0
+input affine center: [-8.38551, -21.5841, 22.8841]
+input affine para: [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 5.8709833106590885, -7.825641297060944, -33.333393476727224]
+level 0, iter 176, size: fix[32, 32, 32]-mov[32, 32, 32], affine para: [-0.0011009971762081252, 0.028327799255635753, -0.06753327947310361, 0.9973141830727957, 1.0052638924394681, 0.993363184241679, 0.9834537059385218, -0.016482592941896333, 0.000762711052491649, -0.006288278159621333, 4.870150127182021, -9.35365329623832, -24.397380088227777]
+    reach oscillation, current step: 9.76563e-05<0.0001
+level 1, iter 169, size: fix[32, 32, 32]-mov[64, 64, 51], affine para: [-0.0039346271760559316, 0.026858898490614902, -0.0620887015629179, 0.9977014139606534, 1.002136065741443, 0.9923575281290608, 0.9944374821154568, -0.01081901123976957, -0.00023818050256700532, -0.005036329889314155, 4.941256113625282, -9.212579023572722, -24.465520719348927]
+    reach oscillation, current step: 9.76563e-05<0.0001
+level 2, iter 79, size: fix[64, 64, 47]-mov[128, 128, 102], affine para: [-0.0025231556648678028, 0.028031371790997586, -0.06406135484600561, 0.9975490056615263, 1.0007899135787115, 0.9948160234748895, 0.9965916346634409, -0.010630991730656356, 0.0018535837856673847, -0.009770327375253532, 4.816907407143833, -8.929954675720579, -24.63770705978192]
+    reach oscillation, current step: 9.76563e-05<0.0001
+level 3, iter 100, size: fix[128, 128, 95]-mov[256, 256, 204], affine para: [-0.0013900317659266657, 0.02441453365675278, -0.061539414256808506, 0.9978050405018717, 1.002601657182743, 0.9975330418028778, 0.9968540249427439, -0.0075702347425351405, 0.007116868062946691, -0.004696964442461473, 4.87214364175057, -8.832991990834868, -24.672236694236343]
+    reach oscillation, current step: 9.76563e-05<0.0001
+level 4, iter 44, size: fix[256, 256, 25]-mov[512, 512, 27], affine para: [-0.004562870223784334, 0.02656736339108731, -0.0603069430582388, 0.9978158287162703, 1.0030194065751594, 0.9978964225407535, 0.9982716761415794, -0.004372365925395828, 0.0039114661519235976, -0.005720712507735909, 4.959421629385716, -8.739362032113434, -24.711678852235845]
+    reach oscillation, current step: 9.76563e-05<0.0001
+A=1 0 0 
+0 1 0 
+0 0 1 
+
+rotation R1 0 0 
+0 1 0 
+0 0 1 
+
+upper R1 0 0 
+0 1 0 
+0 0 1 
+
+s=0.25 u=0 v=0 w0 r=1
+m_Rotation from vnl0 0 0 1
+level 0, iter 275, size: fix[32, 32, 32]-mov[32, 32, 32], affine para: [0.0032436964570390207, -0.029788999867791745, 0.0662038472541799, 0.9973560771003085, 0.9979095881035142, 1.0038071445376673, 1.0057223415128966, 0.018915125419155472, -0.0003221504071524171, -0.0005966640363811116, -8.541165783486438, 9.596538396344387, 24.718157458637165]
+    reach oscillation, current step: 9.76563e-05<0.0001
+level 1, iter 190, size: fix[64, 64, 51]-mov[32, 32, 32], affine para: [0.004808301661586629, -0.028687253010713395, 0.06187370109474158, 0.9976600457383612, 1.0036962040871356, 1.0081022750562694, 0.9968082115806499, 0.010412596672870512, 0.0013463323648387566, 0.003071845513327513, -8.442188126724574, 9.645607356125323, 24.784783518727814]
+    reach oscillation, current step: 9.76563e-05<0.0001
+level 2, iter 117, size: fix[128, 128, 102]-mov[64, 64, 47], affine para: [0.0013720829226055945, -0.026327440631641417, 0.0630937334516679, 0.9976593426903648, 1.00085562500994, 1.0025870612324228, 0.9976861953877064, 0.012153169982618573, -0.0031206187882880775, 0.003842161002832425, -8.372399258104048, 9.235141814802937, 24.75889905575959]
+    reach oscillation, current step: 9.76563e-05<0.0001
+level 3, iter 102, size: fix[256, 256, 204]-mov[128, 128, 95], affine para: [0.0006515645007684755, -0.024015000052789195, 0.06376817910150528, 0.9976755357180229, 0.9982482284216685, 1.0021696497167583, 0.9990971963550167, 0.013860984951552122, -0.0073246511016039845, 0.0022095688828862752, -8.42813115658172, 9.400331303500934, 24.999504744217493]
+    reach oscillation, current step: 9.76563e-05<0.0001
+level 4, iter 408, size: fix[512, 512, 27]-mov[256, 256, 25], affine para: [0.0033631243167597776, -0.03193908044525085, 0.06176581691059727, 0.9975738410746887, 0.9965569780217761, 0.9994313378784974, 1.0046497944852761, 0.008387250018265414, 0.005141454965731201, 0.008326621730659645, -8.615968705341835, 8.803220913913183, 24.945186340169553]
+    reach oscillation, current step: 9.76563e-05<0.0001
+ v1 -0.683698 v2 -0.673646
+final [-0.004562870223784334, 0.02656736339108731, -0.0603069430582388, 0.9978158287162703, 1.0030194065751594, 0.9978964225407535, 0.9982716761415794, -0.004372365925395828, 0.0039114661519235976, -0.005720712507735909, 4.959421629385716, -8.739362032113434, -24.711678852235845]
+outputput affine center: [-8.38551, -21.5841, 22.8841]
+output affine para: [-0.004562870223784334, 0.02656736339108731, -0.0603069430582388, 0.9978158287162703, 1.0030194065751594, 0.9978964225407535, 0.9982716761415794, -0.004372365925395828, 0.0039114661519235976, -0.005720712507735909, 4.959421629385716, -8.739362032113434, -24.711678852235845]
+initial measure value (MMI): rval = -0.435895
+final measure value (MMI): rval = -0.678558
+finish affine registeration...
+ Requested Transformation Model:  SyN : Using 
+SyN diffeomorphic model for transformation. 
+  Grad Step 0.25 total-smoothing 0 gradient-smoothing 3
+ setting N-TimeSteps = 1 trunc 256
+WARNING: In /opt/apps/ANTS/ANTs-dev/Examples/../ImageRegistration/itkANTSImageRegistrationOptimizer.h, line 1207
+ANTSImageRegistrationOptimizer (0x2fce680): The number of levels does not match the size of sigmas.  Using default settings.
+
+ ScaleFactor 4 nlev 3 curl 0
+ allocated def field 0.999187 0 -0.0403154
+0 1 0
+0.0403154 0 0.999187
+
+ Its at this level 30
+ Allocating 
+ Allocating Done 
+ iteration 1 energy 0 : -34454.4
+ iteration 2 energy 0 : -37074.9
+ iteration 3 energy 0 : -38525.7
+ iteration 4 energy 0 : -39412
+ iteration 5 energy 0 : -39955.8
+ iteration 6 energy 0 : -40373.3
+ iteration 7 energy 0 : -40628.5
+ iteration 8 energy 0 : -40713.5
+ iteration 9 energy 0 : -40947.1
+ iteration 10 energy 0 : -40967.4
+ iteration 11 energy 0 : -41127.4
+ iteration 12 energy 0 : -41106.1
+ E-Slope 0.00430612 iteration 13 energy 0 : -41266.2
+ E-Slope 0.00288577 iteration 14 energy 0 : -41219.3
+ E-Slope 0.00211706 iteration 15 energy 0 : -41464.8
+ E-Slope 0.00155162 iteration 16 energy 0 : -41286.9
+ E-Slope 0.00131637 iteration 17 energy 0 : -41635.6
+ E-Slope 0.00104983 iteration 18 energy 0 : -41346.2
+ E-Slope 0.00105943 iteration 19 energy 0 : -41801.3
+ E-Slope 0.000833787 iteration 20 energy 0 : -41394.7
+ E-Slope 0.000949234 iteration 21 energy 0 : -41975
+ E-Slope 0.000827812 iteration 22 energy 0 : -41615.3
+ E-Slope 0.000980668 iteration 23 energy 0 : -42133.1
+ E-Slope 0.000794873 iteration 24 energy 0 : -41602.5
+ E-Slope 0.000942379 iteration 25 energy 0 : -42233.8
+ E-Slope 0.000836253 iteration 26 energy 0 : -41906.9
+ E-Slope 0.000983395 iteration 27 energy 0 : -42300
+ E-Slope 0.000770725 iteration 28 energy 0 : -41881.8
+ E-Slope 0.00088495 iteration 29 energy 0 : -42306.5
+ E-Slope 0.000525407 iteration 30 energy 0 : -41746.8
+ tired convergence: reached max iterations 
+ ScaleFactor 2 nlev 3 curl 1
+ Its at this level 90
+ iteration 1 energy 0 : -137360
+ iteration 2 energy 0 : -139445
+ iteration 3 energy 0 : -140862
+ iteration 4 energy 0 : -142339
+ iteration 5 energy 0 : -143567
+ iteration 6 energy 0 : -144490
+ iteration 7 energy 0 : -145400
+ iteration 8 energy 0 : -146144
+ iteration 9 energy 0 : -146968
+ iteration 10 energy 0 : -147489
+ iteration 11 energy 0 : -147608
+ iteration 12 energy 0 : -147725
+ E-Slope 0.00303216 iteration 13 energy 0 : -147833
+ E-Slope 0.00245637 iteration 14 energy 0 : -147861
+ E-Slope 0.00192739 iteration 15 energy 0 : -148000
+ E-Slope 0.00147553 iteration 16 energy 0 : -148046
+ E-Slope 0.00110381 iteration 17 energy 0 : -148139
+ E-Slope 0.000788733 iteration 18 energy 0 : -148187
+ E-Slope 0.00055255 iteration 19 energy 0 : -148265
+ E-Slope 0.000381552 iteration 20 energy 0 : -148301
+ E-Slope 0.000301212 iteration 21 energy 0 : -148356
+ E-Slope 0.000275053 iteration 22 energy 0 : -148392
+ E-Slope 0.000248991 iteration 23 energy 0 : -148416
+ E-Slope 0.000230178 iteration 24 energy 0 : -148481
+ E-Slope 0.000210345 iteration 25 energy 0 : -148483
+ E-Slope 0.000189863 iteration 26 energy 0 : -148559
+ E-Slope 0.000173174 iteration 27 energy 0 : -148547
+ E-Slope 0.000161305 iteration 28 energy 0 : -148625
+ E-Slope 0.000147514 iteration 29 energy 0 : -148603
+ E-Slope 0.000140399 iteration 30 energy 0 : -148680
+ E-Slope 0.000129737 iteration 31 energy 0 : -148649
+ E-Slope 0.000125602 iteration 32 energy 0 : -148727
+ E-Slope 0.000114217 iteration 33 energy 0 : -148685
+ E-Slope 0.000108704 iteration 34 energy 0 : -148749
+ E-Slope 9.19923e-05 iteration 35 energy 0 : -148700
+ Converged due to oscillation in optimization  metric 0 bad 5  
+ ScaleFactor 1 nlev 3 curl 2
+ Its at this level 20
+ iteration 1 energy 0 : -500445
+ iteration 2 energy 0 : -504196
+ iteration 3 energy 0 : -507633
+ iteration 4 energy 0 : -510661
+ iteration 5 energy 0 : -513203
+ iteration 6 energy 0 : -515517
+ iteration 7 energy 0 : -517811
+ iteration 8 energy 0 : -519743
+ iteration 9 energy 0 : -521511
+ iteration 10 energy 0 : -522797
+ iteration 11 energy 0 : -523847
+ iteration 12 energy 0 : -524714
+ E-Slope 0.00212605 iteration 13 energy 0 : -525452
+ E-Slope 0.0018362 iteration 14 energy 0 : -526063
+ E-Slope 0.00157417 iteration 15 energy 0 : -526614
+ E-Slope 0.00134055 iteration 16 energy 0 : -527132
+ E-Slope 0.00113279 iteration 17 energy 0 : -527671
+ E-Slope 0.000955105 iteration 18 energy 0 : -528200
+ E-Slope 0.000820711 iteration 19 energy 0 : -528785
+ E-Slope 0.000691228 iteration 20 energy 0 : -528490
+ tired convergence: reached max iterations 
+ Registration Done 
+ begin writing target
+ writing target affine 
+ writing target def 
+filename targetWarp.nii.gz
+
+--------------------------------------------------------------------------------------
+Applying forward transformation to target.nii.gz
+--------------------------------------------------------------------------------------
+FIELD: targetdeformed.nii.gz
+Invalid Format!!!: basename
+FIELD: targetWarp.nii.gz
+Invalid Format!!!: basename
+AFFINE: targetAffine.txt
+moving_image_filename: target.nii.gz components 1
+output_image_filename: basename
+reference_image_filename: fixed.nii.gz
+[0/5]: FIELD: targetdeformed.nii.gz
+[1/5]: Invalid Format!!!: basename
+[2/5]: FIELD: targetWarp.nii.gz
+[3/5]: Invalid Format!!!: basename
+[4/5]: AFFINE: targetAffine.txt
+User Linear interpolation 
+Exception caught during WarpImageMultiTransform.
+
+itk::ImageFileReaderException (0x2938be0)
+Location: "unknown" 
+File: /opt/apps/ANTS/ANTs-dev-bin/ITKv4/Modules/IO/ImageBase/include/itkImageFileReader.hxx
+Line: 143
+Description:  Could not create IO object for file targetdeformed.nii.gz
+The file doesn't exist. 
+Filename = targetdeformed.nii.gz
+
+
+
+
+--------------------------------------------------------------------------------------
+Applying inverse transformation to fixed.nii.gz
+--------------------------------------------------------------------------------------
+Invalid Format!!!: basename
+AFFINE-INV: targetAffine.txt
+Invalid Format!!!: basename
+FIELD: targetInverseWarp.nii.gz
+moving_image_filename: fixed.nii.gz components 1
+output_image_filename: fixed_InverseWarp.nii.gz
+reference_image_filename: target.nii.gz
+[0/4]: Invalid Format!!!: basename
+[1/4]: AFFINE-INV: targetAffine.txt
+[2/4]: Invalid Format!!!: basename
+[3/4]: FIELD: targetInverseWarp.nii.gz
+User Linear interpolation 
+Unknown file type!
+Unknown file type!
+  We check the syntax of your call .... 
+ syntax probably ok. 
+output origin: [-113.711, -141.995, -84.3761]
+output size: [512, 512, 27]
+output spacing: [0.4297, 0.4297, 6.50006]
+output direction: 0.999996 0.000667535 -0.00259639
+-0.000676482 0.999994 -0.00344681
+0.00259407 0.00344856 0.999991
+
+FIELD: targetWarp.nii.gz
+AFFINE: targetAffine.txt
+Invalid Format!!!: -r
+FIELD: fixed.nii.gz
+moving_image_filename: target.nii.gz components 1
+output_image_filename: targetdeformed.nii.gz
+reference_image_filename: NULL
+[0/4]: FIELD: targetWarp.nii.gz
+[1/4]: AFFINE: targetAffine.txt
+[2/4]: Invalid Format!!!: -r
+[3/4]: FIELD: fixed.nii.gz
+User Linear interpolation 
+Unknown file type!
+ You are doing something more complex -- we wont check syntax in this case 
+output origin: [-116.483, -131.132, -50.0118]
+output size: [256, 256, 25]
+output spacing: [0.859366, 0.859375, 6.49998]
+output direction: 0.999187 0 -0.0403154
+0 1 0
+0.0403154 0 0.999187
+
