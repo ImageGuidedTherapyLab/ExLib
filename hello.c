@@ -1,4 +1,3 @@
-
 /*
  *  Simple OpenCL demo program
  *
@@ -88,7 +87,7 @@ int main(int argc, char **argv)
 	// CL_CHECK(clGetDeviceIDs(NULL, CL_DEVICE_TYPE_ALL, 100, devices, &devices_n));
 	CL_CHECK(clGetDeviceIDs(platforms[0], CL_DEVICE_TYPE_ALL, 100, devices, &devices_n));
 
-	printf("=== %d OpenCL device(s) found on platform:\n", platforms_n);
+	printf("=== %d OpenCL device(s) found on platform:\n", devices_n);
 	for (int i=0; i<devices_n; i++)
 	{
 		char buffer[10240];
