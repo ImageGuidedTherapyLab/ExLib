@@ -1,0 +1,63 @@
+knepley GPU assembly example
+
+configure petsc-dev with
+config/configure.py --CFLAGS=-O0 --CUDAFLAGS=-O0 --CXXFLAGS=-O0 --download-blacs --download-exodusii=yes --download-fiat=yes --download-generator --download-metis --download-mumps --download-netcdf --download-parmetis --download-scalapack --download-scientificpython --download-superlu_dist --download-triangle --with-blas-lapack-lib="[/opt/epd-7.1-2-rh5-x86_64/lib/libmkl_rt.so,/opt/epd-7.1-2-rh5-x86_64/lib/libmkl_intel_thread.so,/opt/epd-7.1-2-rh5-x86_64/lib/libmkl_core.so,/opt/epd-7.1-2-rh5-x86_64/lib/libiomp5.so]" --with-boost-dir=/usr --with-boost=1 --with-clanguage=C++ --with-cuda-arch=sm_20 --with-cuda-dir=/opt/apps/cuda/4.1/cuda --with-cuda=1 --with-cusp=1 --with-etags=1 --with-matlab-dir=/opt/MATLAB/R2011a --with-matlab-engine=1 --with-matlab=1 --with-mpi-dir=/usr --with-mpi4py=0 --with-shared-libraries --with-sieve=1 --with-thrust=1 PETSC_ARCH=gcc-4.4.3-mpich2-1.2-epd-sm_20-dbg
+
+SCRGP2$ ./ex52 -dim 3 -compute_function  -show_residual -batch -refinement_limit 0.0 -section_view -gpu
+PetscSection
+Process 0:
+  (   0) dim  0 offset   0
+  (   1) dim  0 offset   0
+  (   2) dim  0 offset   0
+  (   3) dim  0 offset   0
+  (   4) dim  0 offset   0
+  (   5) dim  0 offset   0
+  (   6) dim  1 offset   0
+  (   7) dim  1 offset   1
+  (   8) dim  1 offset   2
+  (   9) dim  1 offset   3
+  (  10) dim  1 offset   4
+  (  11) dim  1 offset   5
+  (  12) dim  1 offset   6
+  (  13) dim  1 offset   7
+GPU layout grid(1,1,1) block(4,1,1) with 1 batches
+ N_t: 4, N_cb: 1
+Residual:
+Vector Object: 1 MPI processes
+  type: seq
+-0.666667
+0.166667
+0.166667
+0.333333
+-0.333333
+-0.166667
+-0.166667
+0.666667
+SCRGP2$ ./ex52 -dim 3 -compute_function  -show_residual -batch -refinement_limit 0.0 -section_view 
+PetscSection
+Process 0:
+  (   0) dim  0 offset   0
+  (   1) dim  0 offset   0
+  (   2) dim  0 offset   0
+  (   3) dim  0 offset   0
+  (   4) dim  0 offset   0
+  (   5) dim  0 offset   0
+  (   6) dim  1 offset   0
+  (   7) dim  1 offset   1
+  (   8) dim  1 offset   2
+  (   9) dim  1 offset   3
+  (  10) dim  1 offset   4
+  (  11) dim  1 offset   5
+  (  12) dim  1 offset   6
+  (  13) dim  1 offset   7
+Residual:
+Vector Object: 1 MPI processes
+  type: seq
+-0.666667
+0.166667
+0.166667
+0.333333
+-0.333333
+-0.166667
+-0.166667
+0.666667
