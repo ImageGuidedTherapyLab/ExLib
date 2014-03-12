@@ -1,0 +1,87 @@
+
+   mexGPUArray   from    $(MATLABROOT)/toolbox/distcomp/gpu/extern/src/mex/mexGPUExample.cu
+
+
+$ make  MATLABROOT=/opt/apps/MATLAB/R2013a/
+/opt/apps/MATLAB/R2013a//bin/mex -v -f glnxa64/mexopts.sh mexGPUExample.cu
+
+**************************************************************************
+  Warning: Neither -compatibleArrayDims nor -largeArrayDims is selected.
+           Using -compatibleArrayDims. In the future, MATLAB will require
+           the use of -largeArrayDims and remove the -compatibleArrayDims
+           option. For more information, see:
+           http://www.mathworks.com/help/matlab/matlab_external/upgrading-mex-files-to-use-64-bit-api.html
+**************************************************************************
+
+----------------------------------------------------------------
+-> options file specified on command line:
+   FILE = glnxa64/mexopts.sh
+----------------------------------------------------------------
+->    MATLAB                = /opt/apps/MATLAB/R2013a
+->    CC                    = $NVCC
+->    CC flags:
+         CFLAGS             = -gencode=arch=compute_13,code=sm_13 -gencode=arch=compute_20,code=sm_20  -I/opt/apps/MATLAB/R2013a/toolbox/distcomp/gpu/extern/include --compiler-options=-ansi,-D_GNU_SOURCE,-fexceptions,-fPIC,-fno-omit-frame-pointer,-pthread
+         CDEBUGFLAGS        = -g
+         COPTIMFLAGS        = -O -DNDEBUG
+         CLIBS              = -Wl,-rpath-link,/opt/apps/MATLAB/R2013a/bin/glnxa64 -L/opt/apps/MATLAB/R2013a/bin/glnxa64 -lmx -lmex -lmat -lm -lmwgpu /opt/apps/MATLAB/R2013a/bin/glnxa64/libcudart.so.5.0 -lstdc++
+         arguments          =  -DMX_COMPAT_32
+->    CXX                   = $NVCC
+->    CXX flags:
+         CXXFLAGS           = -gencode=arch=compute_13,code=sm_13 -gencode=arch=compute_20,code=sm_20  -I/opt/apps/MATLAB/R2013a/toolbox/distcomp/gpu/extern/include --compiler-options=-ansi,-D_GNU_SOURCE,-fPIC,-fno-omit-frame-pointer,-pthread
+         CXXDEBUGFLAGS      = -g
+         CXXOPTIMFLAGS      = -O -DNDEBUG
+         CXXLIBS            = -Wl,-rpath-link,/opt/apps/MATLAB/R2013a/bin/glnxa64 -L/opt/apps/MATLAB/R2013a/bin/glnxa64 -lmx -lmex -lmat -lm -lmwgpu /opt/apps/MATLAB/R2013a/bin/glnxa64/libcudart.so.5.0
+         arguments          =  -DMX_COMPAT_32
+->    FC                    =
+->    FC flags:
+         FFLAGS             =
+         FDEBUGFLAGS        =
+         FOPTIMFLAGS        =
+         FLIBS              =
+         arguments          =  -DMX_COMPAT_32
+->    LD                    = g++
+->    Link flags:
+         LDFLAGS            = -pthread -shared -Wl,--version-script,/opt/apps/MATLAB/R2013a/extern/lib/glnxa64/mexFunction.map -Wl,--no-undefined
+         LDDEBUGFLAGS       = -g
+         LDOPTIMFLAGS       = -O
+         LDEXTENSION        = .mexa64
+         arguments          =
+->    LDCXX                 =
+->    Link flags:
+         LDCXXFLAGS         =
+         LDCXXDEBUGFLAGS    =
+         LDCXXOPTIMFLAGS    =
+         LDCXXEXTENSION     =
+         arguments          =
+----------------------------------------------------------------
+
+-> $NVCC -c  -I/opt/apps/MATLAB/R2013a/extern/include -I/opt/apps/MATLAB/R2013a/simulink/include -DMATLAB_MEX_FILE -gencode=arch=compute_13,code=sm_13 -gencode=arch=compute_20,code=sm_20  -I/opt/apps/MATLAB/R2013a/toolbox/distcomp/gpu/extern/include --compiler-options=-ansi,-D_GNU_SOURCE,-fPIC,-fno-omit-frame-pointer,-pthread  -DMX_COMPAT_32 -O -DNDEBUG  "mexGPUExample.cu"
+
+-> g++ -O -pthread -shared -Wl,--version-script,/opt/apps/MATLAB/R2013a/extern/lib/glnxa64/mexFunction.map -Wl,--no-undefined -o  "mexGPUExample.mexa64"  mexGPUExample.o  -Wl,-rpath-link,/opt/apps/MATLAB/R2013a/bin/glnxa64 -L/opt/apps/MATLAB/R2013a/bin/glnxa64 -lmx -lmex -lmat -lm -lmwgpu /opt/apps/MATLAB/R2013a/bin/glnxa64/libcudart.so.5.0
+
+
+
+$ /opt/apps/MATLAB/R2013a/bin/matlab  -nodesktop
+Warning: No display specified.  You will not be able to display graphics on the screen.
+Warning: No window system found.  Java option 'MWT' ignored.
+
+                                                                                               < M A T L A B (R) >
+                                                                                     Copyright 1984-2013 The MathWorks, Inc.
+                                                                                       R2013a (8.1.0.604) 64-bit (glnxa64)
+                                                                                                February 15, 2013
+
+No window system found.  Java option 'MWT' ignored.
+
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+
+>> exampleMxGPUArray
+
+y =
+
+     2     2     2     2
+     2     2     2     2
+     2     2     2     2
+     2     2     2     2
+
+class(x) = gpuArray, class(y) = gpuArray
