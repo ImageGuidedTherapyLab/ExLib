@@ -1,0 +1,8 @@
+
+/* This is a place to collect and store compile time configuration settings. */
+
+#define CRKIT_VERSION_MAJOR @CRKIT_VERSION_MAJOR@
+#define CRKIT_VERSION_MINOR @CRKIT_VERSION_MINOR@
+#define CRKIT_VERSION_PATCH @CRKIT_VERSION_PATCH@
+#define CRKIT_VERSION_STRING "@CRKIT_VERSION_STRING@"
+

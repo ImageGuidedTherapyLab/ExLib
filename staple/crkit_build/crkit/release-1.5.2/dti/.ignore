@@ -1,0 +1,3 @@
+buildx86
+buildx86_64
+#svn propset svn:ignore -F .ignore .

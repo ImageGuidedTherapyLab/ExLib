@@ -1,0 +1,19 @@
+NRRD0004
+# Complete NRRD file format specification at:
+# http://teem.sourceforge.net/nrrd/format.html
+type: float
+dimension: 4
+space: left-posterior-superior
+sizes: 6 3 2 1
+space directions: none (1,0,0) (0,1,0) (0,0,1)
+kinds: 3D-symmetric-matrix domain domain domain
+endian: little
+encoding: ascii
+space origin: (0,0,0)
+
+1e-03 0.0 0.0 1e-04 0.0 1e-04
+1e-03 0.0 0.0 1e-04 0.0 1e-04
+55e-05 0.0 45e-05 1e-04 0.0 55e-05
+55e-05 0.0 45e-05 1e-04 0.0 55e-05
+1e-04 0.0 0.0 1e-04 0.0 7e-04
+1e-04 0.0 0.0 1e-04 0.0 7e-04

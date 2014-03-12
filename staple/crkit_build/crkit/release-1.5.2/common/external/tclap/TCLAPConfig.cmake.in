@@ -1,0 +1,6 @@
+# The TCLAP installed tree.
+SET(TCLAP_SOURCE_DIR "@TCLAP_INSTALL_DIR@/tclap")
+SET(TCLAP_DIR "@TCLAP_INSTALL_DIR@/tclap")
+# Ensure the tclap API is available
+INCLUDE_DIRECTORIES(@TCLAP_INSTALL_DIR@)
+

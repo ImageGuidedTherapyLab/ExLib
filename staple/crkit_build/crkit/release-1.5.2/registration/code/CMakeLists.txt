@@ -1,0 +1,229 @@
+
+PROJECT(CRLREGISTRATION)
+
+FIND_PACKAGE(ITK)
+IF(ITK_FOUND)
+   INCLUDE(${ITK_USE_FILE})
+ELSE(ITK_FOUND)
+   MESSAGE(FATAL_ERROR
+           "Cannot build without ITK. " )
+ENDIF(ITK_FOUND)
+
+INCLUDE_REGULAR_EXPRESSION("^.*$")
+
+INCLUDE_DIRECTORIES(
+${CRKIT_SOURCE_DIR}/common/external
+${CRKIT_SOURCE_DIR}/common/include
+${CRKIT_BINARY_DIR}
+)
+
+ADD_EXECUTABLE(crlRigidRegistration crlRigidRegistration.cxx)
+TARGET_LINK_LIBRARIES(crlRigidRegistration
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlRigidMIRegistration crlRigidMIRegistration.cxx)
+TARGET_LINK_LIBRARIES(crlRigidMIRegistration
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlRigidNormalizedCorrelationRegistration crlRigidNormalizedCorrelationRegistration.cxx)
+TARGET_LINK_LIBRARIES(crlRigidNormalizedCorrelationRegistration
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlRigidNormalizedMIRegistration crlRigidNormalizedMIRegistration.cxx)
+TARGET_LINK_LIBRARIES(crlRigidNormalizedMIRegistration
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlRigidMIExhaustiveSearchRegistration 
+               crlRigidMIExhaustiveSearchRegistration.cxx)
+TARGET_LINK_LIBRARIES( crlRigidMIExhaustiveSearchRegistration 
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlSimilarityMIRegistration crlSimilarityMIRegistration.cxx)
+TARGET_LINK_LIBRARIES(crlSimilarityMIRegistration
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlAffineRegistration crlAffineRegistration.cxx)
+TARGET_LINK_LIBRARIES(crlAffineRegistration
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlAffineMIRegistration crlAffineMIRegistration.cxx)
+TARGET_LINK_LIBRARIES(crlAffineMIRegistration
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlAffineNormalizedCorrelationRegistration
+   crlAffineNormalizedCorrelationRegistration.cxx
+)
+TARGET_LINK_LIBRARIES(crlAffineNormalizedCorrelationRegistration
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlAffineNMIRegistration crlAffineNMIRegistration.cxx)
+TARGET_LINK_LIBRARIES(crlAffineNMIRegistration
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlAffineSSDRegistration crlAffineSSDRegistration.cxx)
+TARGET_LINK_LIBRARIES(crlAffineSSDRegistration
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlNonrigidBSplinePyramid crlNonrigidBSplinePyramid.cxx)
+TARGET_LINK_LIBRARIES(crlNonrigidBSplinePyramid
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlAffineMatchCardinalityRegistration crlAffineMatchCardinalityRegistration.cxx)
+TARGET_LINK_LIBRARIES(crlAffineMatchCardinalityRegistration
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlResampler crlResampler.cxx)
+TARGET_LINK_LIBRARIES(crlResampler
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlResampler2d crlResampler2d.cxx)
+TARGET_LINK_LIBRARIES(crlResampler2d
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE( crlResampleToIsotropic crlResampleToIsotropic.cxx )
+TARGET_LINK_LIBRARIES(crlResampleToIsotropic
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlAnyTransformToAffineTransform crlAnyTransformToAffineTransform.cxx)
+TARGET_LINK_LIBRARIES(crlAnyTransformToAffineTransform
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlAnyTransformToAffineTransform2d crlAnyTransformToAffineTransform2d.cxx)
+TARGET_LINK_LIBRARIES(crlAnyTransformToAffineTransform2d
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlComposeAffineTransforms crlComposeAffineTransforms.cxx)
+TARGET_LINK_LIBRARIES(crlComposeAffineTransforms
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters )
+
+ADD_EXECUTABLE(crlComposeAffineTransforms2d crlComposeAffineTransforms2d.cxx)
+TARGET_LINK_LIBRARIES(crlComposeAffineTransforms2d
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters )
+
+ADD_EXECUTABLE(crlConvertAffine2DToAffine3D crlConvertAffine2DToAffine3D.cxx)
+TARGET_LINK_LIBRARIES(crlConvertAffine2DToAffine3D
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters )
+
+ADD_EXECUTABLE(crlIdentityAffineTransform crlIdentityAffineTransform.cxx)
+TARGET_LINK_LIBRARIES(crlIdentityAffineTransform ITKIO) 
+
+ADD_EXECUTABLE(crlScaleSkewVersor3DTransform crlScaleSkewVersor3DTransform.cxx)
+TARGET_LINK_LIBRARIES(crlScaleSkewVersor3DTransform ITKIO) 
+
+ADD_EXECUTABLE(crlNonrigidBSplinePyramid2 crlNonrigidBSplinePyramid2.cxx)
+TARGET_LINK_LIBRARIES(crlNonrigidBSplinePyramid2 ITKIO ITKBasicFilters ITKAlgorithms )
+
+INSTALL(TARGETS 
+  crlResampleToIsotropic
+  crlResampler2d
+RUNTIME DESTINATION bin)
+
+INSTALL(TARGETS
+  crlAnyTransformToAffineTransform 
+  crlAnyTransformToAffineTransform2d 
+  crlResampler
+  crlComposeAffineTransforms
+  crlComposeAffineTransforms2d
+  crlConvertAffine2DToAffine3D
+  crlRigidRegistration
+  crlRigidMIRegistration
+  crlRigidNormalizedCorrelationRegistration
+  crlRigidMIExhaustiveSearchRegistration
+  crlAffineRegistration
+  crlAffineMIRegistration
+  crlAffineNMIRegistration
+  crlAffineSSDRegistration
+  crlAffineNormalizedCorrelationRegistration
+  crlNonrigidBSplinePyramid
+  crlNonrigidBSplinePyramid2
+  crlAffineMatchCardinalityRegistration
+  crlSimilarityMIRegistration 
+  crlIdentityAffineTransform
+  crlRigidNormalizedMIRegistration
+  crlScaleSkewVersor3DTransform
+  RUNTIME DESTINATION bin
+)
+
+ADD_EXECUTABLE(crlRigidMIRegistration2d crlRigidMIRegistration2d.cxx)
+TARGET_LINK_LIBRARIES(crlRigidMIRegistration2d
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlRigidNormalizedMIRegistration2d crlRigidNormalizedMIRegistration2d.cxx)
+TARGET_LINK_LIBRARIES(crlRigidNormalizedMIRegistration2d
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlRigidNormalizedCorrelationRegistration2d crlRigidNormalizedCorrelationRegistration2d.cxx)
+TARGET_LINK_LIBRARIES(crlRigidNormalizedCorrelationRegistration2d
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlRigidSSDRegistration2d crlRigidSSDRegistration2d.cxx)
+TARGET_LINK_LIBRARIES(crlRigidSSDRegistration2d 
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlTransformMomentsInitialization crlTransformMomentsInitialization.cxx)
+TARGET_LINK_LIBRARIES(crlTransformMomentsInitialization
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlAffineMIRegistration2d crlAffineMIRegistration2d.cxx)
+TARGET_LINK_LIBRARIES(crlAffineMIRegistration2d
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlAffineNormalizedCorrelationRegistration2d crlAffineNormalizedCorrelationRegistration2d.cxx)
+TARGET_LINK_LIBRARIES(crlAffineNormalizedCorrelationRegistration2d
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE(crlAffineNormalizedCorrelationRegStepRegistration2d crlAffineNormalizedCorrelationRegStepRegistration2d.cxx)
+TARGET_LINK_LIBRARIES(crlAffineNormalizedCorrelationRegStepRegistration2d
+ ITKAlgorithms ITKNumerics ITKStatistics ITKIO ITKBasicFilters
+)
+
+ADD_EXECUTABLE( crlLogEuclideanScaleAffineTransform crlLogEuclideanScaleAffineTransform.cxx ) 
+TARGET_LINK_LIBRARIES( crlLogEuclideanScaleAffineTransform ITKAlgorithms
+ITKNumerics ITKStatistics ITKIO ITKBasicFilters )
+
+ADD_EXECUTABLE(crlHausdorffDistance crlHausdorffDistance.cxx)
+TARGET_LINK_LIBRARIES(crlHausdorffDistance ITKIO ITKBasicFilters ITKCommon)
+
+ADD_EXECUTABLE(crlInvertDeformationField crlInvertDeformationField.cxx)
+TARGET_LINK_LIBRARIES(crlInvertDeformationField ITKIO ITKCommon)
+
+INSTALL(TARGETS 
+  crlRigidMIRegistration2d 
+  crlRigidNormalizedMIRegistration2d
+  crlTransformMomentsInitialization
+  crlRigidNormalizedCorrelationRegistration2d
+  crlRigidSSDRegistration2d
+  crlAffineMIRegistration2d 
+  crlAffineNormalizedCorrelationRegistration2d
+  crlAffineNormalizedCorrelationRegStepRegistration2d
+  crlLogEuclideanScaleAffineTransform 
+  crlHausdorffDistance
+  crlInvertDeformationField
+  RUNTIME DESTINATION bin
+)
+
