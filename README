@@ -14,17 +14,15 @@ Here's a way that doesn't rewrite any history, so all commit IDs will remain val
 
 2. Create a local branch from the second repo's branch:
 
-   git branch branchfromsecondrepo secondrepo/master
+   git branch branchfromsecondrepo secondrepo/master; git checkout branchfromsecondrepo
 
 3. Move all its files into a subdirectory:
 
-   git checkout branchfromsecondrepo
    mkdir subdir/
    git ls-tree -z --name-only HEAD | xargs -0 -I {} git mv {} subdir/
-   git commit -m "STYLE: organizing files to subdir/"
 
 4.  Merge the second branch into the first repo's master branch:
 
-   git checkout master; git merge branchfromsecondrepo
+   git commit -m "STYLE: organizing files"; git checkout master; git merge branchfromsecondrepo
 
 5.  git log --follow file
