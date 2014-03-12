@@ -10,7 +10,7 @@ Here's a way that doesn't rewrite any history, so all commit IDs will remain val
 1. Add the second repo as a remote:
 
    cd firstgitrepo/
-   git remote add secondrepo username@servername:andsoon
+   git remote add -f secondrepo username@servername:andsoon
 
 2. Create a local branch from the second repo's branch:
 
