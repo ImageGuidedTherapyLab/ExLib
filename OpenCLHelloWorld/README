@@ -1,0 +1,107 @@
+
+http://svn.clifford.at/tools/trunk/examples/cldemo.c
+
+
+$ make
+g++ -o hello -I/opt/apps/khronos/1.0/ -g -O0 hello.c -lOpenCL
+
+$ ./hello
+=== 1 OpenCL platform(s) found: ===
+  -- 0 --
+  PROFILE = FULL_PROFILE
+  VERSION = OpenCL 1.1 CUDA 4.2.1
+  NAME = NVIDIA CUDA
+  VENDOR = NVIDIA Corporation
+  EXTENSIONS = cl_khr_byte_addressable_store cl_khr_icd cl_khr_gl_sharing cl_nv_compiler_options cl_nv_device_attribute_query cl_nv_pragma_unroll 
+=== 1 OpenCL device(s) found on platform:
+  -- 0 --
+  DEVICE_NAME = Tesla M2070
+  DEVICE_VENDOR = NVIDIA Corporation
+  DEVICE_VERSION = OpenCL 1.1 CUDA
+  DRIVER_VERSION = 304.84
+  DEVICE_MAX_COMPUTE_UNITS = 14
+  DEVICE_MAX_CLOCK_FREQUENCY = 1147
+  DEVICE_GLOBAL_MEM_SIZE = 5636554752
+  -- 1 --
+  DEVICE_NAME = Tesla M2070
+  DEVICE_VENDOR = NVIDIA Corporation
+  DEVICE_VERSION = OpenCL 1.1 CUDA
+  DRIVER_VERSION = 304.84
+  DEVICE_MAX_COMPUTE_UNITS = 14
+  DEVICE_MAX_CLOCK_FREQUENCY = 1147
+  DEVICE_GLOBAL_MEM_SIZE = 5636554752
+  -- 2 --
+  DEVICE_NAME = Tesla M2070
+  DEVICE_VENDOR = NVIDIA Corporation
+  DEVICE_VERSION = OpenCL 1.1 CUDA
+  DRIVER_VERSION = 304.84
+  DEVICE_MAX_COMPUTE_UNITS = 14
+  DEVICE_MAX_CLOCK_FREQUENCY = 1147
+  DEVICE_GLOBAL_MEM_SIZE = 5636554752
+  -- 3 --
+  DEVICE_NAME = Tesla M2070
+  DEVICE_VENDOR = NVIDIA Corporation
+  DEVICE_VERSION = OpenCL 1.1 CUDA
+  DRIVER_VERSION = 304.84
+  DEVICE_MAX_COMPUTE_UNITS = 14
+  DEVICE_MAX_CLOCK_FREQUENCY = 1147
+  DEVICE_GLOBAL_MEM_SIZE = 5636554752
+  -- 4 --
+  DEVICE_NAME = Tesla M2070
+  DEVICE_VENDOR = NVIDIA Corporation
+  DEVICE_VERSION = OpenCL 1.1 CUDA
+  DRIVER_VERSION = 304.84
+  DEVICE_MAX_COMPUTE_UNITS = 14
+  DEVICE_MAX_CLOCK_FREQUENCY = 1147
+  DEVICE_GLOBAL_MEM_SIZE = 5636554752
+  -- 5 --
+  DEVICE_NAME = Tesla M2070
+  DEVICE_VENDOR = NVIDIA Corporation
+  DEVICE_VERSION = OpenCL 1.1 CUDA
+  DRIVER_VERSION = 304.84
+  DEVICE_MAX_COMPUTE_UNITS = 14
+  DEVICE_MAX_CLOCK_FREQUENCY = 1147
+  DEVICE_GLOBAL_MEM_SIZE = 5636554752
+  -- 6 --
+  DEVICE_NAME = GeForce 8800 GTS
+  DEVICE_VENDOR = NVIDIA Corporation
+  DEVICE_VERSION = OpenCL 1.0 CUDA
+  DRIVER_VERSION = 304.84
+  DEVICE_MAX_COMPUTE_UNITS = 12
+  DEVICE_MAX_CLOCK_FREQUENCY = 1350
+  DEVICE_GLOBAL_MEM_SIZE = 670367744
+Result: 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60 62 64 66 68 70 72 74 76 78 80 82 84 86 88 90 92 94 96 98 100 102 104 106 108 110 112 114 116 118 120 122 124 126 128 130 132 134 136 138 140 142 144 146 148 150 152 154 156 158 160 162 164 166 168 170 172 174 176 178 180 182 184 186 188 190 192 194 196 198
+
+--------------------------------------------- stampede ----------------------------------------------------
+
+$ make
+icpc -o hello -I/opt/apps/intel/opencl-1.2-3.0.67279/include -g -O0 hello.c  -Wl,-rpath,/opt/apps/intel/opencl-1.2-3.0.67279/lib64/ -L/opt/apps/intel/opencl-1.2-3.0.67279/lib64/ -lOpenCL
+hello.c(136): warning #1478: function "clUnloadCompiler" (declared at line 1204 of "/opt/apps/intel/opencl-1.2-3.0.67279/include/CL/cl.h") was declared deprecated
+        CL_CHECK(clUnloadCompiler());
+        ^
+$ ./hello
+=== 1 OpenCL platform(s) found: ===
+  -- 0 --
+  PROFILE = FULL_PROFILE
+  VERSION = OpenCL 1.2 LINUX
+  NAME = Intel(R) OpenCL
+  VENDOR = Intel(R) Corporation
+  EXTENSIONS = cl_khr_fp64 cl_khr_global_int32_base_atomics cl_khr_global_int32_extended_atomics cl_khr_local_int32_base_atomics cl_khr_local_int32_extended_atomics cl_khr_byte_addressable_store 
+=== 1 OpenCL device(s) found on platform:
+  -- 0 --
+  DEVICE_NAME =        Intel(R) Xeon(R) CPU E5-2680 0 @ 2.70GHz
+  DEVICE_VENDOR = Intel(R) Corporation
+  DEVICE_VERSION = OpenCL 1.2 (Build 67279)
+  DRIVER_VERSION = 1.2
+  DEVICE_MAX_COMPUTE_UNITS = 16
+  DEVICE_MAX_CLOCK_FREQUENCY = 2700
+  DEVICE_GLOBAL_MEM_SIZE = 33603096576
+  -- 1 --
+  DEVICE_NAME = Intel(R) Many Integrated Core Acceleration Card
+  DEVICE_VENDOR = Intel(R) Corporation
+  DEVICE_VERSION = OpenCL 1.2 (Build 67279)
+  DRIVER_VERSION = 1.2
+  DEVICE_MAX_COMPUTE_UNITS = 240
+  DEVICE_MAX_CLOCK_FREQUENCY = 1090
+  DEVICE_GLOBAL_MEM_SIZE = 6053326848
+Result: 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60 62 64 66 68 70 72 74 76 78 80 82 84 86 88 90 92 94 96 98 100 102 104 106 108 110 112 114 116 118 120 122 124 126 128 130 132 134 136 138 140 142 144 146 148 150 152 154 156 158 160 162 164 166 168 170 172 174 176 178 180 182 184 186 188 190 192 194 196 198
