@@ -25,4 +25,8 @@ Here's a way that doesn't rewrite any history, so all commit IDs will remain val
 
    git commit -m "STYLE: organizing files"; git checkout master; git merge branchfromsecondrepo
 
-5.  git log --follow file
+5. clean up
+
+   git branch -D branchfromsecondrepo; git remote rm secondrepo
+
+6. git log --follow file
