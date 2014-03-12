@@ -26,4 +26,6 @@ Here's a way that doesn't rewrite any history, so all commit IDs will remain val
 4.  Merge the second branch into the first repo's master branch:
 
    git checkout master
-   git merge secondbranch
+   git merge branchfromsecondrepo
+
+5.  git log --follow file
