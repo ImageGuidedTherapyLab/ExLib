@@ -1,8 +1,14 @@
-OPENCLDIR=/opt/apps/intel/opencl-1.2-3.0.67279
+# intel
+OPENCLINCLUDE=/opt/apps/intel/opencl-1.2-3.0.67279/include 
+OPENCLLIB=/opt/apps/intel/opencl-1.2-3.0.67279/lib64
 CXX = icpc
+# mac
+OPENCLINCLUDE=/Applications/Xcode.app/Contents//Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk//System/Library/Frameworks/OpenCL.framework/
+OPENCLLIB=/Applications/Xcode.app/Contents//Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk//System/Library/Frameworks/OpenCL.framework/
+CXX = gcc
 
 hello: hello.c
-	$(CXX) -o hello -I$(OPENCLDIR)/include -g -O0 hello.c  -Wl,-rpath,$(OPENCLDIR)/lib64/ -L$(OPENCLDIR)/lib64/ -lOpenCL
+	$(CXX) -o hello -I$(OPENCLINCLUDE) -g -O0 hello.c  -Wl,-rpath,$(OPENCLLIB) -L$(OPENCLLIB) -lOpenCL
 tags: 
-	ctags -R $(OPENCL_INCLUDE)/CL/
+	ctags -R $(OPENCLINCLUDE)
 
