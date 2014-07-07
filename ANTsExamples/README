@@ -3,6 +3,10 @@ Example ANTsR Segmentation Scripts obtained from:
 
 http://stnava.github.io/ANTsR/antsSegmentation.html
 
+------------------------ Example Bias Correct ------------------------ 
+/usr/lib/ants/N4BiasFieldCorrection  -d 3 -i target.nii.gz -o biastarget.nii.gz -b [200] -s 3 -c [50x50x30x20,1e-6]
+
+
 ------------------------ Example Registration ------------------------ 
 
 /opt/apps/ANTS/ANTs-dev/Scripts/antsIntroduction.sh -d 3 -r fixed.nii.gz -i target.nii.gz > log.txt 2>&1
