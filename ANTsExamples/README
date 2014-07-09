@@ -1,11 +1,26 @@
 Example ANTsR Segmentation Scripts obtained from:
-
-
 http://stnava.github.io/ANTsR/antsSegmentation.html
 
------------------------- Example Bias Correct ------------------------ 
-/opt/apps/ANTS/ANTs-build//bin//N4BiasFieldCorrection  -d 3 -i target.nii.gz -o biastarget.nii.gz -b [200] -s 3 -c [50x50x30x20,1e-6]
+------------------------ Example Brain Strip ------------------------ 
 
+./antsBrainExtraction.sh -d 3 -a target.nii.gz  -e  LPBA40_Template.nii.gz     -m LPBA40_mask.nii.gz     -o LPstrip
+
+Tempates obtained from:
+   https://drive.google.com/folderview?id=0B4SvObeEfaRySUNDOE5DWksyQ0k&usp=sharing#list
+
+Tustison, Nicholas J., et al. "Large-Scale Evaluation of ANTs and FreeSurfer Cortical Thickness Measurements." NeuroImage (2014).
+
+------------------------ Example Bias Correct ------------------------ 
+
+/opt/apps/ANTS/ANTs-build//bin//N4BiasFieldCorrection  -d 3 -i target.nii.gz -o biastarget.nii.gz -b [200] -s 3 -c [50x50x30x20,1e-6]
+Tustison, N. J., Avants, B. B., Cook, P. a, Zheng, Y., Egan, A., Yushkevich, P. a, & Gee, J. C. (2010). N4ITK: improved N3 bias correction. IEEE Transactions on Medical Imaging, 29(6), 1310–20. doi:10.1109/TMI.2010.2046908
+
+------------------------ Example Histogram Matching ------------------------ 
+
+/opt/apps/ANTS/ANTs-build//bin/ImageMath 3 matched.nii.gz HistogramMatch target.nii.gz fixed.nii.gz  200 12
+
+http://www.itk.org/Doxygen/html/classitk_1_1HistogramMatchingImageFilter.html
+Udupa, J. K., Zhang, X., & Notation, A. (2000). New Variants of a Method of MRI Scale Standardization. IEEE TMI, 19(2), 143–150.
 
 ------------------------ Example Registration ------------------------ 
 
