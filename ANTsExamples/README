@@ -1,6 +1,15 @@
 Example ANTsR Segmentation Scripts obtained from:
 http://stnava.github.io/ANTsR/antsSegmentation.html
 
+
+------------------------ View Anatomy and Mask ------------------------ 
+vglrun itksnap -g LPBA40_Template.nii.gz  -s LPBA40_mask.nii.gz
+
+
+------------------------ Extract Anatomy Using Mask ------------------------ 
+/opt/apps/itksnap/c3d-1.0.0-Linux-x86_64/bin/c3d LPBA40_Template.nii.gz  LPBA40_mask.nii.gz  -binarize -multiply -o LPBA40_strip.nii.gz
+
+
 ------------------------ Example Brain Strip ------------------------ 
 
 ./antsBrainExtraction.sh -d 3 -a target.nii.gz  -e  LPBA40_Template.nii.gz     -m LPBA40_mask.nii.gz     -o LPstrip
@@ -22,12 +31,16 @@ $ANTSPATH/ImageMath 3 matched.nii.gz HistogramMatch target.nii.gz fixed.nii.gz  
 http://www.itk.org/Doxygen/html/classitk_1_1HistogramMatchingImageFilter.html
 Udupa, J. K., Zhang, X., & Notation, A. (2000). New Variants of a Method of MRI Scale Standardization. IEEE TMI, 19(2), 143–150.
 
+------------------------ Example Rigid Registration ------------------------ 
+
+/opt/apps/ANTsR/dev//ANTsR_src/ANTsR/src/ANTS/ANTS-build//bin/ANTS 3 -m CC[fixed.nii.gz,target.nii.gz,1,5] -o basenametarget.nii.gz -i 0 --use-Histogram-Matching --number-of-affine-iterations 10000x10000x10000x10000x10000 --MI-option 32x16000 
+$ANTSPATH/WarpImageMultiTransform 3 target.nii.gz targetdeformed.nii.gz basenametargetAffine.txt -r fixed.nii.gz
+
+
 ------------------------ Example Registration ------------------------ 
 
-
-$ANTSPATH/../../ANTS-src/Scripts/antsIntroduction.sh -d 3 -r fixed.nii.gz -i target.nii.gz > log.txt 2>&1
-$ANTSPATH/ANTS 3 -m  CC[fixed.nii.gz,target.nii.gz,1,5] -t SyN[0.25] -r Gauss[3,0] -o basename target -i 30x90x20 --use-Histogram-Matching  --number-of-affine-iterations 10000x10000x10000x10000x10000 --MI-option 32x16000  
-$ANTSPATH/WarpImageMultiTransform 3 target.nii.gz targetdeformed.nii.gz targetWarp.nii.gz targetAffine.txt -r fixed.nii.gz >> log.txt 2>&1
+$ANTSPATH/ANTS 3 -m  CC[fixed.nii.gz,target.nii.gz,1,5] -t SyN[0.25] -r Gauss[3,0] -o basenametarget -i 30x90x20 --use-Histogram-Matching  --number-of-affine-iterations 10000x10000x10000x10000x10000 --MI-option 32x16000  
+$ANTSPATH/WarpImageMultiTransform 3 target.nii.gz targetdeformed.nii.gz basenametargetWarp.nii.gz basenametargetAffine.txt -r fixed.nii.gz >> log.txt 2>&1
 
 ------------------------ Example Registration ------------------------ 
 convert DICOM to nii.gz

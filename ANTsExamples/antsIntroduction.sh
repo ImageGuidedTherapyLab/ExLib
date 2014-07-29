@@ -347,7 +347,7 @@ do
         ;;
     i) #input or moving image
         MOVING=$OPTARG
-        OUTPUTNAME=` echo basename $MOVING | cut -d '.' -f 1 `
+        OUTPUTNAME=` echo basename$MOVING | cut -d '.' -f 1 `
         ;;
     l) #use label image
         LABELIMAGE=$OPTARG
