@@ -7,6 +7,7 @@ vglrun itksnap -g LPBA40_Template.nii.gz  -s LPBA40_mask.nii.gz
 
 
 ------------------------ Extract Anatomy Using Mask ------------------------ 
+
 /opt/apps/itksnap/c3d-1.0.0-Linux-x86_64/bin/c3d LPBA40_Template.nii.gz  LPBA40_mask.nii.gz  -binarize -multiply -o LPBA40_strip.nii.gz
 
 
@@ -18,6 +19,15 @@ Tempates obtained from:
    https://drive.google.com/folderview?id=0B4SvObeEfaRySUNDOE5DWksyQ0k&usp=sharing#list
 
 Tustison, Nicholas J., et al. "Large-Scale Evaluation of ANTs and FreeSurfer Cortical Thickness Measurements." NeuroImage (2014).
+
+------------------------ Example FMM ------------------------ 
+
+/opt/apps/itksnap/c3d-1.0.0-Linux-x86_64/bin/c3d  LPBA40_mask.nii.gz  -binarize -o LPBinary.nii.gz
+$ANTSPATH/ImageMath 3 lpexN4Truncated0.nii.gz TruncateImageIntensity LPBA40_strip.nii.gz 0.01 0.999 256
+$ANTSPATH/N4BiasFieldCorrection -d 3 -i lpexN4Truncated0.nii.gz -s 4 -c [50x50x50x50,0.0000001] -b [200] -o lpexN4Corrected0.nii.gz
+$ANTSPATH//ImageMath 3 lpexBrainExtractionLaplacian.nii.gz Laplacian lpexN4Corrected0.nii.gz 1.5 1
+$ANTSPATH//Atropos -d 3 -a lpexN4Corrected0.nii.gz  -i kmeans[4]                -x LPBinary.nii.gz  -c [3,0.0] -m [0.1,1x1x1] -k Gaussian -o [lpex_ATROPOS_GMM.nii.gz,lpex_ATROPOS_GMM_POSTERIORS%d.nii.gz]
+
 
 ------------------------ Example Bias Correct ------------------------ 
 
