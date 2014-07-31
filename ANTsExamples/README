@@ -29,6 +29,8 @@ $ANTSPATH//ImageMath 3 lpexBrainExtractionLaplacian.nii.gz Laplacian lpexN4Corre
 $ANTSPATH//Atropos -d 3 -a lpexN4Corrected0.nii.gz  -i kmeans[4]                -x LPBinary.nii.gz  -c [3,0.0] -m [0.1,1x1x1] -k Gaussian -o [lpex_ATROPOS_GMM.nii.gz,lpex_ATROPOS_GMM_POSTERIORS%d.nii.gz]
 
 
+Atropos: http://www.ncbi.nlm.nih.gov/pubmed/21373993
+
 ------------------------ Example Bias Correct ------------------------ 
 
 $ANTSPATH/N4BiasFieldCorrection  -d 3 -i target.nii.gz -o biastarget.nii.gz -b [200] -s 3 -c [50x50x30x20,1e-6]
