@@ -12,7 +12,7 @@ vglrun itksnap -g LPBA40_Template.nii.gz  -s LPBA40_mask.nii.gz
 
 ------------------------ Example Brain Strip ------------------------ 
 
-./antsBrainExtraction.sh -d 3 -a target.nii.gz  -e  LPBA40_Template.nii.gz     -m LPBA40_mask.nii.gz     -o LPstrip
+./antsBrainExtraction.sh  -k 1 -d 3 -a target.nii.gz  -e  LPBA40_Template.nii.gz     -m LPBA40_mask.nii.gz     -o LPstrip
 
 Tempates obtained from:
    https://drive.google.com/folderview?id=0B4SvObeEfaRySUNDOE5DWksyQ0k&usp=sharing#list
