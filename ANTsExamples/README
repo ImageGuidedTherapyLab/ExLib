@@ -8,6 +8,8 @@ vglrun itksnap -g LPBA40_Template.nii.gz  -s LPBA40_mask.nii.gz
 
 ------------------------ Extract Anatomy Using Mask ------------------------ 
 
+http://www.itksnap.org/pmwiki/pmwiki.php?n=Convert3D.Documentation
+
 /opt/apps/itksnap/c3d-1.0.0-Linux-x86_64/bin/c3d LPBA40_Template.nii.gz  LPBA40_mask.nii.gz  -binarize -multiply -o LPBA40_strip.nii.gz
 
 
@@ -45,7 +47,13 @@ Udupa, J. K., Zhang, X., & Notation, A. (2000). New Variants of a Method of MRI 
 
 ------------------------ Example Rigid Registration ------------------------ 
 
+http://stnava.github.io/ANTsDoc/
+
+1) compute the deformation/rigid tranformation field
 /opt/apps/ANTsR/dev//ANTsR_src/ANTsR/src/ANTS/ANTS-build//bin/ANTS 3 -m CC[fixed.nii.gz,target.nii.gz,1,5] -o basenametarget.nii.gz -i 0 --use-Histogram-Matching --number-of-affine-iterations 10000x10000x10000x10000x10000 --MI-option 32x16000 
+
+
+2) apply the tranform
 $ANTSPATH/WarpImageMultiTransform 3 target.nii.gz targetdeformed.nii.gz basenametargetAffine.txt -r fixed.nii.gz
 
 
