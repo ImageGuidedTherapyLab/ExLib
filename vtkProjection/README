@@ -1,0 +1,12 @@
+Usage
+=====
+python needleprojection.py
+
+Create Example Image
+====================
+c3d -create 256x256x160 1x1x1mm -o newimage.vtk
+
+Visualize Needle
+================
+/opt/apps/Paraview/ParaView-4.0.1-Linux-64bit/bin/paraview --data=needle.vtk
+/opt/apps/Paraview/ParaView-3.14.1-Linux-64bit/bin/paraview --data=needle.vtk
