@@ -34,8 +34,54 @@ vtkCylinder.SetRadius(DiffusingTipRadius );
 vtkCylinder.SetCenter(0.0, 0.0, 0.0);
 vtkCylinder.SetResolution(16);
 
+# read source landmarks
+SourceLMReader = vtk.vtkPolyDataReader()
+SourceLMReader.SetFileName("DefaultLandmarks.vtk");
+SourceLMReader.Update()
+#print SourceLMReader.GetOutput().GetPoints()
+
+# read target landmarks
+TargetLMReader = vtk.vtkPolyDataReader()
+TargetLMReader.SetFileName("TargetLandmarks.vtk");
+TargetLMReader.Update()
+#print TargetLMReader.GetOutput().GetPoints()
+
+
+# create transformation
+LandmarkTransform = vtk.vtkLandmarkTransform()
+LandmarkTransform.SetSourceLandmarks(SourceLMReader.GetOutput().GetPoints() )
+LandmarkTransform.SetTargetLandmarks(TargetLMReader.GetOutput().GetPoints() )
+LandmarkTransform.SetModeToRigidBody()
+LandmarkTransform.Update()
+print LandmarkTransform.GetMatrix()
+
+# apply transform
+transformFilter = vtk.vtkTransformFilter()
+transformFilter.SetInput(vtkCylinder.GetOutput() ) 
+transformFilter.SetTransform( LandmarkTransform) 
+transformFilter.Update()
+
+# write model
 modelWriter = vtk.vtkDataSetWriter()
-modelWriter.SetInput(vtkCylinder.GetOutput())
+modelWriter.SetInput(transformFilter.GetOutput())
 modelWriter.SetFileName("needle.vtk")
 modelWriter.SetFileTypeToBinary()
 modelWriter.Update()
+
+# write model
+ImageReader = vtk.vtkDataSetReader()
+ImageReader.SetFileName("newimage.vtk")
+ImageReader.Update()
+
+# resample needle to image to create mask
+vtkResample = vtk.vtkCompositeDataProbeFilter()
+vtkResample.SetInput( ImageReader.GetOutput() )
+vtkResample.SetSource( transformFilter.GetOutput() ) 
+vtkResample.Update()
+
+# write mask
+MaskWriter = vtk.vtkDataSetWriter()
+MaskWriter.SetInput(vtkResample.GetOutput())
+MaskWriter.SetFileName("needlemask.vtk")
+MaskWriter.Update()
+

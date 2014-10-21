@@ -1,0 +1,10 @@
+# vtk DataFile Version 3.0
+vtk output
+ASCII
+DATASET POLYDATA
+POINTS 2 float
+90 120 100 90 120 105 
+VERTICES 2 4
+1 0 
+1 1 
+
