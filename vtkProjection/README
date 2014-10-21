@@ -4,7 +4,7 @@ python needleprojection.py
 
 Create Example Image
 ====================
-c3d -create 256x256x160 1x1x1mm -o newimage.vtk
+c3d -create 256x256x160 1x1x1mm -type char -o newimage.vtk
 
 Visualize Needle
 ================
