@@ -50,7 +50,7 @@ Udupa, J. K., Zhang, X., & Notation, A. (2000). New Variants of a Method of MRI 
 http://stnava.github.io/ANTsDoc/
 
 1) compute the deformation/rigid tranformation field
-/opt/apps/ANTsR/dev//ANTsR_src/ANTsR/src/ANTS/ANTS-build//bin/ANTS 3 -m CC[fixed.nii.gz,target.nii.gz,1,5] -o basenametarget.nii.gz -i 0 --use-Histogram-Matching --number-of-affine-iterations 10000x10000x10000x10000x10000 --MI-option 32x16000 
+/opt/apps/ANTsR/dev//ANTsR_src/ANTsR/src/ANTS/ANTS-build//bin/ANTS 3 -m CC[fixed.nii.gz,target.nii.gz,1,5] -o basenametarget -i 0 --use-Histogram-Matching --number-of-affine-iterations 10000x10000x10000x10000x10000 --MI-option 32x16000 
 
 
 2) apply the tranform
