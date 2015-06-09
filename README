@@ -6,9 +6,9 @@ https://www.orfeo-toolbox.org//doxygen/classotb_1_1ScalarImageToTexturesFilter.h
 
 build on 12.04 ubuntu
 
-with otb version 4.2.0
+with otb version 4.2.0 - match itk build  and use static libraries to transfer between machines
 
-cmake -DCMAKE_BUILD_TYPE=Debug -DOTB_USE_EXTERNAL_LIBKML=ON -DBUILD_APPLICATIONS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX=$OTB_HOME ../OTB-4.2.0
+cmake -DCMAKE_CXX_COMPILER=/usr/bin/g++-4.4 -DCMAKE_C_COMPILER=/usr/bin/gcc-4.4 -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=Off -DOTB_USE_EXTERNAL_LIBKML=ON -DBUILD_APPLICATIONS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX=$OTB_HOME ../OTB-4.2.0
 
 compile hack needed
 -------------------
