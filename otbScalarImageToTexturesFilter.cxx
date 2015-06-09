@@ -91,49 +91,49 @@ int main(int argc, char * argv[])
   //writer->SetNumberOfDivisionsStrippedStreaming(2);
 
   oss.str("");
-  oss << outprefix << "Energy.nii.gz";
+  oss << outprefix << "Energy_" << radius << ".nii.gz";
   writer->SetInput(filter->GetEnergyOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss << outprefix << "Entropy.nii.gz";
+  oss << outprefix << "Entropy_" << radius << ".nii.gz";
   writer->SetInput(filter->GetEntropyOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss << outprefix << "Correlation.nii.gz";
+  oss << outprefix << "Correlation_" << radius << ".nii.gz";
   writer->SetInput(filter->GetCorrelationOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss << outprefix << "InverseDifferenceMoment.nii.gz";
+  oss << outprefix << "InverseDifferenceMoment_" << radius << ".nii.gz";
   writer->SetInput(filter->GetInverseDifferenceMomentOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss << outprefix << "Inertia.nii.gz";
+  oss << outprefix << "Inertia_" << radius << ".nii.gz";
   writer->SetInput(filter->GetInertiaOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss << outprefix << "ClusterShade.nii.gz";
+  oss << outprefix << "ClusterShade_" << radius << ".nii.gz";
   writer->SetInput(filter->GetClusterShadeOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss << outprefix << "ClusterProminence.nii.gz";
+  oss << outprefix << "ClusterProminence_" << radius << ".nii.gz";
   writer->SetInput(filter->GetClusterProminenceOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss << outprefix << "HaralickCorrelation.nii.gz";
+  oss << outprefix << "HaralickCorrelation_" << radius << ".nii.gz";
   writer->SetInput(filter->GetHaralickCorrelationOutput());
   writer->SetFileName(oss.str());
   writer->Update();
