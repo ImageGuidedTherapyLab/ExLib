@@ -2,3 +2,29 @@ Haralick texture features
 -------------------------
 
 https://www.orfeo-toolbox.org//doxygen/classotb_1_1ScalarImageToTexturesFilter.html
+
+
+build on 12.04 ubuntu
+
+with otb version 4.2.0
+
+cmake -DCMAKE_BUILD_TYPE=Debug -DOTB_USE_EXTERNAL_LIBKML=ON -DBUILD_APPLICATIONS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX=$OTB_HOME ../OTB-4.2.0
+
+compile hack needed
+-------------------
+$ git diff
+diff --git a/Code/IO/otbGDALImageIO.cxx b/Code/IO/otbGDALImageIO.cxx
+index 171a732..b08cc30 100644
+--- a/Code/IO/otbGDALImageIO.cxx
++++ b/Code/IO/otbGDALImageIO.cxx
+@@ -911,7 +911,9 @@ void GDALImageIO::InternalReadImageInformation()
+   if (m_Dataset->IsJPEG2000())
+     {
+     // store the cache size used for Jpeg2000 files
+-    itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::CacheSizeInBytes , GDALGetCacheMax64());
++    //itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::CacheSizeInBytes , GDALGetCacheMax64());
++    itkExceptionMacro(<< "COMP HACK ");
++    return;
+     }
+
+   /* -------------------------------------------------------------------- */

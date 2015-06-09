@@ -19,8 +19,8 @@
 
 #include "otbScalarImageToTexturesFilter.h"
 #include "otbImage.h"
-#include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+#include "itkImageFileReader.h"
+#include "itkImageFileWriter.h"
 #include "otbStandardFilterWatcher.h"
 
 int main(int argc, char * argv[])
@@ -55,8 +55,8 @@ int main(int argc, char * argv[])
   typedef otb::Image<PixelType, Dimension> ImageType;
   typedef otb::ScalarImageToTexturesFilter
   <ImageType, ImageType>                        TexturesFilterType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef itk::ImageFileReader<ImageType> ReaderType;
+  typedef itk::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer         reader = ReaderType::New();
   TexturesFilterType::Pointer filter = TexturesFilterType::New();
@@ -73,6 +73,7 @@ int main(int argc, char * argv[])
   TexturesFilterType::OffsetType offset;
   offset[0] = offsetx;
   offset[1] = offsety;
+  offset[2] = offsetz;
 
   filter->SetInput(reader->GetOutput());
   filter->SetRadius(sradius);
@@ -87,7 +88,7 @@ int main(int argc, char * argv[])
   // Write outputs
   std::ostringstream oss;
 
-  writer->SetNumberOfDivisionsStrippedStreaming(2);
+  //writer->SetNumberOfDivisionsStrippedStreaming(2);
 
   oss.str("");
   oss << outprefix << "Energy.nii.gz";

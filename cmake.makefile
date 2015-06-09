@@ -9,4 +9,4 @@ clean:
 
 tags:
 	#ctags -R  --langmap=c++:+.cu --langmap=c++:+.cuh $(MATLABROOT) . 
-	ctags -R  --langmap=c++:+.cu --langmap=c++:+.cuh --langmap=c++:+.txx --langmap=c++:+.cl $(ITK_SOURCE) .
+	ctags -R  --langmap=c++:+.cu --langmap=c++:+.cuh --langmap=c++:+.txx --langmap=c++:+.cl $(OTB_SOURCE) .
