@@ -23,7 +23,7 @@
 #include "otbImageFileWriter.h"
 #include "otbStandardFilterWatcher.h"
 
-int otbScalarImageToTexturesFilter(int argc, char * argv[])
+int main(int argc, char * argv[])
 {
   if (argc != 7)
     {
