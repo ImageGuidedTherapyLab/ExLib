@@ -25,19 +25,32 @@
 
 int main(int argc, char * argv[])
 {
-  if (argc != 7)
+  if (argc < 5)
     {
-    std::cerr << "Usage: " << argv[0] << " infname outprefix nbBins radius offsetx offsety" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " infname outprefix nbBins radius [offsetx offsety offsetz]" << std::endl;
     return EXIT_FAILURE;
     }
   const char *       infname      = argv[1];
   const char *       outprefix    = argv[2];
   const unsigned int nbBins       = atoi(argv[3]);
   const unsigned int radius       = atoi(argv[4]);
-  const int          offsetx      = atoi(argv[5]);
-  const int          offsety      = atoi(argv[6]);
+  int          offsetx      = 0;
+  int          offsety      = 0;
+  int          offsetz      = 0;
+  if( argc > 5 )
+    {
+    offsetx      = atoi(argv[5]);
+    }
+  if( argc > 6 )
+    {
+    offsety      = atoi(argv[6]);
+    }
+  if( argc > 7 )
+    {
+    offsetz      = atoi(argv[7]);
+    }
 
-  const unsigned int Dimension = 2;
+  const unsigned int Dimension = 3;
   typedef float                            PixelType;
   typedef otb::Image<PixelType, Dimension> ImageType;
   typedef otb::ScalarImageToTexturesFilter
@@ -77,49 +90,49 @@ int main(int argc, char * argv[])
   writer->SetNumberOfDivisionsStrippedStreaming(2);
 
   oss.str("");
-  oss << outprefix << "Energy.tif";
+  oss << outprefix << "Energy.nii.gz";
   writer->SetInput(filter->GetEnergyOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss << outprefix << "Entropy.tif";
+  oss << outprefix << "Entropy.nii.gz";
   writer->SetInput(filter->GetEntropyOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss << outprefix << "Correlation.tif";
+  oss << outprefix << "Correlation.nii.gz";
   writer->SetInput(filter->GetCorrelationOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss << outprefix << "InverseDifferenceMoment.tif";
+  oss << outprefix << "InverseDifferenceMoment.nii.gz";
   writer->SetInput(filter->GetInverseDifferenceMomentOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss << outprefix << "Inertia.tif";
+  oss << outprefix << "Inertia.nii.gz";
   writer->SetInput(filter->GetInertiaOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss << outprefix << "ClusterShade.tif";
+  oss << outprefix << "ClusterShade.nii.gz";
   writer->SetInput(filter->GetClusterShadeOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss << outprefix << "ClusterProminence.tif";
+  oss << outprefix << "ClusterProminence.nii.gz";
   writer->SetInput(filter->GetClusterProminenceOutput());
   writer->SetFileName(oss.str());
   writer->Update();
 
   oss.str("");
-  oss << outprefix << "HaralickCorrelation.tif";
+  oss << outprefix << "HaralickCorrelation.nii.gz";
   writer->SetInput(filter->GetHaralickCorrelationOutput());
   writer->SetFileName(oss.str());
   writer->Update();
