@@ -27,7 +27,7 @@ int main(int argc, char * argv[])
 {
   if (argc < 5)
     {
-    std::cerr << "Usage: " << argv[0] << " infname outprefix nbBins radius [offsetx offsety offsetz]" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " infname outprefix nbBins radius [offsetx offsety offsetz minIntensity maxIntensity]" << std::endl;
     return EXIT_FAILURE;
     }
   const char *       infname      = argv[1];
@@ -37,6 +37,7 @@ int main(int argc, char * argv[])
   int          offsetx      = 0;
   int          offsety      = 0;
   int          offsetz      = 0;
+
   if( argc > 5 )
     {
     offsetx      = atoi(argv[5]);
@@ -52,6 +53,18 @@ int main(int argc, char * argv[])
 
   const unsigned int Dimension = 3;
   typedef float                            PixelType;
+  // assume images are scaled between [0,1]
+  PixelType    minIntensity = 0.;
+  PixelType    maxIntensity = 1.;
+  if( argc > 8 )
+    {
+    minIntensity = atof(argv[8]);
+    }
+  if( argc > 9 )
+    {
+    maxIntensity = atof(argv[9]);
+    }
+
   typedef otb::Image<PixelType, Dimension> ImageType;
   typedef otb::ScalarImageToTexturesFilter
   <ImageType, ImageType>                        TexturesFilterType;
@@ -82,8 +95,10 @@ int main(int argc, char * argv[])
   otb::StandardFilterWatcher watcher(filter, "Textures filter");
 
   filter->SetNumberOfBinsPerAxis(nbBins);
-  filter->SetInputImageMinimum(0);
-  filter->SetInputImageMaximum(255);
+  filter->SetInputImageMinimum( minIntensity);
+  filter->SetInputImageMaximum( maxIntensity);
+  filter->Update();
+  //filter->Print(std::cout);
 
   // Write outputs
   std::ostringstream oss;
