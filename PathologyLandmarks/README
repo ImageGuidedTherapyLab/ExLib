@@ -1,0 +1,12 @@
+
+Usage
+=====
+make -f lm.makefile
+
+Convert path to nifti and set spacing
+=======
+c3d -verbose -mcs pathology.tif -origin 0x0x0mm -spacing 0.01x0.01x0.01mm -omc pathology.nii.gz
+vglrun itksnap -g pathology.nii.gz -s pathologyLM.nii.gz
+  Layer Inspector -> General -> Display Mode -> RGB
+
+vglrun itksnap -g dce.nii.gz -s dceLM.nii.gz
