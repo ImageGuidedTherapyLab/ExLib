@@ -13,3 +13,12 @@ pathology.lmreg.nii.gz: landmarktransform.tfm pathology.nii.gz dce.nii.gz
 # compute lm transformation
 landmarktransform.tfm: dceLM.nii.gz pathologyLM.nii.gz 
 	 $(ANTSLANDMARKCMD) $^  rigid $@  >> $(basename $@).log 2>&1
+
+#Convert path to nifti and set spacing
+pathology.nii.gz: pathology.tif 
+	c3d -verbose -mcs $< -origin 0x0x0mm -spacing 0.01x0.01x0.01mm -omc $@
+
+view:
+	vglrun itksnap -g pathology.nii.gz -s pathologyLM.nii.gz
+	vglrun itksnap -g dce.nii.gz -s dceLM.nii.gz
+	echo Layer Inspector -> General -> Display Mode -> RGB
