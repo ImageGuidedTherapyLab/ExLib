@@ -7,7 +7,7 @@ ANTSLANDMARKCMD       =/opt/apps/ANTsR/dev//ANTsR_src/ANTsR/src/ANTS/ANTS-build/
 
 # apply transformation
 pathology.lmreg.nii.gz: landmarktransform.tfm pathology.nii.gz dce.nii.gz
-	 $(ANTSAPPLYTRANSFORMSCMD) -d 3 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $<  --float 0 
+	 $(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $<  --float 0 
 	@echo vglrun itksnap -g $(word 3, $^)  -o $@
 
 # compute lm transformation
