@@ -10,8 +10,7 @@ Rat                         VARCHAR(64)  NOT  NULL ,
 TimePoint                   VARCHAR(64)       NULL ,
 T2WeightedReference         VARCHAR(256) NOT  NULL ,
 T2WeightedReferenceLM       VARCHAR(256) GENERATED ALWAYS AS (REPLACE(T2WeightedReference,"RefImg.hdr","RefImgLM.hdr")) STORED,
-TransformT2HELM             VARCHAR(256) GENERATED ALWAYS AS (REPLACE(T2WeightedReference,"T2wReference/RefImg.hdr","t2HElmtransform.tfm")) STORED,
-TransformT2PimoLM           VARCHAR(256) GENERATED ALWAYS AS (REPLACE(T2WeightedReference,"T2wReference/RefImg.hdr","t2PIMOlmtransform.tfm")) STORED,
+UpdateTransform             VARCHAR(256) GENERATED ALWAYS AS (REPLACE(T2WeightedReference,"T2wReference/RefImg.hdr","updatetransform")) STORED,
 T2starMapOxygen             VARCHAR(256)      NULL ,
 T2statMapMedicalAir         VARCHAR(256)      NULL ,
 T2starMapAbsoluteChange     VARCHAR(256)      NULL ,
@@ -56,8 +55,7 @@ BEGIN
     select  concat("T1PostContrast           =", group_concat( hcc.T1PostContrast            separator ' ')) T1PostContrast             from Metadata.HCCPathdb hcc;
     select  concat("PathologyHE              =", group_concat( hcc.PathologyHE               separator ' ')) PathologyHE                from Metadata.HCCPathdb hcc;        
     select  concat("PathologyPimo            =", group_concat( hcc.PathologyPimo             separator ' ')) PathologyPimo              from Metadata.HCCPathdb hcc;
-    select  concat("TransformT2HELM          =", group_concat( hcc.TransformT2HELM           separator ' ')) TransformT2HELM            from Metadata.HCCPathdb hcc;
-    select  concat("TransformT2PimoLM        =", group_concat( hcc.TransformT2PimoLM         separator ' ')) TransformT2PimoLM          from Metadata.HCCPathdb hcc;
+    select  concat("UpdateTransform          =", group_concat( hcc.UpdateTransform           separator ' ')) UpdateTransform            from Metadata.HCCPathdb hcc;
 END //
 DELIMITER ;
 -- show create procedure Metadata.HCCPathDBList;
