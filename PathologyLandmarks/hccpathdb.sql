@@ -31,7 +31,7 @@ KEY `UID1` (`Rat`)
 
 
 -- load dti data
-LOAD DATA LOCAL INFILE '/workarea/fuentes/FullRepo/DIP/data/avritscher/CorrelativePathFiles.csv'
+LOAD DATA LOCAL INFILE './datalocation/CorrelativePathFiles.csv'
 INTO TABLE Metadata.HCCPathdb
 FIELDS TERMINATED BY ','  ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
