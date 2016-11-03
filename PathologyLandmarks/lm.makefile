@@ -3,6 +3,7 @@ ANTSLANDMARKCMD       =/opt/apps/ANTsR/dev//ANTsR_src/ANTsR/src/ANTS/ANTS-build/
 ITKSNAP  = vglrun /opt/apps/itksnap/itksnap-3.2.0-20141023-Linux-x86_64/bin/itksnap
 C3DEXE=/rsrch2/ip/dtfuentes/bin/c3d
 MYSQL = mysql 
+CONVERTSVS = python ./convertsvs.py
 
 ################
 # Dependencies #
@@ -44,6 +45,7 @@ pathology.lmreg.nii.gz: landmarktransform.tfm pathology.nii.gz dce.nii.gz
 # http://openslide.org/    MPP = micron per pixel
 # FIXME - need script to parse header
 %/PathHE.nii.gz: %/PathHE.svs
+	$(CONVERTSVS) --svsfile=$< --outimage=$@
 	openslide-show-properties $<   | grep -i 'layer\[2\|mpp'
 	openslide-write-png $< 0 0 2 2738 2286 pathology.png
 	# remove alpha channel from rgba image and write rgb nii.gz
