@@ -2,19 +2,18 @@ ANTSAPPLYTRANSFORMSCMD=/opt/apps/ANTsR/dev//ANTsR_src/ANTsR/src/ANTS/ANTS-build/
 ANTSLANDMARKCMD       =/opt/apps/ANTsR/dev//ANTsR_src/ANTsR/src/ANTS/ANTS-build//bin//ANTSUseLandmarkImagesToGetAffineTransform 
 ITKSNAP  = vglrun /opt/apps/itksnap/itksnap-3.2.0-20141023-Linux-x86_64/bin/itksnap
 C3DEXE=/rsrch2/ip/dtfuentes/bin/c3d
+MYSQL = mysql 
 
 ################
 # Dependencies #
 ################
-include datalocation/dependencies
-
-T2LM:=  $(subst RefImg.hdr,RefImgLM.nii.gz,$(T2WeightedReference))
-HENIFTI:=  $(subst PathHE.svs,PathHE.nii.gz,$(PathologyHE))
-LMTRANSFORM:=  $(subst T2wReference/RefImg.hdr,t2pathlmtransform.tfm,$(T2WeightedReference))
+-include datalocation/dependencies
+dependencies: 
+	$(MYSQL) -sNre "call Metadata.HCCPathDBList();"  > datalocation/dependencies
 
 convert:    $(HENIFTI)
 lm:         $(T2LM)
-transform:  $(LMTRANSFORM)
+transform:  $(TransformT2HELM)
 
 # debug
 jobs:
@@ -36,7 +35,7 @@ pathology.lmreg.nii.gz: landmarktransform.tfm pathology.nii.gz dce.nii.gz
 	@echo vglrun itksnap -g $(word 3, $^)  -o $@
 
 # compute lm transformation
-%/t2pathlmtransform.tfm: %/Pathology/PathHELM.nii.gz %/Pathology/PathHE.nii.gz %/T2wReference/RefImgLM.nii.gz %/T2wReference/RefImg.hdr
+%/t2HElmtransform.tfm: %/Pathology/PathHELM.nii.gz %/Pathology/PathHE.nii.gz %/T2wReference/RefImgLM.nii.gz %/T2wReference/RefImg.hdr
 	$(ITKSNAP) -l LMLabels.txt -s $(word 1, $^)  -g $(word 2, $^)  
 	$(ITKSNAP) -l LMLabels.txt -s $(word 3, $^)  -g $(word 4, $^)  
 	$(ANTSLANDMARKCMD) $^  rigid $@  >> $(basename $@).log 2>&1
