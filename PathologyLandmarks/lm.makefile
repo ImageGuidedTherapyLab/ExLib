@@ -38,14 +38,14 @@ jobs:
 # apply transformation
 pathology.lmreg.nii.gz: landmarktransform.tfm pathology.nii.gz dce.nii.gz
 	 $(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $<  --float 0 
-	@echo vglrun itksnap -g $(word 3, $^)  -o $@
+	@echo vglrun $(ITKSNAP) -g $(word 3, $^)  -o $@
 
 # update transform lm
 %/updatetransform: %/Pathology/PathHELM.nii.gz %/Pathology/PathHE.nii.gz %/T2wReference/RefImgLM.nii.gz %/T2wReference/RefImg.hdr %/Pathology/PathPIMOLM.nii.gz %/Pathology/PathPIMO.nii.gz 
-	vglrun itksnap -l LMLabels.txt -s $(word 1, $^)  -g $(word 2, $^)  &  PIDPATH=$$!; \
-        vglrun itksnap -l LMLabels.txt -s $(word 3, $^)  -g $(word 4, $^)  &  PIDMRI=$$!; \
-        vglrun itksnap -l LMLabels.txt -s $(word 5, $^)  -g $(word 6, $^)  &  PIDPIMO=$$!; \
-        zenity --info --title="OutputFile" --text="$(word 4, $^)"; \
+	vglrun $(ITKSNAP) -l LMLabels.txt -s $(word 1, $^)  -g $(word 2, $^)  &  PIDPATH=$$!; \
+        vglrun $(ITKSNAP) -l LMLabels.txt -s $(word 3, $^)  -g $(word 4, $^)  &  PIDMRI=$$!; \
+        vglrun $(ITKSNAP) -l LMLabels.txt -s $(word 5, $^)  -g $(word 6, $^)  &  PIDPIMO=$$!; \
+        zenity --info --title="OutputFile" --text="Tools -> Layer Inspector -> General -> Display Mode -> RGB $(word 4, $^)  "; \
         kill -9 $$PIDPATH;kill -9 $$PIDMRI;kill -9 $$PIDPIMO;
 
 # compute lm transformation
@@ -65,4 +65,4 @@ pathology.lmreg.nii.gz: landmarktransform.tfm pathology.nii.gz dce.nii.gz
 view:
 	vglrun itksnap -g pathology.nii.gz -s pathologyLM.nii.gz
 	vglrun itksnap -g dce.nii.gz -s dceLM.nii.gz
-	echo Layer Inspector -> General -> Display Mode -> RGB
+	echo Tools -> Layer Inspector -> General -> Display Mode -> RGB

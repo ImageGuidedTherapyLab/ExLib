@@ -4,7 +4,7 @@
 ### Usage
 
 ```
-$ make -f lm.makefile
+$ make -f lm.makefile transform
 ```
 
 ### Example Output
