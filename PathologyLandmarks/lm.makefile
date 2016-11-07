@@ -7,7 +7,7 @@ CONVERTSVS = python ./convertsvs.py
 DIMENSION = 3
 NTISSUE = 4
 ATROPOSCMD=$(ANTSPATH)/Atropos -d $(DIMENSION)  -c [3,0.0] -m [0.1,1x1x1] 
-OTBTEXTURE=$(ANTSPATH)/otbScalarImageToTexturesFilter 
+OTBTEXTURE=/rsrch2/ip/dtfuentes/github/ExLib/otbScalarImageTextures/otbScalarImageToTexturesFilter
 CLUSTERDIR=/rsrch2/ip/dtfuentes/github/ExLib/PathologyLandmarks/
 WORKDIR=Processed
 
@@ -116,7 +116,7 @@ jobs:
 
 $(WORKDIR)/%/PathHE.HaralickCorrelation_200.nii.gz: $(DATADIR)/%/PathHE.gmm.nii.gz
 	mkdir -p $(CLUSTERDIR)/$(@D); rsync --exclude '*.svs' -avz $(<D) $(CLUSTERDIR)/$(dir $(WORKDIR)/$*);  
-	ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/$(@D) -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $<  $*/PathHE.   4 200 > $(CLUSTERDIR)/$(@D)/otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+	ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE.   4 200 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
 	echo $(ITKSNAP) -s  $< -g $*/PathHE.nii.gz -o $*/PathHE.Entropy_3.nii.gz
 
 %/PathPIMO.gmm.nii.gz: %/PathPIMO.nii.gz %/PathPIMO.mask.nii.gz
