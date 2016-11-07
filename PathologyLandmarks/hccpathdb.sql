@@ -8,6 +8,7 @@ CREATE TABLE Metadata.HCCPathdb(
 id    bigint(20) NOT NULL AUTO_INCREMENT,
 Rat                         VARCHAR(64)  NOT  NULL ,
 TimePoint                   VARCHAR(64)       NULL ,
+DataDir                     VARCHAR(256) NOT  NULL COMMENT 'Root data direcrtory',
 T2WeightedReference         VARCHAR(256) NOT  NULL ,
 T2WeightedReferenceLM       VARCHAR(256) GENERATED ALWAYS AS (REPLACE(T2WeightedReference,"RefImg.hdr","RefImgLM.hdr")) STORED,
 UpdateTransform             VARCHAR(256) GENERATED ALWAYS AS (REPLACE(T2WeightedReference,"T2wReference/RefImg.hdr","updatetransform")) STORED,
@@ -35,7 +36,7 @@ INTO TABLE Metadata.HCCPathdb
 FIELDS TERMINATED BY ','  ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES
-(Rat                         ,TimePoint                   ,T2WeightedReference         ,T2starMapOxygen             ,T2statMapMedicalAir         ,T2starMapAbsoluteChange     ,T2statMapPercentageChange   ,DCE                         ,T1PreContrast               ,T1PostContrast              ,PathologyHE                 ,PathologyPimo               )
+(DataDir, Rat                         ,TimePoint                   ,T2WeightedReference         ,T2starMapOxygen             ,T2statMapMedicalAir         ,T2starMapAbsoluteChange     ,T2statMapPercentageChange   ,DCE                         ,T1PreContrast               ,T1PostContrast              ,PathologyHE                 ,PathologyPimo               )
 SET metadata =  JSON_OBJECT( "Rat",Rat ,
                          "Time",cast(REPLACE(TimePoint,"weeks","") as Decimal)) ;
 
@@ -45,6 +46,7 @@ CREATE PROCEDURE HCCPathDBList
 ( )
 BEGIN
     SET SESSION group_concat_max_len = 10000000;
+    select  concat("DATADIR                  =", group_concat( distinct hcc.DataDir                       )) DataDir                    from Metadata.HCCPathdb hcc;
     select  concat("T2WeightedReference      =", group_concat( hcc.T2WeightedReference       separator ' ')) T2WeightedReference        from Metadata.HCCPathdb hcc;
     select  concat("T2starMapOxygen          =", group_concat( hcc.T2starMapOxygen           separator ' ')) T2starMapOxygen            from Metadata.HCCPathdb hcc;
     select  concat("T2statMapMedicalAir      =", group_concat( hcc.T2statMapMedicalAir       separator ' ')) T2statMapMedicalAir        from Metadata.HCCPathdb hcc;

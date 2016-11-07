@@ -5,8 +5,11 @@ C3DEXE=/rsrch2/ip/dtfuentes/bin/c3d
 MYSQL = mysql 
 CONVERTSVS = python ./convertsvs.py
 DIMENSION = 3
-ATROPOSCMD=$(ANTSPATH)/Atropos -d $(DIMENSION)  -c [3,0.0] -m [0.1,1x1x1] 
 NTISSUE = 4
+ATROPOSCMD=$(ANTSPATH)/Atropos -d $(DIMENSION)  -c [3,0.0] -m [0.1,1x1x1] 
+OTBTEXTURE=$(ANTSPATH)/otbScalarImageToTexturesFilter 
+CLUSTERDIR=/rsrch2/ip/dtfuentes/github/ExLib/PathologyLandmarks/
+WORKDIR=Processed
 
 ################
 # Dependencies #
@@ -16,10 +19,10 @@ dependencies:
 	bash -i -c '$(MYSQL) --local-infile < ./hccpathdb.sql'
 	bash -i -c '$(MYSQL) -sNre "call Metadata.HCCPathDBList();"  > datalocation/dependencies'
 
-HENIFTI:=  $(subst PathHE.svs,PathHE.nii.gz,$(PathologyHE))
-PIMONIFTI:=  $(subst PathPIMO.svs,PathPIMO.nii.gz,$(PathologyPimo))
-HEGMM:=  $(subst PathHE.svs,PathHE.gmm.nii.gz,$(PathologyHE))
-PIMOGMM:=  $(subst PathPIMO.svs,PathPIMO.gmm.nii.gz,$(PathologyPimo))
+HENIFTI:=    $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHE.nii.gz,$(PathologyHE)))
+PIMONIFTI:=  $(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMO.nii.gz,$(PathologyPimo)))
+HEGMM:=    $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHE.gmm.nii.gz,$(PathologyHE)))
+PIMOGMM:=  $(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMO.gmm.nii.gz,$(PathologyPimo)))
 convert:    $(HENIFTI) $(PIMONIFTI)
 gmm:        $(HEGMM) $(PIMOGMM)
 lm:         $(T2LM)
@@ -110,6 +113,11 @@ jobs:
 	$(C3DEXE) -mcs $< -oo $*/PathHEred.nii.gz $*/PathHEgreen.nii.gz $*/PathHEblue.nii.gz
 	$(ATROPOSCMD) -i kmeans[$(NTISSUE)] -x $(word 2,$^) -a $*/PathHEred.nii.gz -a $*/PathHEgreen.nii.gz -a $*/PathHEblue.nii.gz   -o [$@,$*/PathHEgmmPOSTERIORS%d.nii.gz] 
 	echo $(ITKSNAP) -s  $@ -g $<
+
+$(WORKDIR)/%/PathHE.HaralickCorrelation_200.nii.gz: $(DATADIR)/%/PathHE.gmm.nii.gz
+	mkdir -p $(CLUSTERDIR)/$(@D); rsync --exclude '*.svs' -avz $(<D) $(CLUSTERDIR)/$(dir $(WORKDIR)/$*);  
+	ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/$(@D) -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $<  $*/PathHE.   4 200 > $(CLUSTERDIR)/$(@D)/otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+	echo $(ITKSNAP) -s  $< -g $*/PathHE.nii.gz -o $*/PathHE.Entropy_3.nii.gz
 
 %/PathPIMO.gmm.nii.gz: %/PathPIMO.nii.gz %/PathPIMO.mask.nii.gz
 	$(C3DEXE) -mcs $< -oo $*/PathPIMOred.nii.gz $*/PathPIMOgreen.nii.gz $*/PathPIMOblue.nii.gz
