@@ -6,9 +6,11 @@ MYSQL = mysql
 CONVERTSVS = python ./convertsvs.py
 DIMENSION = 3
 NTISSUE = 4
+OTBOFFSET  = 30
+OTBRADIUS  = 50
 ATROPOSCMD=$(ANTSPATH)/Atropos -d $(DIMENSION)  -c [3,0.0] -m [0.1,1x1x1] 
 OTBTEXTURE=/rsrch2/ip/dtfuentes/github/ExLib/otbScalarImageTextures/otbScalarImageToTexturesFilter
-CLUSTERDIR=/rsrch2/ip/dtfuentes/github/ExLib/PathologyLandmarks/
+CLUSTERDIR=/rsrch2/ip/dtfuentes/github/ExLib/PathologyLandmarks/Processed
 WORKDIR=Processed
 
 ################
@@ -19,14 +21,15 @@ dependencies:
 	bash -i -c '$(MYSQL) --local-infile < ./hccpathdb.sql'
 	bash -i -c '$(MYSQL) -sNre "call Metadata.HCCPathDBList();"  > datalocation/dependencies'
 
-HENIFTI:=    $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHE.nii.gz,$(PathologyHE)))
-PIMONIFTI:=  $(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMO.nii.gz,$(PathologyPimo)))
+HENIFTI:=  $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHE.nii.gz,$(PathologyHE)))
+PIMONIFTI:=$(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMO.nii.gz,$(PathologyPimo)))
 HEGMM:=    $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHE.gmm.nii.gz,$(PathologyHE)))
 PIMOGMM:=  $(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMO.gmm.nii.gz,$(PathologyPimo)))
-convert:    $(HENIFTI) $(PIMONIFTI)
-gmm:        $(HEGMM) $(PIMOGMM)
-lm:         $(T2LM)
-transform:  $(UpdateTransform)
+HEOTB:=    $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE120.HaralickCorrelation_$(OTBRADIUS).nii.gz,$(PathologyHE)))
+convert:   $(HENIFTI) $(PIMONIFTI)
+gmm:       $(HEGMM) $(PIMOGMM)
+lm:        $(T2LM)
+transform: $(UpdateTransform)
 
 # debug
 jobs:
@@ -114,10 +117,24 @@ jobs:
 	$(ATROPOSCMD) -i kmeans[$(NTISSUE)] -x $(word 2,$^) -a $*/PathHEred.nii.gz -a $*/PathHEgreen.nii.gz -a $*/PathHEblue.nii.gz   -o [$@,$*/PathHEgmmPOSTERIORS%d.nii.gz] 
 	echo $(ITKSNAP) -s  $@ -g $<
 
-$(WORKDIR)/%/PathHE.HaralickCorrelation_50.nii.gz: $(DATADIR)/%/PathHE.gmm.nii.gz
-	mkdir -p $(CLUSTERDIR)/$(@D); rsync --exclude '*.svs' -avz $(<D) $(CLUSTERDIR)/$(dir $(WORKDIR)/$*);  
-	ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE.   3 50 0 0 0 0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
-	echo $(ITKSNAP) -s  $< -g $*/PathHE.nii.gz -o $*/PathHE.Entropy_3.nii.gz
+# FIXME - push to cluster
+# ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE000.   3 50     0            0            0        0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+# ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE001.   3 50     0            0        $(OTBOFFSET) 0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+# ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE010.   3 50     0        $(OTBOFFSET)     0        0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+# ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE011.   3 50     0        $(OTBOFFSET) $(OTBOFFSET) 0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+# ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE100.   3 50 $(OTBOFFSET)     0            0        0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+# ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE101.   3 50 $(OTBOFFSET)     0        $(OTBOFFSET) 0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+# ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE110.   3 50 $(OTBOFFSET) $(OTBOFFSET)     0        0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+# ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE111.   3 50 $(OTBOFFSET) $(OTBOFFSET) $(OTBOFFSET) 0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+$(WORKDIR)/%/PathHE120.HaralickCorrelation_$(OTBRADIUS).nii.gz: $(DATADIR)/%/PathHE.gmm.nii.gz
+	mkdir -p $(CLUSTERDIR)/$*; rsync --exclude '*.svs' -avz $(<D)/ $(CLUSTERDIR)/$*/;  
+	$(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE000.   3 $(OTBRADIUS)     0             0            0     0.5 3.5
+	$(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE010.   3 $(OTBRADIUS)     0         $(OTBOFFSET)     0     0.5 3.5 
+	$(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE110.   3 $(OTBRADIUS) $(OTBOFFSET)  $(OTBOFFSET)     0     0.5 3.5 
+	$(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE100.   3 $(OTBRADIUS) $(OTBOFFSET)      0            0     0.5 3.5 
+	$(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE120.   3 $(OTBRADIUS) $(OTBOFFSET) -$(OTBOFFSET)     0     0.5 3.5 
+	mkdir -p $(WORKDIR)/$*; rsync  -avz  $(CLUSTERDIR)/$*/ $(WORKDIR)/$*/;
+	echo $(ITKSNAP) -s  $< -g $(WORKDIR)/$*/PathHE.nii.gz -o $(WORKDIR)/$*/PathHE120.Entropy_$(OTBRADIUS).nii.gz
 
 %/PathPIMO.gmm.nii.gz: %/PathPIMO.nii.gz %/PathPIMO.mask.nii.gz
 	$(C3DEXE) -mcs $< -oo $*/PathPIMOred.nii.gz $*/PathPIMOgreen.nii.gz $*/PathPIMOblue.nii.gz
