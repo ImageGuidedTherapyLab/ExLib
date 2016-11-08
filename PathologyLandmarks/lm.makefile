@@ -30,7 +30,7 @@ PIMOOTB:=  $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO120.HaralickCorr
 convert:   $(HENIFTI) $(PIMONIFTI)
 gmm:       $(HEGMM) $(PIMOGMM)
 lm:        $(T2LM)
-transform: $(UpdateTransform)
+transform: $(addprefix $(DATADIR)/,$(UpdateTransform))
 otb: $(HEOTB) $(PIMOOTB)
 
 # debug
