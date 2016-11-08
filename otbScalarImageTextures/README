@@ -28,3 +28,106 @@ index 171a732..b08cc30 100644
      }
 
    /* -------------------------------------------------------------------- */
+
+Usage
+-----
+
+$ ./otbScalarImageToTexturesFilter 
+Usage: ./otbScalarImageToTexturesFilter infname outprefix nbBins radius [offsetx offsety offsetz minIntensity maxIntensity]
+
+(gdb) bt
+#0  otb::GreyLevelCooccurrenceIndexedList<float>::Initialize (this=0x7fffd0000910, nbins=4, min=0, max=1, symmetry=true)
+    at /opt/apps/OTB/OTB-4.2.0-gcc-4.4.7-dbg/include/otb/FeatureExtraction/otbGreyLevelCooccurrenceIndexedList.txx:45
+#1  0x00000000008c3302 in otb::ScalarImageToTexturesFilter<otb::Image<float, 3u>, otb::Image<float, 3u> >::ThreadedGenerateData (this=0x25966e0, outputRegionForThread=..., threadId=1)
+    at /opt/apps/OTB/OTB-4.2.0-gcc-4.4.7-dbg/include/otb/FeatureExtraction/otbScalarImageToTexturesFilter.txx:313
+#2  0x00000000008cab3d in itk::ImageSource<otb::Image<float, 3u> >::ThreaderCallback (arg=0x2596a20)
+    at /opt/apps/ITK/InsightToolkit-4.7.2-gcc-4.4.7-dbg/include/ITK-4.7/itkImageSource.hxx:307
+#3  0x000000000104ceab in itk::MultiThreader::SingleMethodProxy (arg=0x2596a20) at /opt/apps/ITK/InsightToolkit-4.7.2/Modules/Core/Common/src/itkMultiThreader.cxx:433
+#4  0x00007ffff7bc4e9a in start_thread (arg=0x7fffd5d09700) at pthread_create.c:308
+#5  0x00007ffff5e343fd in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:112
+
+
+ * Bins equally spaced over range
+
+template <class TPixel >
+void
+GreyLevelCooccurrenceIndexedList<TPixel>::
+Initialize(const unsigned int nbins, const PixelValueType min,
+                  const PixelValueType max, const bool symmetry)
+{
+ .
+ .
+ .
+  float interval;
+  for ( unsigned int i = 0; i < PixelPairSize; i++ )
+    {
+    if ( m_Size[i] > 0 )
+      {
+      interval = static_cast<float>( upperBound[i] - lowerBound[i] )
+        / static_cast< PixelValueType >( m_Size[i] );
+
+      // Set the min vector and max vector
+      for ( unsigned int j = 0; j < static_cast< unsigned int >( m_Size[i] - 1 ); j++ )
+        {
+        this->SetBinMin( i, j, (PixelValueType)( lowerBound[i]
+                                                 + ( (float)j * interval ) ) );
+        this->SetBinMax( i, j, (PixelValueType)( lowerBound[i]
+                                                 + ( ( (float)j + 1 ) * interval ) ) );
+        }
+      this->SetBinMin( i, m_Size[i] - 1,
+                       (PixelValueType)( lowerBound[i]
+                                         + ( ( (float)m_Size[i] - 1 ) * interval ) ) );
+      this->SetBinMax( i, m_Size[i] - 1,
+                       (PixelValueType)( upperBound[i] ) );
+      }
+    }
+}
+
+
+ * Unnormalized pixels not counted
+
+
+template <class TPixel >
+void
+GreyLevelCooccurrenceIndexedList<TPixel>::
+AddPixelPair(const PixelValueType& pixelvalue1, const PixelValueType& pixelvalue2)
+{
+
+  if ( pixelvalue1 < m_InputImageMinimum
+       || pixelvalue1 > m_InputImageMaximum )
+    {
+    return; // don't put a pixel in the co-occurrence list if pixelvalue1
+            // is out-of-bounds.
+    }
+
+  if ( pixelvalue2 < m_InputImageMinimum
+       || pixelvalue2 > m_InputImageMaximum )
+    {
+    return; // don't put a pixel in the co-occurrence list if the pixelvalue2
+           // is out-of-bounds.
+    }
+
+  IndexType index;
+  PixelPairType ppair( PixelPairSize);
+  ppair[0] = pixelvalue1;
+  ppair[1] = pixelvalue2;
+
+  //Get Index of the given pixel pair;
+  this->GetIndex(ppair, index);
+  //Add the index and set/update the frequency of the pixel pair. if m_Symmetry
+  //is true the index is swapped and added to vector again.
+  this->AddPairToVector(index);
+  if(m_Symmetry)
+    {
+    IndexValueType temp;
+    temp = index[0];
+    index[0] = index[1];
+    index[1] = temp;
+    this->AddPairToVector(index);
+    }
+}
+
+
+
+
+
