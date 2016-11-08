@@ -114,9 +114,9 @@ jobs:
 	$(ATROPOSCMD) -i kmeans[$(NTISSUE)] -x $(word 2,$^) -a $*/PathHEred.nii.gz -a $*/PathHEgreen.nii.gz -a $*/PathHEblue.nii.gz   -o [$@,$*/PathHEgmmPOSTERIORS%d.nii.gz] 
 	echo $(ITKSNAP) -s  $@ -g $<
 
-$(WORKDIR)/%/PathHE.HaralickCorrelation_200.nii.gz: $(DATADIR)/%/PathHE.gmm.nii.gz
+$(WORKDIR)/%/PathHE.HaralickCorrelation_50.nii.gz: $(DATADIR)/%/PathHE.gmm.nii.gz
 	mkdir -p $(CLUSTERDIR)/$(@D); rsync --exclude '*.svs' -avz $(<D) $(CLUSTERDIR)/$(dir $(WORKDIR)/$*);  
-	ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE.   4 200 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+	ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE.   3 50 0 0 0 0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
 	echo $(ITKSNAP) -s  $< -g $*/PathHE.nii.gz -o $*/PathHE.Entropy_3.nii.gz
 
 %/PathPIMO.gmm.nii.gz: %/PathPIMO.nii.gz %/PathPIMO.mask.nii.gz
