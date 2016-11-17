@@ -31,8 +31,7 @@ HEOTB:=    $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE120.HaralickCorrelat
 PIMOOTB:=  $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO120.HaralickCorrelation_$(OTBRADIUS).nii.gz,$(PathologyPimo)))
 convert:   $(HENIFTI) $(PIMONIFTI)
 gmm:       $(HEGMM) $(PIMOGMM)
-#lm:        $(HELMREG) $(PIMOLMREG)
-lm:        $(HELMREG) 
+lm:        $(HELMREG) $(PIMOLMREG)
 transform: $(addprefix $(DATADIR)/,$(UpdateTransform))
 otb: $(HEOTB) $(PIMOOTB)
 
@@ -57,40 +56,37 @@ $(DATADIR)/%/PathPIMOLM.nii.gz: $(DATADIR)/%/PathPIMO.nii.gz
 	-$(C3DEXE) $< -scale 0. -type char $@ 
 
 # apply transformation
-$(DATADIR)/%/Pathology/PathHE.lmreg.nii.gz: $(DATADIR)/%/t2HElmtransform.tfm $(DATADIR)/%/Pathology/PathHE.nii.gz $(DATADIR)/%/T2wReference/RefImg.hdr 
+$(DATADIR)/%/Pathology/PathHE.lmreg.nii.gz: $(DATADIR)/%/t2HElmtransform.tfm $(DATADIR)/%/Pathology/PathHE.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
 	echo $(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $< 
 	$(ANTSAPPLYTRANSFORMSCMD) -d 3      -i $(word 2, $(^D))/PathHEred.nii.gz    -o $(@D)/PathHEred.lmreg.nii.gz    -r $(word 3, $^)  -n Linear   -t $< 
 	$(ANTSAPPLYTRANSFORMSCMD) -d 3      -i $(word 2, $(^D))/PathHEgreen.nii.gz  -o $(@D)/PathHEgreen.lmreg.nii.gz  -r $(word 3, $^)  -n Linear   -t $< 
 	$(ANTSAPPLYTRANSFORMSCMD) -d 3      -i $(word 2, $(^D))/PathHEblue.nii.gz   -o $(@D)/PathHEblue.lmreg.nii.gz   -r $(word 3, $^)  -n Linear   -t $< 
 	$(C3DEXE) $(@D)/PathHEred.lmreg.nii.gz    $(@D)/PathHEgreen.lmreg.nii.gz  $(@D)/PathHEblue.lmreg.nii.gz   -omc $@
-	@echo $(ITKSNAP) -g $(word 3, $^)  -o $@
 $(DATADIR)/%/Pathology/PathHE.gmm.lmreg.nii.gz: $(DATADIR)/%/t2HElmtransform.tfm $(DATADIR)/%/Pathology/PathHE.gmm.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
 	$(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n NearestNeighbor   -t $<  --float 0 
-	@echo $(ITKSNAP) -g $(word 3, $^)  -o $@
 $(DATADIR)/%/Pathology/PathPIMO.lmreg.nii.gz: $(DATADIR)/%/t2PIMOlmtransform.tfm $(DATADIR)/%/Pathology/PathPIMO.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
-	$(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $<  --float 0 
-	@echo $(ITKSNAP) -g $(word 3, $^)  -o $@
+	echo $(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $<  --float 0 
+	$(ANTSAPPLYTRANSFORMSCMD) -d 3      -i $(word 2, $(^D))/PathPIMOEred.nii.gz    -o $(@D)/PathPIMOEred.lmreg.nii.gz    -r $(word 3, $^)  -n Linear   -t $< 
+	$(ANTSAPPLYTRANSFORMSCMD) -d 3      -i $(word 2, $(^D))/PathPIMOEgreen.nii.gz  -o $(@D)/PathPIMOEgreen.lmreg.nii.gz  -r $(word 3, $^)  -n Linear   -t $< 
+	$(ANTSAPPLYTRANSFORMSCMD) -d 3      -i $(word 2, $(^D))/PathPIMOEblue.nii.gz   -o $(@D)/PathPIMOEblue.lmreg.nii.gz   -r $(word 3, $^)  -n Linear   -t $< 
+	$(C3DEXE) $(@D)/PathPIMOEred.lmreg.nii.gz    $(@D)/PathPIMOEgreen.lmreg.nii.gz  $(@D)/PathPIMOEblue.lmreg.nii.gz   -omc $@
 $(DATADIR)/%/Pathology/PathPIMO.gmm.lmreg.nii.gz: $(DATADIR)/%/t2PIMOlmtransform.tfm $(DATADIR)/%/Pathology/PathPIMO.gmm.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
 	$(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n NearestNeighbor   -t $<  --float 0 
-	@echo $(ITKSNAP) -g $(word 3, $^)  -o $@
 $(DATADIR)/%/DCE/DCEavg.lmreg.nii.gz: $(DATADIR)/%/t2dcelmtransform.tfm $(DATADIR)/%/DCE/DCEavg.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
 	$(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $<  --float 0 
-	@echo $(ITKSNAP) -g $(word 3, $^)  -o $@
 $(DATADIR)/%/DCE/DCE.lmreg.nii.gz: $(DATADIR)/%/t2dcelmtransform.tfm $(DATADIR)/%/DCE/DCE.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
 	$(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $<  --float 0 
-	@echo $(ITKSNAP) -g $(word 3, $^)  -o $@
 $(DATADIR)/%/T1Post/T1post.lmreg.nii.gz: $(DATADIR)/%/t2t1lmtransform.tfm $(DATADIR)/%/T1Post/T1post.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
 	$(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $<  --float 0 
-	@echo $(ITKSNAP) -g $(word 3, $^)  -o $@
 $(DATADIR)/%/T1Pre/T1pre.lmreg.nii.gz: $(DATADIR)/%/t2t1lmtransform.tfm $(DATADIR)/%/T1Pre/T1pre.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
 	$(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $<  --float 0 
-	@echo $(ITKSNAP) -g $(word 3, $^)  -o $@
 
 # update transform lm
 # FIXME - add texture to dependencies
-$(DATADIR)/%/updatetransform: $(DATADIR)/%/Pathology/PathHELM.nii.gz $(DATADIR)/%/Pathology/PathHE.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/T2wReference/RefImg.hdr $(DATADIR)/%/Pathology/PathPIMOLM.nii.gz $(DATADIR)/%/Pathology/PathPIMO.nii.gz $(DATADIR)/%/T1post/T1postLM.nii.gz $(DATADIR)/%/T1post/T1post.hdr $(DATADIR)/%/T1pre/T1pre.hdr $(DATADIR)/%/DCE/DCEavgLM.nii.gz $(DATADIR)/%/DCE/DCEavg.hdr  $(DATADIR)/%/DCE/DCE.hdr 
+$(DATADIR)/%/updatetransform: $(DATADIR)/%/Pathology/PathHELM.nii.gz $(DATADIR)/%/Pathology/PathHE.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/T2wReference/RefImg.hdr $(DATADIR)/%/Pathology/PathPIMOLM.nii.gz $(DATADIR)/%/Pathology/PathPIMO.nii.gz $(DATADIR)/%/T1post/T1postLM.nii.gz $(DATADIR)/%/T1post/T1post.hdr $(DATADIR)/%/T1pre/T1pre.hdr $(DATADIR)/%/DCE/DCEavgLM.nii.gz $(DATADIR)/%/DCE/DCEavg.hdr  $(DATADIR)/%/DCE/DCE.hdr $(DATADIR)/%/Pathology/PathHE.lmreg.nii.gz  $(DATADIR)/%/Pathology/PathHE.gmm.nii.gz
 	-$(ITKSNAP) -l LMLabels.txt -s $(word 1, $^)  -g $(word 2, $^) -o $(WORKDIR)/$*/Pathology/PathHE000.Entropy_$(OTBRADIUS).nii.gz &  PIDPATH=$$!; \
-        $(ITKSNAP) -l LMLabels.txt -s $(word 3, $^)  -g $(word 4, $^)  &  PIDMRI=$$!; \
+	$(ITKSNAP) -l LMLabels.txt                   -g $(word 2, $^)  -s $(word 14, $^) &  PIDGMM=$$!; \
+        $(ITKSNAP) -l LMLabels.txt -s $(word 3, $^)  -g $(word 4, $^)  -o $(word 13, $^)  &  PIDMRI=$$!; \
         $(ITKSNAP) -l LMLabels.txt -s $(word 5, $^)  -g $(word 6, $^)  -o $(WORKDIR)/$*/Pathology/PathPIMO000.Entropy_$(OTBRADIUS).nii.gz &  PIDPIMO=$$!; \
         $(ITKSNAP) -l LMLabels.txt -s $(word 7, $^)  -g $(word 8, $^)  -o $(word 9, $^)  &  PIDT1=$$!; \
         $(ITKSNAP) -l LMLabels.txt -s $(word 10, $^) -g $(word 11, $^) -o $(word 12, $^) &  PIDDCE=$$!; \
