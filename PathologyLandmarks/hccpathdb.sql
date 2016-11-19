@@ -114,3 +114,18 @@ DELIMITER ;
 -- show create procedure HCCPath.HCCPathDBList;
 -- call HCCPath.HCCPathDBList();
 -- mysql  -sNre "call HCCPath.HCCPathDBList();"
+
+
+DROP PROCEDURE IF EXISTS HCCPath.HCCPathOutput ;
+DELIMITER //
+CREATE PROCEDURE HCCPath.HCCPathOutput 
+( )
+BEGIN
+select md.Rat, md.TimePoint, ls.mean as Entropy, md.metadata
+from        HCCPath.metadata md
+left  join  HCCPath.lstat    ls  on (md.Rat=ls.InstanceUID and ls.LabelID = 4);
+END //
+DELIMITER ;
+-- show create procedure HCCPath.HCCPathOutput;
+-- call HCCPath.HCCPathOutput();
+-- mysql  -sNre "call HCCPath.HCCPathOutput();"
