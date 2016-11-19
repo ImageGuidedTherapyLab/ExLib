@@ -47,15 +47,7 @@ jobs:
 .SECONDARY: 
 
 # initialize LM
-$(DATADIR)/%/RefImgLM.nii.gz: $(DATADIR)/%/RefImg.hdr
-	-$(C3DEXE) $< -scale 0. -type char $@ 
-$(DATADIR)/%/T1postLM.nii.gz: $(DATADIR)/%/T1post.hdr
-	-$(C3DEXE) $< -scale 0. -type char $@ 
-$(DATADIR)/%/DCEavgLM.nii.gz: $(DATADIR)/%/DCEavg.hdr
-	-$(C3DEXE) $< -scale 0. -type char $@ 
-$(DATADIR)/%/PathHELM.nii.gz: $(DATADIR)/%/PathHE.nii.gz
-	-$(C3DEXE) $< -scale 0. -type char $@ 
-$(DATADIR)/%/PathPIMOLM.nii.gz: $(DATADIR)/%/PathPIMO.nii.gz
+$(DATADIR)/%LM.nii.gz: $(DATADIR)/%.hdr
 	-$(C3DEXE) $< -scale 0. -type char $@ 
 
 # apply transformation
@@ -182,7 +174,3 @@ $(WORKDIR)/%/PathPIMO000.HaralickCorrelation_$(OTBRADIUS)/lstat.csv: $(WORKDIR)/
 	$(C3DEXE) $< $(word 2,$^) -lstat > $(@D).txt
 	sed "s/^\s\+/$(word 1,$(subst /, ,$*)),$(word 2,$(^F)),$(<F),/g;s/\s\+/,/g;s/LabelID/SeriesInstanceUID,SegmentationID,FeatureID,LabelID/g;s/Vol(mm^3)/Vol.mm.3/g;s/Extent(Vox)/ExtentX,ExtentY,ExtentZ/g" $(@D).txt > $@
 
-view:
-	vglrun itksnap -g pathology.nii.gz -s pathologyLM.nii.gz
-	vglrun itksnap -g dce.nii.gz -s dceLM.nii.gz
-	echo Tools -> Layer Inspector -> General -> Display Mode -> RGB
