@@ -4,10 +4,8 @@ ITKSNAP  = vglrun /opt/apps/itksnap/itksnap-3.2.0-20141023-Linux-x86_64/bin/itks
 C3DEXE=/rsrch2/ip/dtfuentes/bin/c3d
 CONVERTSVS = python ./convertsvs.py
 DIMENSION = 3
-NTISSUEHE   = 3
-NTISSUEPIMO = 2
 OTBOFFSET  = 30
-OTBRADIUS  = 50
+OTBRADIUS  = 20
 ATROPOSCMD=$(ANTSPATH)/Atropos -d $(DIMENSION)  -c [3,0.0] -m [0.1,1x1x1] 
 OTBTEXTURE=/rsrch2/ip/dtfuentes/github/ExLib/otbScalarImageTextures/otbScalarImageToTexturesFilter
 CLUSTERDIR=/rsrch2/ip/dtfuentes/github/ExLib/PathologyLandmarks/Processed
@@ -117,12 +115,18 @@ $(DATADIR)/%/PathPIMO.mask.nii.gz: $(DATADIR)/%/PathPIMO.nii.gz
 
 $(DATADIR)/%/PathHE.gmm.nii.gz: $(DATADIR)/%/PathHE.nii.gz $(DATADIR)/%/PathHE.mask.nii.gz
 	$(C3DEXE) -mcs $< -oo $(DATADIR)/$*/PathHEred.nii.gz $(DATADIR)/$*/PathHEgreen.nii.gz $(DATADIR)/$*/PathHEblue.nii.gz
-	$(ATROPOSCMD) -i kmeans[$(NTISSUEHE)] -x $(word 2,$^) -a $(DATADIR)/$*/PathHEred.nii.gz -a $(DATADIR)/$*/PathHEgreen.nii.gz -a $(DATADIR)/$*/PathHEblue.nii.gz   -o [$@,$(DATADIR)/$*/PathHEgmmPOSTERIORS%d.nii.gz] 
+	$(ATROPOSCMD) -i kmeans[2] -x $(word 2,$^) -a $(DATADIR)/$*/PathHEred.nii.gz -a $(DATADIR)/$*/PathHEgreen.nii.gz -a $(DATADIR)/$*/PathHEblue.nii.gz   -o [$(DATADIR)/$*/PathHE.gmm02.nii.gz] 
+	$(ATROPOSCMD) -i kmeans[3] -x $(word 2,$^) -a $(DATADIR)/$*/PathHEred.nii.gz -a $(DATADIR)/$*/PathHEgreen.nii.gz -a $(DATADIR)/$*/PathHEblue.nii.gz   -o [$(DATADIR)/$*/PathHE.gmm03.nii.gz] 
+	$(ATROPOSCMD) -i kmeans[4] -x $(word 2,$^) -a $(DATADIR)/$*/PathHEred.nii.gz -a $(DATADIR)/$*/PathHEgreen.nii.gz -a $(DATADIR)/$*/PathHEblue.nii.gz   -o [$(DATADIR)/$*/PathHE.gmm04.nii.gz] 
+	cp $(DATADIR)/$*/PathHE.gmm03.nii.gz $@
 	echo $(ITKSNAP) -s  $@ -g $<
 
 $(DATADIR)/%/PathPIMO.gmm.nii.gz: $(DATADIR)/%/PathPIMO.nii.gz $(DATADIR)/%/PathPIMO.mask.nii.gz
 	$(C3DEXE) -mcs $< -oo $(DATADIR)/$*/PathPIMOred.nii.gz $(DATADIR)/$*/PathPIMOgreen.nii.gz $(DATADIR)/$*/PathPIMOblue.nii.gz
-	$(ATROPOSCMD) -i kmeans[$(NTISSUEPIMO)] -x $(word 2,$^) -a $(DATADIR)/$*/PathPIMOred.nii.gz -a $(DATADIR)/$*/PathPIMOgreen.nii.gz -a $(DATADIR)/$*/PathPIMOblue.nii.gz   -o [$@,$(DATADIR)/$*/PathPIMOgmmPOSTERIORS%d.nii.gz] 
+	$(ATROPOSCMD) -i kmeans[2] -x $(word 2,$^) -a $(DATADIR)/$*/PathPIMOred.nii.gz -a $(DATADIR)/$*/PathPIMOgreen.nii.gz -a $(DATADIR)/$*/PathPIMOblue.nii.gz   -o [$(DATADIR)/$*/PathPIMO.gmm02.nii.gz] 
+	$(ATROPOSCMD) -i kmeans[3] -x $(word 2,$^) -a $(DATADIR)/$*/PathPIMOred.nii.gz -a $(DATADIR)/$*/PathPIMOgreen.nii.gz -a $(DATADIR)/$*/PathPIMOblue.nii.gz   -o [$(DATADIR)/$*/PathPIMO.gmm03.nii.gz] 
+	$(ATROPOSCMD) -i kmeans[4] -x $(word 2,$^) -a $(DATADIR)/$*/PathPIMOred.nii.gz -a $(DATADIR)/$*/PathPIMOgreen.nii.gz -a $(DATADIR)/$*/PathPIMOblue.nii.gz   -o [$(DATADIR)/$*/PathPIMO.gmm04.nii.gz] 
+	cp $(DATADIR)/$*/PathPIMO.gmm03.nii.gz $@
 	echo $(ITKSNAP) -s  $@ -g $<
 
 # FIXME - push to cluster
