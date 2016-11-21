@@ -78,17 +78,17 @@ $(DATADIR)/%/T1Pre/T1pre.lmreg.nii.gz: $(DATADIR)/%/t2t1lmtransform.tfm $(DATADI
 
 # update transform lm
 # FIXME - add texture to dependencies
-$(DATADIR)/%/updatetransform: $(DATADIR)/%/Pathology/PathHELM.nii.gz $(DATADIR)/%/Pathology/PathHE.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/T2wReference/RefImg.hdr $(DATADIR)/%/Pathology/PathPIMOLM.nii.gz $(DATADIR)/%/Pathology/PathPIMO.nii.gz $(DATADIR)/%/T1post/T1postLM.nii.gz $(DATADIR)/%/T1post/T1post.hdr $(DATADIR)/%/T1pre/T1pre.hdr $(DATADIR)/%/DCE/DCEavgLM.nii.gz $(DATADIR)/%/DCE/DCEavg.hdr  $(DATADIR)/%/DCE/DCE.hdr $(DATADIR)/%/Pathology/PathHE.lmreg.nii.gz  $(DATADIR)/%/Pathology/PathHE.gmm.nii.gz  $(DATADIR)/%/Pathology/PathHE.mask.nii.gz
+$(DATADIR)/%/updatetransform: $(DATADIR)/%/Pathology/PathHELM.nii.gz $(DATADIR)/%/Pathology/PathHE.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/T2wReference/RefImg.hdr $(DATADIR)/%/Pathology/PathPIMOLM.nii.gz $(DATADIR)/%/Pathology/PathPIMO.nii.gz $(DATADIR)/%/T1post/T1postLM.nii.gz $(DATADIR)/%/T1post/T1post.hdr $(DATADIR)/%/T1pre/T1pre.hdr $(DATADIR)/%/DCE/DCEavgLM.nii.gz $(DATADIR)/%/DCE/DCEavg.hdr  $(DATADIR)/%/DCE/DCE.hdr $(DATADIR)/%/Pathology/PathHE.lmreg.nii.gz  $(DATADIR)/%/Pathology/PathHE.gmm.nii.gz  $(DATADIR)/%/Pathology/PathHE.mask.nii.gz $(DATADIR)/%/Pathology/PathPIMO.gmm.nii.gz  $(DATADIR)/%/Pathology/PathPIMO.mask.nii.gz
 	echo $@
-	-$(ITKSNAP) -l LMLabels.txt -s $(word 1, $^) -g $(word 2, $^)  -o $(WORKDIR)/$*/Pathology/PathHE000.Entropy_$(OTBRADIUS).nii.gz &  PIDPATH=$$!;   \
-	$(ITKSNAP) -l LMLabels.txt                   -g $(word 2, $^)  -s $(word 14, $^) &  PIDHEGMM=$$!; \
-	$(ITKSNAP) -l LMLabels.txt                   -g $(word 2, $^)  -s $(word 15, $^) &  PIDHEMASK=$$!; \
-        $(ITKSNAP) -l LMLabels.txt -s $(word 3, $^)  -g $(word 4, $^)  -o $(word 13, $^) &  PIDLMREG=$$!; \
-        $(ITKSNAP) -l LMLabels.txt -s $(word 5, $^)  -g $(word 6, $^)  -o $(WORKDIR)/$*/Pathology/PathPIMO000.Entropy_$(OTBRADIUS).nii.gz &  PIDPIMO=$$!; \
-        $(ITKSNAP) -l LMLabels.txt -s $(word 7, $^)  -g $(word 8, $^)  -o $(word 9, $^)  &  PIDT1=$$!;  \
-        $(ITKSNAP) -l LMLabels.txt -s $(word 10, $^) -g $(word 11, $^) -o $(word 12, $^) &  PIDDCE=$$!; \
+	-$(ITKSNAP) -l LMLabels.txt -g $(word  2, $^) -s $(word  1, $^) -o $(WORKDIR)/$*/Pathology/PathHE000.Entropy_$(OTBRADIUS).nii.gz &  PIDPATH=$$!;   \
+	 $(ITKSNAP) -l LMLabels.txt -g $(word  2, $^) -s $(word 14, $^) -o $(word 15, $^) &  PIDHEGMM=$$!; \
+	 $(ITKSNAP) -l LMLabels.txt -g $(word  6, $^) -s $(word 16, $^) -o $(word 17, $^) &  PIDPIMOGMM=$$!; \
+         $(ITKSNAP) -l LMLabels.txt -g $(word  4, $^) -s $(word  3, $^) -o $(word 13, $^) &  PIDLMREG=$$!; \
+         $(ITKSNAP) -l LMLabels.txt -g $(word  6, $^) -s $(word  5, $^) -o $(WORKDIR)/$*/Pathology/PathPIMO000.Entropy_$(OTBRADIUS).nii.gz &  PIDPIMO=$$!; \
+         $(ITKSNAP) -l LMLabels.txt -g $(word  8, $^) -s $(word  7, $^) -o $(word 9, $^)  &  PIDT1=$$!;  \
+         $(ITKSNAP) -l LMLabels.txt -g $(word 11, $^) -s $(word 10, $^) -o $(word 12, $^) &  PIDDCE=$$!; \
         zenity --info --title="OutputFile" --text="Tools -> Layer Inspector -> General -> Display Mode -> RGB $(word 4, $^)  "; \
-        kill -9 $$PIDPATH;kill -9 $$PIDLMREG;kill -9 $$PIDPIMO; kill -9 $$PIDT1; kill -9 $$PIDDCE; kill -9 $$PIDHEGMM; kill -9 $$PIDHEMASK
+        kill -9 $$PIDPATH;kill -9 $$PIDLMREG;kill -9 $$PIDPIMO; kill -9 $$PIDT1; kill -9 $$PIDDCE; kill -9 $$PIDHEGMM; kill -9 $$PIDPIMOGMM
 
 # compute lm transformation
 $(DATADIR)/%/t2HElmtransform.tfm:   $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/Pathology/PathHELM.nii.gz 
