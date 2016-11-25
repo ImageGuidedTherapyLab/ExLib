@@ -129,4 +129,4 @@ END //
 DELIMITER ;
 -- show create procedure HCCPath.HCCPathOutput;
 -- call HCCPath.HCCPathOutput(20);
--- mysql  -re "call HCCPath.HCCPathOutput(20);" | sed "s/\t/,/g" > analysissummary.csv
+-- mysql  -re "call HCCPath.HCCPathOutput(20);" | sed "s/\t/,/g;s/NULL//g" > analysissummary.csv
