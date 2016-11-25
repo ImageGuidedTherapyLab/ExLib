@@ -119,14 +119,14 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS HCCPath.HCCPathOutput ;
 DELIMITER //
 CREATE PROCEDURE HCCPath.HCCPathOutput 
-( )
+(IN radius int)
 BEGIN
 select md.Rat, md.TimePoint, md.PathologyHE, he.mean as EntropyHE, md.PathologyPimo ,pi.mean as EntropyPimo, md.metadata
 from        HCCPath.metadata md
-left  join  HCCPath.lstat    he  on (md.Rat=he.InstanceUID and he.LabelID = 4 and he.FeatureID='PathHE000.HaralickCorrelation_50.nii.gz')
-left  join  HCCPath.lstat    pi  on (md.Rat=pi.InstanceUID and pi.LabelID = 4 and pi.FeatureID='PathPIMO000.HaralickCorrelation_50.nii.gz');
+left  join  HCCPath.lstat    he  on (md.Rat=he.InstanceUID and he.LabelID = 4 and he.FeatureID=CONCAT('PathHE000.HaralickCorrelation_',radius ,'.nii.gz'))
+left  join  HCCPath.lstat    pi  on (md.Rat=pi.InstanceUID and pi.LabelID = 4 and pi.FeatureID=CONCAT('PathPIMO000.HaralickCorrelation_',radius ,'.nii.gz'));
 END //
 DELIMITER ;
 -- show create procedure HCCPath.HCCPathOutput;
--- call HCCPath.HCCPathOutput();
--- mysql  -re "call HCCPath.HCCPathOutput();" | sed "s/\t/,/g" > analysissummary.csv
+-- call HCCPath.HCCPathOutput(20);
+-- mysql  -re "call HCCPath.HCCPathOutput(20);" | sed "s/\t/,/g" > analysissummary.csv

@@ -40,6 +40,30 @@ stat: $(HESTAT) $(PIMOSTAT)
 jobs:
 	@echo $(HEOTB)
 
+check:
+	@$(foreach idfile,$(T2WeightedReference)      , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(T2starMapOxygen)          , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(T2statMapMedicalAir)      , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(T2starMapAbsoluteChange)  , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(T2statMapPercentageChange), if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(DCE)                      , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(T1PreContrast)            , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(T1PostContrast)           , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(PathologyHE)              , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(PathologyPimo)            , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+
+
+
+
+
+
+
+
+
+
+	
+
+
 #https://www.gnu.org/software/make/manual/html_node/Special-Targets.html
 # do not delete secondary files
 .SECONDARY: 
