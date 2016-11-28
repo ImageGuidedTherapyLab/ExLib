@@ -15,9 +15,9 @@ WORKDIR=Processed
 # Dependencies #
 ################
 -include datalocation/dependencies
-dependencies: 
-	$(MYSQL) --local-infile < ./hccpathdb.sql
-	$(MYSQL) -sNre "call HCCPath.HCCPathDBList();"  > datalocation/dependencies
+datalocation/dependencies: ./hccpathdb.sql ./datalocation/CorrelativePathFiles.csv
+	$(MYSQL) --local-infile < $< 
+	$(MYSQL) -sNre "call HCCPath.HCCPathDBList($(word 2, $^));"  > $@
 
 HENIFTI:=  $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHE.nii.gz,$(PathologyHE)))
 PIMONIFTI:=$(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMO.nii.gz,$(PathologyPimo)))

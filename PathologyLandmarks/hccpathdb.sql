@@ -94,8 +94,9 @@ SET metadata =  JSON_OBJECT( "Rat",Rat ,
 DROP PROCEDURE IF EXISTS HCCPath.HCCPathDBList ;
 DELIMITER //
 CREATE PROCEDURE HCCPath.HCCPathDBList 
-( )
+(IN csvfile  varchar(255))
 BEGIN
+-- FIXME replace csvfile  into  table
     SET SESSION group_concat_max_len = 10000000;
     select  concat("DATADIR                  =", group_concat( distinct hcc.DataDir                       )) DataDir                    from HCCPath.metadata hcc;
     select  concat("T2WeightedReference      =", group_concat( hcc.T2WeightedReference       separator ' ')) T2WeightedReference        from HCCPath.metadata hcc;
