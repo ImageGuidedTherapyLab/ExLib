@@ -17,7 +17,7 @@ WORKDIR=Processed
 -include datalocation/dependencies
 datalocation/dependencies: ./hccpathdb.sql ./datalocation/CorrelativePathFiles.csv
 	$(MYSQL) --local-infile < $< 
-	$(MYSQL) -sNre "call HCCPath.HCCPathDBList($(word 2, $^));"  > $@
+	$(MYSQL) -sNre "call HCCPath.HCCPathDBList('$(word 2, $^)');"  > $@
 
 HENIFTI:=  $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHE.nii.gz,$(PathologyHE)))
 PIMONIFTI:=$(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMO.nii.gz,$(PathologyPimo)))
@@ -27,8 +27,8 @@ HEGMM:=    $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHE.gmm.nii.gz,$(Pathol
 PIMOGMM:=  $(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMO.gmm.nii.gz,$(PathologyPimo)))
 HEOTB:=    $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE000.HaralickCorrelation_$(OTBRADIUS).nii.gz,$(PathologyHE)))
 PIMOOTB:=  $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO000.HaralickCorrelation_$(OTBRADIUS).nii.gz,$(PathologyPimo)))
-HESTAT:=    $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE000.HaralickCorrelation_$(OTBRADIUS).sql,$(PathologyHE)))
-PIMOSTAT:=  $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO000.HaralickCorrelation_$(OTBRADIUS).sql,$(PathologyPimo)))
+HESTAT:=    $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE000.HaralickCorrelation_$(OTBRADIUS).sql,$(PathologyHE))) $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHELMdist.sql,$(PathologyHE)))
+PIMOSTAT:=  $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO000.HaralickCorrelation_$(OTBRADIUS).sql,$(PathologyPimo))) $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMOLMdist.sql,$(PathologyPimo)))
 HEDIST:=    $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHELMdist.nii.gz,$(PathologyHE)))
 PIMODIST:=  $(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMOLMdist.nii.gz,$(PathologyPimo)))
 convert:   $(HENIFTI) $(PIMONIFTI)
@@ -145,7 +145,7 @@ $(DATADIR)/%/PathPIMO.gmm.nii.gz: $(DATADIR)/%/PathPIMO.nii.gz $(DATADIR)/%/Path
 	$(ATROPOSCMD) -i kmeans[2] -x $(word 2,$^) -a $(DATADIR)/$*/PathPIMOred.nii.gz -a $(DATADIR)/$*/PathPIMOgreen.nii.gz -a $(DATADIR)/$*/PathPIMOblue.nii.gz   -o [$(DATADIR)/$*/PathPIMO.gmm02.nii.gz] 
 	$(ATROPOSCMD) -i kmeans[3] -x $(word 2,$^) -a $(DATADIR)/$*/PathPIMOred.nii.gz -a $(DATADIR)/$*/PathPIMOgreen.nii.gz -a $(DATADIR)/$*/PathPIMOblue.nii.gz   -o [$(DATADIR)/$*/PathPIMO.gmm03.nii.gz] 
 	$(ATROPOSCMD) -i kmeans[4] -x $(word 2,$^) -a $(DATADIR)/$*/PathPIMOred.nii.gz -a $(DATADIR)/$*/PathPIMOgreen.nii.gz -a $(DATADIR)/$*/PathPIMOblue.nii.gz   -o [$(DATADIR)/$*/PathPIMO.gmm04.nii.gz] 
-	cp $(DATADIR)/$*/PathPIMO.gmm03.nii.gz $@
+	$(C3DEXE) $(DATADIR)/$*/PathPIMO.gmm04.nii.gz -replace 4 2 3 2  $@
 	echo $(ITKSNAP) -s  $@ -g $<
 
 # FIXME - push to cluster
@@ -168,15 +168,6 @@ $(WORKDIR)/%/PathHE000.HaralickCorrelation_$(OTBRADIUS).nii.gz: $(DATADIR)/%/Pat
 	mkdir -p $(WORKDIR)/$*; rsync  -avz  $(CLUSTERDIR)/$*/ $(WORKDIR)/$*/;
 	echo $(ITKSNAP) -s  $< -g $(WORKDIR)/$*/PathHE.nii.gz -o $(WORKDIR)/$*/PathHE000.Entropy_$(OTBRADIUS).nii.gz
 
-# push to database
-$(WORKDIR)/%/PathHE000.HaralickCorrelation_$(OTBRADIUS).sql: $(WORKDIR)/%/PathHE000.HaralickCorrelation_$(OTBRADIUS)/lstat.csv
-	$(MYSQLIMPORT) --replace --fields-terminated-by=',' --lines-terminated-by='\n' --ignore-lines 1 HCCPath $<
-
-$(WORKDIR)/%/PathHE000.HaralickCorrelation_$(OTBRADIUS)/lstat.csv: $(WORKDIR)/%/PathHE000.HaralickCorrelation_$(OTBRADIUS).nii.gz $(DATADIR)/%/PathHELM.nii.gz
-	mkdir -p $(@D)
-	$(C3DEXE) $< $(word 2,$^) -lstat > $(@D).txt
-	sed "s/^\s\+/$(word 1,$(subst /, ,$*)),$(word 2,$(^F)),$(<F),/g;s/\s\+/,/g;s/LabelID/SeriesInstanceUID,SegmentationID,FeatureID,LabelID/g;s/Vol(mm^3)/Vol.mm.3/g;s/Extent(Vox)/ExtentX,ExtentY,ExtentZ/g" $(@D).txt > $@
-
 # PIMO
 $(WORKDIR)/%/PathPIMO000.HaralickCorrelation_$(OTBRADIUS).nii.gz: $(DATADIR)/%/PathPIMO.gmm.nii.gz
 	mkdir -p $(CLUSTERDIR)/$*; rsync --exclude '*.svs' -avz $(<D)/ $(CLUSTERDIR)/$*/;  
@@ -188,12 +179,24 @@ $(WORKDIR)/%/PathPIMO000.HaralickCorrelation_$(OTBRADIUS).nii.gz: $(DATADIR)/%/P
 	mkdir -p $(WORKDIR)/$*; rsync  -avz  $(CLUSTERDIR)/$*/ $(WORKDIR)/$*/;
 	echo $(ITKSNAP) -s  $< -g $(WORKDIR)/$*/PathPIMO.nii.gz -o $(WORKDIR)/$*/PathPIMO000.Entropy_$(OTBRADIUS).nii.gz
 
-# push to database
-$(WORKDIR)/%/PathPIMO000.HaralickCorrelation_$(OTBRADIUS).sql: $(WORKDIR)/%/PathPIMO000.HaralickCorrelation_$(OTBRADIUS)/lstat.csv
-	$(MYSQLIMPORT) --replace --fields-terminated-by=',' --lines-terminated-by='\n' --ignore-lines 1 HCCPath $<
-
-$(WORKDIR)/%/PathPIMO000.HaralickCorrelation_$(OTBRADIUS)/lstat.csv: $(WORKDIR)/%/PathPIMO000.HaralickCorrelation_$(OTBRADIUS).nii.gz $(DATADIR)/%/PathPIMOLM.nii.gz
+# entropy
+$(WORKDIR)/%000.Entropy_$(OTBRADIUS)/lstat.csv: $(WORKDIR)/%000.Entropy_$(OTBRADIUS).nii.gz $(DATADIR)/%LM.nii.gz
 	mkdir -p $(@D)
 	$(C3DEXE) $< $(word 2,$^) -lstat > $(@D).txt
 	sed "s/^\s\+/$(word 1,$(subst /, ,$*)),$(word 2,$(^F)),$(<F),/g;s/\s\+/,/g;s/LabelID/SeriesInstanceUID,SegmentationID,FeatureID,LabelID/g;s/Vol(mm^3)/Vol.mm.3/g;s/Extent(Vox)/ExtentX,ExtentY,ExtentZ/g" $(@D).txt > $@
+
+# HaralickCorrelation
+$(WORKDIR)/%000.HaralickCorrelation_$(OTBRADIUS)/lstat.csv: $(WORKDIR)/%000.HaralickCorrelation_$(OTBRADIUS).nii.gz $(DATADIR)/%LM.nii.gz
+	mkdir -p $(@D)
+	$(C3DEXE) $< $(word 2,$^) -lstat > $(@D).txt
+	sed "s/^\s\+/$(word 1,$(subst /, ,$*)),$(word 2,$(^F)),$(<F),/g;s/\s\+/,/g;s/LabelID/SeriesInstanceUID,SegmentationID,FeatureID,LabelID/g;s/Vol(mm^3)/Vol.mm.3/g;s/Extent(Vox)/ExtentX,ExtentY,ExtentZ/g" $(@D).txt > $@
+
+# dist
+$(WORKDIR)/%LMdist/lstat.csv: $(DATADIR)/%LMdist.nii.gz  $(DATADIR)/%.gmm.nii.gz
+	$(C3DEXE) $< $(word 2,$^) -lstat > $(@D).txt
+	sed "s/^\s\+/$(word 1,$(subst /, ,$*)),$(word 2,$(^F)),$(<F),/g;s/\s\+/,/g;s/LabelID/SeriesInstanceUID,SegmentationID,FeatureID,LabelID/g;s/Vol(mm^3)/Vol.mm.3/g;s/Extent(Vox)/ExtentX,ExtentY,ExtentZ/g" $(@D).txt > $@
+
+# push to database
+$(WORKDIR)/%.sql: $(WORKDIR)/%/lstat.csv
+	$(MYSQLIMPORT) --replace --fields-terminated-by=',' --lines-terminated-by='\n' --ignore-lines 1 HCCPath $<
 
