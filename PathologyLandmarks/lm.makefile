@@ -133,8 +133,8 @@ $(DATADIR)/%/PathHE.mask.nii.gz: $(DATADIR)/%/PathHE.nii.gz
 	$(C3DEXE) -verbose -mcs $< -popas b -popas g -popas r -push b -push g -scale -1 -add -dup -multiply -sqrt -popas bg  -push b -push r  -scale -1 -add -dup -multiply -sqrt -push bg -add -popas rgb -push g -push r -scale -1 -add -dup -multiply -sqrt -push rgb -add -threshold 0 10 0 1 -erode 1 8x8x0vox  -comp -threshold 1 3 1 0 -o $@
 	echo $(ITKSNAP) -s  $@ -g $<
 
-$(DATADIR)/%/PathPIMO.mask.nii.gz: $(DATADIR)/%/PathPIMO.nii.gz
-	$(C3DEXE) -verbose -mcs $< -popas b -popas g -popas r -push b -push g -scale -1 -add -dup -multiply -sqrt -popas bg  -push b -push r  -scale -1 -add -dup -multiply -sqrt -push bg -add -popas rgb -push g -push r -scale -1 -add -dup -multiply -sqrt -push rgb -add -threshold 0 10 0 1 -erode 1 8x8x0vox  -comp -threshold 1 3 1 0 -o $@
+$(DATADIR)/%/PathPIMO.mask.nii.gz: $(DATADIR)/%/PathPIMO.nii.gz $(DATADIR)/%/PathPIMOLM.nii.gz
+	$(C3DEXE) -verbose -mcs $< -popas b -popas g -popas r -push b -push g -scale -1 -add -dup -multiply -sqrt -popas bg  -push b -push r  -scale -1 -add -dup -multiply -sqrt -push bg -add -popas rgb -push g -push r -scale -1 -add -dup -multiply -sqrt -push rgb -add -threshold 0 10 0 1 -erode 1 8x8x0vox  -comp -threshold 1 3 1 0  $(word 2,$^) -thresh 4 4 1 0 -multiply -o $@
 	echo $(ITKSNAP) -s  $@ -g $<
 
 $(DATADIR)/%/PathHE.gmm.nii.gz: $(DATADIR)/%/PathHE.nii.gz $(DATADIR)/%/PathHE.mask.nii.gz
