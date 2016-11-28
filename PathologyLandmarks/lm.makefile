@@ -29,12 +29,15 @@ HEOTB:=    $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE000.HaralickCorrelat
 PIMOOTB:=  $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO000.HaralickCorrelation_$(OTBRADIUS).nii.gz,$(PathologyPimo)))
 HESTAT:=    $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE000.HaralickCorrelation_$(OTBRADIUS).sql,$(PathologyHE)))
 PIMOSTAT:=  $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO000.HaralickCorrelation_$(OTBRADIUS).sql,$(PathologyPimo)))
+HEDIST:=    $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHELMdist.nii.gz,$(PathologyHE)))
+PIMODIST:=  $(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMOLMdist.nii.gz,$(PathologyPimo)))
 convert:   $(HENIFTI) $(PIMONIFTI)
 gmm:       $(HEGMM) $(PIMOGMM)
 lm:        $(HELMREG) $(PIMOLMREG)
 transform: $(addprefix $(DATADIR)/,$(UpdateTransform))
 otb: $(HEOTB) $(PIMOOTB)
 stat: $(HESTAT) $(PIMOSTAT)
+dist: $(HEDIST) $(PIMODIST)
 
 # debug
 jobs:
@@ -53,17 +56,6 @@ check:
 	@$(foreach idfile,$(PathologyPimo)            , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
 
 
-
-
-
-
-
-
-
-
-	
-
-
 #https://www.gnu.org/software/make/manual/html_node/Special-Targets.html
 # do not delete secondary files
 .SECONDARY: 
@@ -71,6 +63,9 @@ check:
 # initialize LM
 $(DATADIR)/%LM.nii.gz: $(DATADIR)/%.hdr
 	-$(C3DEXE) $< -scale 0. -type char $@ 
+
+$(DATADIR)/%LMdist.nii.gz: $(DATADIR)/%LM.nii.gz
+	$(C3DEXE) $< -thresh 4 4 1 0 -dilate 1 5x5x0vox -erode 1 5x5x0vox -sdt -o $@
 
 # apply transformation
 $(DATADIR)/%/Pathology/PathHE.lmreg.nii.gz: $(DATADIR)/%/t2HElmtransform.tfm $(DATADIR)/%/Pathology/PathHE.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
