@@ -122,10 +122,15 @@ DELIMITER //
 CREATE PROCEDURE HCCPath.HCCPathOutput 
 (IN radius int)
 BEGIN
-select md.Rat, md.TimePoint, md.PathologyHE, he.mean as EntropyHE, md.PathologyPimo ,pi.mean as EntropyPimo, md.metadata
+select md.Rat, md.TimePoint, md.PathologyHE, hee.mean as EntropyHE,heh.mean as HaralickHE, hev.mean as DistViableHE, hen.mean as DistNecrosisHE, md.PathologyPimo ,pie.mean as EntropyPimo,pih.mean as HaralickPimo, pio.mean as DistO2Pimo,md.metadata
 from        HCCPath.metadata md
-left  join  HCCPath.lstat    he  on (md.Rat=he.InstanceUID and he.LabelID = 4 and he.FeatureID=CONCAT('PathHE000.HaralickCorrelation_',radius ,'.nii.gz'))
-left  join  HCCPath.lstat    pi  on (md.Rat=pi.InstanceUID and pi.LabelID = 4 and pi.FeatureID=CONCAT('PathPIMO000.HaralickCorrelation_',radius ,'.nii.gz'));
+left  join  HCCPath.lstat    heh  on (md.Rat=heh.InstanceUID and heh.LabelID = 4 and heh.FeatureID=CONCAT('PathHE000.HaralickCorrelation_',radius ,'.nii.gz'))
+left  join  HCCPath.lstat    pih  on (md.Rat=pih.InstanceUID and pih.LabelID = 4 and pih.FeatureID=CONCAT('PathPIMO000.HaralickCorrelation_',radius ,'.nii.gz')) 
+left  join  HCCPath.lstat    hev  on (md.Rat=hev.InstanceUID and hev.LabelID = 1 and hev.FeatureID=CONCAT('PathHELMdist.nii.gz'))
+left  join  HCCPath.lstat    hen  on (md.Rat=hen.InstanceUID and hen.LabelID = 3 and hen.FeatureID=CONCAT('PathHELMdist.nii.gz'))
+left  join  HCCPath.lstat    pio  on (md.Rat=pio.InstanceUID and pio.LabelID = 1 and pio.FeatureID=CONCAT('PathPIMOLMdist.nii.gz'))
+left  join  HCCPath.lstat    hee  on (md.Rat=hee.InstanceUID and hee.LabelID = 4 and hee.FeatureID=CONCAT('PathHE000.Entropy_',radius ,'.nii.gz'))
+left  join  HCCPath.lstat    pie  on (md.Rat=pie.InstanceUID and pie.LabelID = 4 and pie.FeatureID=CONCAT('PathPIMO000.Entropy_',radius ,'.nii.gz'));
 END //
 DELIMITER ;
 -- show create procedure HCCPath.HCCPathOutput;

@@ -132,12 +132,12 @@ $(DATADIR)/%/PathPIMO.mask.nii.gz: $(DATADIR)/%/PathPIMO.nii.gz $(DATADIR)/%/Pat
 	$(C3DEXE) -verbose -mcs $< -popas b -popas g -popas r -push b -push g -scale -1 -add -dup -multiply -sqrt -popas bg  -push b -push r  -scale -1 -add -dup -multiply -sqrt -push bg -add -popas rgb -push g -push r -scale -1 -add -dup -multiply -sqrt -push rgb -add -threshold 0 10 0 1 -erode 1 8x8x0vox  -comp -threshold 1 3 1 0  $(word 2,$^) -thresh 4 4 1 0 -multiply -o $@
 	echo $(ITKSNAP) -s  $@ -g $<
 
-$(DATADIR)/%/PathHE.gmm.nii.gz: $(DATADIR)/%/PathHE.nii.gz $(DATADIR)/%/PathHE.mask.nii.gz
+$(DATADIR)/%/PathHE.gmm.nii.gz: $(DATADIR)/%/PathHE.nii.gz $(DATADIR)/%/PathHE.mask.nii.gz $(DATADIR)/%/PathHELM.nii.gz
 	$(C3DEXE) -mcs $< -oo $(DATADIR)/$*/PathHEred.nii.gz $(DATADIR)/$*/PathHEgreen.nii.gz $(DATADIR)/$*/PathHEblue.nii.gz
 	$(ATROPOSCMD) -i kmeans[2] -x $(word 2,$^) -a $(DATADIR)/$*/PathHEred.nii.gz -a $(DATADIR)/$*/PathHEgreen.nii.gz -a $(DATADIR)/$*/PathHEblue.nii.gz   -o [$(DATADIR)/$*/PathHE.gmm02.nii.gz] 
 	$(ATROPOSCMD) -i kmeans[3] -x $(word 2,$^) -a $(DATADIR)/$*/PathHEred.nii.gz -a $(DATADIR)/$*/PathHEgreen.nii.gz -a $(DATADIR)/$*/PathHEblue.nii.gz   -o [$(DATADIR)/$*/PathHE.gmm03.nii.gz] 
 	$(ATROPOSCMD) -i kmeans[4] -x $(word 2,$^) -a $(DATADIR)/$*/PathHEred.nii.gz -a $(DATADIR)/$*/PathHEgreen.nii.gz -a $(DATADIR)/$*/PathHEblue.nii.gz   -o [$(DATADIR)/$*/PathHE.gmm04.nii.gz] 
-	cp $(DATADIR)/$*/PathHE.gmm03.nii.gz $@
+	$(C3DEXE) $(DATADIR)/$*/PathHE.gmm03.nii.gz $(word 3,$^) -thresh 4 4 1 0 -multiply -o $@ 
 	echo $(ITKSNAP) -s  $@ -g $<
 
 $(DATADIR)/%/PathPIMO.gmm.nii.gz: $(DATADIR)/%/PathPIMO.nii.gz $(DATADIR)/%/PathPIMO.mask.nii.gz
