@@ -27,8 +27,8 @@ HEGMM:=    $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHE.gmm.nii.gz,$(Pathol
 PIMOGMM:=  $(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMO.gmm.nii.gz,$(PathologyPimo)))
 HEOTB:=    $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE000.HaralickCorrelation_$(OTBRADIUS).nii.gz,$(PathologyHE)))
 PIMOOTB:=  $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO000.HaralickCorrelation_$(OTBRADIUS).nii.gz,$(PathologyPimo)))
-HESTAT:=    $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE000.HaralickCorrelation_$(OTBRADIUS).sql,$(PathologyHE))) $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHELMdist.sql,$(PathologyHE)))
-PIMOSTAT:=  $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO000.HaralickCorrelation_$(OTBRADIUS).sql,$(PathologyPimo))) $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMOLMdist.sql,$(PathologyPimo)))
+HESTAT:=   $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE000.HaralickCorrelation_$(OTBRADIUS).sql,$(PathologyHE))) $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE000.Entropy_$(OTBRADIUS).sql,$(PathologyHE))) $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHELMdist.sql,$(PathologyHE)))
+PIMOSTAT:= $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO000.HaralickCorrelation_$(OTBRADIUS).sql,$(PathologyPimo))) $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO000.Entropy_$(OTBRADIUS).sql,$(PathologyPimo))) $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMOLMdist.sql,$(PathologyPimo)))
 HEDIST:=    $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHELMdist.nii.gz,$(PathologyHE)))
 PIMODIST:=  $(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMOLMdist.nii.gz,$(PathologyPimo)))
 convert:   $(HENIFTI) $(PIMONIFTI)
@@ -145,7 +145,7 @@ $(DATADIR)/%/PathPIMO.gmm.nii.gz: $(DATADIR)/%/PathPIMO.nii.gz $(DATADIR)/%/Path
 	$(ATROPOSCMD) -i kmeans[2] -x $(word 2,$^) -a $(DATADIR)/$*/PathPIMOred.nii.gz -a $(DATADIR)/$*/PathPIMOgreen.nii.gz -a $(DATADIR)/$*/PathPIMOblue.nii.gz   -o [$(DATADIR)/$*/PathPIMO.gmm02.nii.gz] 
 	$(ATROPOSCMD) -i kmeans[3] -x $(word 2,$^) -a $(DATADIR)/$*/PathPIMOred.nii.gz -a $(DATADIR)/$*/PathPIMOgreen.nii.gz -a $(DATADIR)/$*/PathPIMOblue.nii.gz   -o [$(DATADIR)/$*/PathPIMO.gmm03.nii.gz] 
 	$(ATROPOSCMD) -i kmeans[4] -x $(word 2,$^) -a $(DATADIR)/$*/PathPIMOred.nii.gz -a $(DATADIR)/$*/PathPIMOgreen.nii.gz -a $(DATADIR)/$*/PathPIMOblue.nii.gz   -o [$(DATADIR)/$*/PathPIMO.gmm04.nii.gz] 
-	$(C3DEXE) $(DATADIR)/$*/PathPIMO.gmm04.nii.gz -replace 4 2 3 2  $@
+	$(C3DEXE) $(DATADIR)/$*/PathPIMO.gmm04.nii.gz -replace 4 2 3 2 -o $@
 	echo $(ITKSNAP) -s  $@ -g $<
 
 # FIXME - push to cluster
@@ -193,6 +193,7 @@ $(WORKDIR)/%000.HaralickCorrelation_$(OTBRADIUS)/lstat.csv: $(WORKDIR)/%000.Hara
 
 # dist
 $(WORKDIR)/%LMdist/lstat.csv: $(DATADIR)/%LMdist.nii.gz  $(DATADIR)/%.gmm.nii.gz
+	mkdir -p $(@D)
 	$(C3DEXE) $< $(word 2,$^) -lstat > $(@D).txt
 	sed "s/^\s\+/$(word 1,$(subst /, ,$*)),$(word 2,$(^F)),$(<F),/g;s/\s\+/,/g;s/LabelID/SeriesInstanceUID,SegmentationID,FeatureID,LabelID/g;s/Vol(mm^3)/Vol.mm.3/g;s/Extent(Vox)/ExtentX,ExtentY,ExtentZ/g" $(@D).txt > $@
 
