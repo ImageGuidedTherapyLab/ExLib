@@ -7,6 +7,7 @@ DIMENSION = 3
 OTBOFFSET  = 30
 OTBRADIUS  = 20
 ATROPOSCMD=$(ANTSPATH)/Atropos -d $(DIMENSION)  -c [3,0.0] -m [0.1,1x1x1] 
+#OTBTEXTURE=/opt/apps/ANTsR/dev//ANTsR_src/ANTsR/src/ANTS/ANTS-build//bin//otbScalarImageToTexturesFilter
 OTBTEXTURE=/rsrch2/ip/dtfuentes/github/ExLib/otbScalarImageTextures/otbScalarImageToTexturesFilter
 CLUSTERDIR=/rsrch2/ip/dtfuentes/github/ExLib/PathologyLandmarks/Processed
 WORKDIR=Processed
@@ -149,7 +150,6 @@ $(DATADIR)/%/PathPIMO.gmm.nii.gz: $(DATADIR)/%/PathPIMO.nii.gz $(DATADIR)/%/Path
 	echo $(ITKSNAP) -s  $@ -g $<
 
 # FIXME - push to cluster
-# ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE000.   3 50     0            0            0        0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
 # ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE001.   3 50     0            0        $(OTBOFFSET) 0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
 # ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE010.   3 50     0        $(OTBOFFSET)     0        0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
 # ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE011.   3 50     0        $(OTBOFFSET) $(OTBOFFSET) 0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
@@ -160,18 +160,18 @@ $(DATADIR)/%/PathPIMO.gmm.nii.gz: $(DATADIR)/%/PathPIMO.nii.gz $(DATADIR)/%/Path
 # HE
 $(WORKDIR)/%/PathHE000.HaralickCorrelation_$(OTBRADIUS).nii.gz: $(DATADIR)/%/PathHE.gmm.nii.gz
 	mkdir -p $(CLUSTERDIR)/$*; rsync --exclude '*.svs' -avz $(<D)/ $(CLUSTERDIR)/$*/;  
+	ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathHE000.   3 $(OTBRADIUS)     0             0            0     0.5 3.5  > $(@D)/PathHE.otb.log 2>&1 '; 
 	echo $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathHE010.   3 $(OTBRADIUS)     0         $(OTBOFFSET)     0     0.5 3.5 
 	echo $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathHE110.   3 $(OTBRADIUS) $(OTBOFFSET)  $(OTBOFFSET)     0     0.5 3.5 
 	echo $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathHE100.   3 $(OTBRADIUS) $(OTBOFFSET)      0            0     0.5 3.5 
 	echo $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathHE120.   3 $(OTBRADIUS) $(OTBOFFSET) -$(OTBOFFSET)     0     0.5 3.5 
-	$(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathHE000.   3 $(OTBRADIUS)     0             0            0     0.5 3.5
 	mkdir -p $(WORKDIR)/$*; rsync  -avz  $(CLUSTERDIR)/$*/ $(WORKDIR)/$*/;
 	echo $(ITKSNAP) -s  $< -g $(WORKDIR)/$*/PathHE.nii.gz -o $(WORKDIR)/$*/PathHE000.Entropy_$(OTBRADIUS).nii.gz
 
 # PIMO
 $(WORKDIR)/%/PathPIMO000.HaralickCorrelation_$(OTBRADIUS).nii.gz: $(DATADIR)/%/PathPIMO.gmm.nii.gz
 	mkdir -p $(CLUSTERDIR)/$*; rsync --exclude '*.svs' -avz $(<D)/ $(CLUSTERDIR)/$*/;  
-	$(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathPIMO000.   3 $(OTBRADIUS)     0             0            0     0.5 3.5
+	ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathPIMO000.   3 $(OTBRADIUS)     0             0            0     0.5 3.5  > $(@D)/PathPIMO.otb.log 2>&1 '; 
 	echo $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathPIMO010.   3 $(OTBRADIUS)     0         $(OTBOFFSET)     0     0.5 3.5 
 	echo $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathPIMO110.   3 $(OTBRADIUS) $(OTBOFFSET)  $(OTBOFFSET)     0     0.5 3.5 
 	echo $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathPIMO100.   3 $(OTBRADIUS) $(OTBOFFSET)      0            0     0.5 3.5 
