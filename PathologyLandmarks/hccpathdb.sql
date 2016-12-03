@@ -1,10 +1,10 @@
 -- mysql  --local-infile < ./hccpathdb.sql
--- select * from Metadata.HCCPathdb;
+-- select * from HCCPath.metadata;
 -- set db
-use Metadata;
+use HCCPath;
 -- NS database data
-DROP TABLE IF EXISTS  Metadata.HCCPathdb;
-CREATE TABLE Metadata.HCCPathdb(
+DROP TABLE IF EXISTS  HCCPath.metadata;
+CREATE TABLE HCCPath.metadata(
 id    bigint(20) NOT NULL AUTO_INCREMENT,
 Rat                         VARCHAR(64)  NOT  NULL ,
 TimePoint                   VARCHAR(64)       NULL ,
@@ -28,11 +28,62 @@ PRIMARY KEY (id),
 KEY `UID1` (`Rat`)
 );
 
+DROP PROCEDURE IF EXISTS HCCPath.ResetLabelStats ;
+DELIMITER //
+CREATE PROCEDURE HCCPath.ResetLabelStats()
+BEGIN
+  DROP TABLE IF EXISTS  HCCPath.lstat;
+  CREATE TABLE HCCPath.lstat  (
+   InstanceUID        VARCHAR(255)  NOT NULL COMMENT 'studyuid *OR* seriesUID', 
+   SegmentationID     VARCHAR(80)   NOT NULL,  -- UID for segmentation file -- FIXME -- SOPUID NOT WORTH IT???  SegmentationSOPUID VARCHAR(255)   NOT NULL,  
+   FeatureID          VARCHAR(80)   NOT NULL,  -- UID for image feature     -- FIXME -- SOPUID NOT WORTH IT???  FeatureSOPUID      VARCHAR(255)   NOT NULL,  
+   LabelID            INT           NOT NULL,  -- label id for LabelSOPUID statistics of FeatureSOPUID      
+   Mean               REAL              NULL,
+   StdD               REAL              NULL,
+   Max                REAL              NULL,
+   Min                REAL              NULL,
+   Count              INT               NULL,
+   Volume             REAL              NULL,
+   ExtentX            INT               NULL,
+   ExtentY            INT               NULL,
+   ExtentZ            INT               NULL,
+   PRIMARY KEY (InstanceUID,SegmentationID,FeatureID,LabelID) );
+END //
+DELIMITER ;
+show create procedure HCCPath.ResetLabelStats;
+-- call HCCPath.ResetLabelStats();
+show create table HCCPath.lstat;
+
+DROP PROCEDURE IF EXISTS HCCPath.ResetOverlapStats ;
+DELIMITER //
+CREATE PROCEDURE HCCPath.ResetOverlapStats()
+BEGIN
+  DROP TABLE IF EXISTS  HCCPath.overlap;
+  CREATE TABLE HCCPath.overlap(
+   InstanceUID        VARCHAR(255)  NOT NULL COMMENT 'studyuid *OR* seriesUID',  
+   FirstImage         VARCHAR(80)   NOT NULL,  -- UID for  FirstImage  
+   SecondImage        VARCHAR(80)   NOT NULL,  -- UID for  SecondImage 
+   LabelID            INT           NOT NULL,  -- label id for LabelSOPUID statistics of FeatureSOPUID      
+   SegmentationID     VARCHAR(80)   NOT NULL,  -- UID for segmentation file  to join with lstat
+   -- output of c3d firstimage.nii.gz secondimage.nii.gz -overlap LabelID
+   -- Computing overlap #1 and #2
+   -- OVL: 6, 11703, 7362, 4648, 0.487595, 0.322397  
+   MatchingFirst      int           DEFAULT NULL,     --   Matching voxels in first image:  11703
+   MatchingSecond     int           DEFAULT NULL,     --   Matching voxels in second image: 7362
+   SizeOverlap        int           DEFAULT NULL,     --   Size of overlap region:          4648
+   DiceSimilarity     real          DEFAULT NULL,     --   Dice similarity coefficient:     0.487595
+   IntersectionRatio  real          DEFAULT NULL,     --   Intersection / ratio:            0.322397
+   PRIMARY KEY (InstanceUID,FirstImage,SecondImage,LabelID) );
+END //
+DELIMITER ;
+show create procedure HCCPath.ResetOverlapStats;
+-- call HCCPath.ResetOverlapStats();
+show create table HCCPath.overlap;
 
 
 -- load dti data
 LOAD DATA LOCAL INFILE './datalocation/CorrelativePathFiles.csv'
-INTO TABLE Metadata.HCCPathdb
+INTO TABLE HCCPath.metadata
 FIELDS TERMINATED BY ','  ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES
@@ -40,26 +91,48 @@ IGNORE 1 LINES
 SET metadata =  JSON_OBJECT( "Rat",Rat ,
                          "Time",cast(REPLACE(TimePoint,"weeks","") as Decimal)) ;
 
-DROP PROCEDURE IF EXISTS HCCPathDBList ;
+DROP PROCEDURE IF EXISTS HCCPath.HCCPathDBList ;
 DELIMITER //
-CREATE PROCEDURE HCCPathDBList 
-( )
+CREATE PROCEDURE HCCPath.HCCPathDBList 
+(IN csvfile  varchar(255))
 BEGIN
+-- FIXME replace csvfile  into  table
     SET SESSION group_concat_max_len = 10000000;
-    select  concat("DATADIR                  =", group_concat( distinct hcc.DataDir                       )) DataDir                    from Metadata.HCCPathdb hcc;
-    select  concat("T2WeightedReference      =", group_concat( hcc.T2WeightedReference       separator ' ')) T2WeightedReference        from Metadata.HCCPathdb hcc;
-    select  concat("T2starMapOxygen          =", group_concat( hcc.T2starMapOxygen           separator ' ')) T2starMapOxygen            from Metadata.HCCPathdb hcc;
-    select  concat("T2statMapMedicalAir      =", group_concat( hcc.T2statMapMedicalAir       separator ' ')) T2statMapMedicalAir        from Metadata.HCCPathdb hcc;
-    select  concat("T2starMapAbsoluteChange  =", group_concat( hcc.T2starMapAbsoluteChange   separator ' ')) T2starMapAbsoluteChange    from Metadata.HCCPathdb hcc;
-    select  concat("T2statMapPercentageChange=", group_concat( hcc.T2statMapPercentageChange separator ' ')) T2statMapPercentageChange  from Metadata.HCCPathdb hcc;
-    select  concat("DCE                      =", group_concat( hcc.DCE                       separator ' ')) DCE                        from Metadata.HCCPathdb hcc;
-    select  concat("T1PreContrast            =", group_concat( hcc.T1PreContrast             separator ' ')) T1PreContrast              from Metadata.HCCPathdb hcc;
-    select  concat("T1PostContrast           =", group_concat( hcc.T1PostContrast            separator ' ')) T1PostContrast             from Metadata.HCCPathdb hcc;
-    select  concat("PathologyHE              =", group_concat( hcc.PathologyHE               separator ' ')) PathologyHE                from Metadata.HCCPathdb hcc;        
-    select  concat("PathologyPimo            =", group_concat( hcc.PathologyPimo             separator ' ')) PathologyPimo              from Metadata.HCCPathdb hcc;
-    select  concat("UpdateTransform          =", group_concat( hcc.UpdateTransform           separator ' ')) UpdateTransform            from Metadata.HCCPathdb hcc;
+    select  concat("DATADIR                  =", group_concat( distinct hcc.DataDir                       )) DataDir                    from HCCPath.metadata hcc;
+    select  concat("T2WeightedReference      =", group_concat( hcc.T2WeightedReference       separator ' ')) T2WeightedReference        from HCCPath.metadata hcc;
+    select  concat("T2starMapOxygen          =", group_concat( hcc.T2starMapOxygen           separator ' ')) T2starMapOxygen            from HCCPath.metadata hcc;
+    select  concat("T2statMapMedicalAir      =", group_concat( hcc.T2statMapMedicalAir       separator ' ')) T2statMapMedicalAir        from HCCPath.metadata hcc;
+    select  concat("T2starMapAbsoluteChange  =", group_concat( hcc.T2starMapAbsoluteChange   separator ' ')) T2starMapAbsoluteChange    from HCCPath.metadata hcc;
+    select  concat("T2statMapPercentageChange=", group_concat( hcc.T2statMapPercentageChange separator ' ')) T2statMapPercentageChange  from HCCPath.metadata hcc;
+    select  concat("DCE                      =", group_concat( hcc.DCE                       separator ' ')) DCE                        from HCCPath.metadata hcc;
+    select  concat("T1PreContrast            =", group_concat( hcc.T1PreContrast             separator ' ')) T1PreContrast              from HCCPath.metadata hcc;
+    select  concat("T1PostContrast           =", group_concat( hcc.T1PostContrast            separator ' ')) T1PostContrast             from HCCPath.metadata hcc;
+    select  concat("PathologyHE              =", group_concat( hcc.PathologyHE               separator ' ')) PathologyHE                from HCCPath.metadata hcc;        
+    select  concat("PathologyPimo            =", group_concat( hcc.PathologyPimo             separator ' ')) PathologyPimo              from HCCPath.metadata hcc;
+    select  concat("UpdateTransform          =", group_concat( hcc.UpdateTransform           separator ' ')) UpdateTransform            from HCCPath.metadata hcc;
 END //
 DELIMITER ;
--- show create procedure Metadata.HCCPathDBList;
--- call Metadata.HCCPathDBList();
--- mysql  -sNre "call Metadata.HCCPathDBList();"
+-- show create procedure HCCPath.HCCPathDBList;
+-- call HCCPath.HCCPathDBList();
+-- mysql  -sNre "call HCCPath.HCCPathDBList();"
+
+
+DROP PROCEDURE IF EXISTS HCCPath.HCCPathOutput ;
+DELIMITER //
+CREATE PROCEDURE HCCPath.HCCPathOutput 
+(IN radius int)
+BEGIN
+select md.Rat, md.TimePoint, md.PathologyHE, hee.mean as EntropyHE,heh.mean as HaralickHE, hev.mean as DistViableHE, hen.mean as DistNecrosisHE, md.PathologyPimo ,pie.mean as EntropyPimo,pih.mean as HaralickPimo, pio.mean as DistO2Pimo,md.metadata
+from        HCCPath.metadata md
+left  join  HCCPath.lstat    heh  on (md.Rat=heh.InstanceUID and heh.LabelID = 4 and heh.FeatureID=CONCAT('PathHE000.HaralickCorrelation_',radius ,'.nii.gz'))
+left  join  HCCPath.lstat    pih  on (md.Rat=pih.InstanceUID and pih.LabelID = 4 and pih.FeatureID=CONCAT('PathPIMO000.HaralickCorrelation_',radius ,'.nii.gz')) 
+left  join  HCCPath.lstat    hev  on (md.Rat=hev.InstanceUID and hev.LabelID = 1 and hev.FeatureID=CONCAT('PathHELMdist.nii.gz'))
+left  join  HCCPath.lstat    hen  on (md.Rat=hen.InstanceUID and hen.LabelID = 3 and hen.FeatureID=CONCAT('PathHELMdist.nii.gz'))
+left  join  HCCPath.lstat    pio  on (md.Rat=pio.InstanceUID and pio.LabelID = 1 and pio.FeatureID=CONCAT('PathPIMOLMdist.nii.gz'))
+left  join  HCCPath.lstat    hee  on (md.Rat=hee.InstanceUID and hee.LabelID = 4 and hee.FeatureID=CONCAT('PathHE000.Entropy_',radius ,'.nii.gz'))
+left  join  HCCPath.lstat    pie  on (md.Rat=pie.InstanceUID and pie.LabelID = 4 and pie.FeatureID=CONCAT('PathPIMO000.Entropy_',radius ,'.nii.gz'));
+END //
+DELIMITER ;
+-- show create procedure HCCPath.HCCPathOutput;
+-- call HCCPath.HCCPathOutput(20);
+-- mysql  -re "call HCCPath.HCCPathOutput(20);" | sed "s/\t/,/g;s/NULL//g" > analysissummary.csv

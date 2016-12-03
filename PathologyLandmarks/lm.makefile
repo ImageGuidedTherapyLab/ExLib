@@ -2,129 +2,202 @@ ANTSAPPLYTRANSFORMSCMD=/opt/apps/ANTsR/dev//ANTsR_src/ANTsR/src/ANTS/ANTS-build/
 ANTSLANDMARKCMD       =/opt/apps/ANTsR/dev//ANTsR_src/ANTsR/src/ANTS/ANTS-build//bin//ANTSUseLandmarkImagesToGetAffineTransform 
 ITKSNAP  = vglrun /opt/apps/itksnap/itksnap-3.2.0-20141023-Linux-x86_64/bin/itksnap
 C3DEXE=/rsrch2/ip/dtfuentes/bin/c3d
-MYSQL = mysql 
 CONVERTSVS = python ./convertsvs.py
 DIMENSION = 3
-NTISSUE = 4
+OTBOFFSET  = 30
+OTBRADIUS  = 20
 ATROPOSCMD=$(ANTSPATH)/Atropos -d $(DIMENSION)  -c [3,0.0] -m [0.1,1x1x1] 
+#OTBTEXTURE=/opt/apps/ANTsR/dev//ANTsR_src/ANTsR/src/ANTS/ANTS-build//bin//otbScalarImageToTexturesFilter
 OTBTEXTURE=/rsrch2/ip/dtfuentes/github/ExLib/otbScalarImageTextures/otbScalarImageToTexturesFilter
-CLUSTERDIR=/rsrch2/ip/dtfuentes/github/ExLib/PathologyLandmarks/
+CLUSTERDIR=/rsrch2/ip/dtfuentes/github/ExLib/PathologyLandmarks/Processed
 WORKDIR=Processed
 
 ################
 # Dependencies #
 ################
 -include datalocation/dependencies
-dependencies: 
-	bash -i -c '$(MYSQL) --local-infile < ./hccpathdb.sql'
-	bash -i -c '$(MYSQL) -sNre "call Metadata.HCCPathDBList();"  > datalocation/dependencies'
+datalocation/dependencies: ./hccpathdb.sql ./datalocation/CorrelativePathFiles.csv
+	$(MYSQL) --local-infile < $< 
+	$(MYSQL) -sNre "call HCCPath.HCCPathDBList('$(word 2, $^)');"  > $@
 
-HENIFTI:=    $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHE.nii.gz,$(PathologyHE)))
-PIMONIFTI:=  $(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMO.nii.gz,$(PathologyPimo)))
+HENIFTI:=  $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHE.nii.gz,$(PathologyHE)))
+PIMONIFTI:=$(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMO.nii.gz,$(PathologyPimo)))
+HELMREG:=  $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHE.lmreg.nii.gz,$(PathologyHE)))
+PIMOLMREG:=$(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMO.lmreg.nii.gz,$(PathologyPimo)))
 HEGMM:=    $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHE.gmm.nii.gz,$(PathologyHE)))
 PIMOGMM:=  $(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMO.gmm.nii.gz,$(PathologyPimo)))
-convert:    $(HENIFTI) $(PIMONIFTI)
-gmm:        $(HEGMM) $(PIMOGMM)
-lm:         $(T2LM)
-transform:  $(UpdateTransform)
+HEOTB:=    $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE000.HaralickCorrelation_$(OTBRADIUS).nii.gz,$(PathologyHE)))
+PIMOOTB:=  $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO000.HaralickCorrelation_$(OTBRADIUS).nii.gz,$(PathologyPimo)))
+HESTAT:=   $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE000.HaralickCorrelation_$(OTBRADIUS).sql,$(PathologyHE))) $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE000.Entropy_$(OTBRADIUS).sql,$(PathologyHE))) $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHELMdist.sql,$(PathologyHE)))
+PIMOSTAT:= $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO000.HaralickCorrelation_$(OTBRADIUS).sql,$(PathologyPimo))) $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO000.Entropy_$(OTBRADIUS).sql,$(PathologyPimo))) $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMOLMdist.sql,$(PathologyPimo)))
+HEDIST:=    $(addprefix $(DATADIR)/,$(subst PathHE.svs,PathHELMdist.nii.gz,$(PathologyHE)))
+PIMODIST:=  $(addprefix $(DATADIR)/,$(subst PathPIMO.svs,PathPIMOLMdist.nii.gz,$(PathologyPimo)))
+convert:   $(HENIFTI) $(PIMONIFTI)
+gmm:       $(HEGMM) $(PIMOGMM)
+lm:        $(HELMREG) $(PIMOLMREG)
+transform: $(addprefix $(DATADIR)/,$(UpdateTransform))
+otb: $(HEOTB) $(PIMOOTB)
+stat: $(HESTAT) $(PIMOSTAT)
+dist: $(HEDIST) $(PIMODIST)
 
 # debug
 jobs:
-	echo $(T2LM)
+	@echo $(HEOTB)
+
+check:
+	@$(foreach idfile,$(T2WeightedReference)      , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(T2starMapOxygen)          , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(T2statMapMedicalAir)      , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(T2starMapAbsoluteChange)  , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(T2statMapPercentageChange), if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(DCE)                      , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(T1PreContrast)            , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(T1PostContrast)           , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(PathologyHE)              , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+	@$(foreach idfile,$(PathologyPimo)            , if [ ! -f $(DATADIR)/$(idfile)  ]  ; then echo 'missing ' $(DATADIR)/$(idfile) ;fi;)
+
 
 #https://www.gnu.org/software/make/manual/html_node/Special-Targets.html
 # do not delete secondary files
 .SECONDARY: 
 
 # initialize LM
-%/RefImgLM.nii.gz: %/RefImg.hdr
+$(DATADIR)/%LM.nii.gz: $(DATADIR)/%.hdr
 	-$(C3DEXE) $< -scale 0. -type char $@ 
-%/T1postLM.nii.gz: %/T1post.hdr
-	-$(C3DEXE) $< -scale 0. -type char $@ 
-%/DCEavgLM.nii.gz: %/DCEavg.hdr
-	-$(C3DEXE) $< -scale 0. -type char $@ 
-%/PathHELM.nii.gz: %/PathHE.nii.gz
-	-$(C3DEXE) $< -scale 0. -type char $@ 
-%/PathPIMOLM.nii.gz: %/PathPIMO.nii.gz
-	-$(C3DEXE) $< -scale 0. -type char $@ 
+
+$(DATADIR)/%LMdist.nii.gz: $(DATADIR)/%LM.nii.gz
+	$(C3DEXE) $< -thresh 4 4 1 0 -dilate 1 5x5x0vox -erode 1 5x5x0vox -sdt -o $@
 
 # apply transformation
-%/Pathology/PathHE.lmreg.nii.gz: %/t2HElmtransform.tfm %/Pathology/PathHE.nii.gz %/T2wReference/RefImgLM.nii.gz
-	$(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $<  --float 0 
-	@echo vglrun $(ITKSNAP) -g $(word 3, $^)  -o $@
-%/Pathology/PathHE.gmm.lmreg.nii.gz: %/t2HElmtransform.tfm %/Pathology/PathHE.gmm.nii.gz %/T2wReference/RefImgLM.nii.gz
+$(DATADIR)/%/Pathology/PathHE.lmreg.nii.gz: $(DATADIR)/%/t2HElmtransform.tfm $(DATADIR)/%/Pathology/PathHE.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
+	echo $(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $< 
+	$(ANTSAPPLYTRANSFORMSCMD) -d 3      -i $(word 2, $(^D))/PathHEred.nii.gz    -o $(@D)/PathHEred.lmreg.nii.gz    -r $(word 3, $^)  -n Linear   -t $< 
+	$(ANTSAPPLYTRANSFORMSCMD) -d 3      -i $(word 2, $(^D))/PathHEgreen.nii.gz  -o $(@D)/PathHEgreen.lmreg.nii.gz  -r $(word 3, $^)  -n Linear   -t $< 
+	$(ANTSAPPLYTRANSFORMSCMD) -d 3      -i $(word 2, $(^D))/PathHEblue.nii.gz   -o $(@D)/PathHEblue.lmreg.nii.gz   -r $(word 3, $^)  -n Linear   -t $< 
+	$(C3DEXE) $(@D)/PathHEred.lmreg.nii.gz    $(@D)/PathHEgreen.lmreg.nii.gz  $(@D)/PathHEblue.lmreg.nii.gz   -omc $@
+$(DATADIR)/%/Pathology/PathHE.gmm.lmreg.nii.gz: $(DATADIR)/%/t2HElmtransform.tfm $(DATADIR)/%/Pathology/PathHE.gmm.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
 	$(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n NearestNeighbor   -t $<  --float 0 
-	@echo vglrun $(ITKSNAP) -g $(word 3, $^)  -o $@
-%/Pathology/PathPIMO.lmreg.nii.gz: %/t2PIMOlmtransform.tfm %/Pathology/PathPIMO.nii.gz %/T2wReference/RefImgLM.nii.gz
-	$(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $<  --float 0 
-	@echo vglrun $(ITKSNAP) -g $(word 3, $^)  -o $@
-%/Pathology/PathPIMO.gmm.lmreg.nii.gz: %/t2PIMOlmtransform.tfm %/Pathology/PathPIMO.gmm.nii.gz %/T2wReference/RefImgLM.nii.gz
+$(DATADIR)/%/Pathology/PathPIMO.lmreg.nii.gz: $(DATADIR)/%/t2PIMOlmtransform.tfm $(DATADIR)/%/Pathology/PathPIMO.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
+	echo $(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $<  --float 0 
+	$(ANTSAPPLYTRANSFORMSCMD) -d 3      -i $(word 2, $(^D))/PathPIMOEred.nii.gz    -o $(@D)/PathPIMOEred.lmreg.nii.gz    -r $(word 3, $^)  -n Linear   -t $< 
+	$(ANTSAPPLYTRANSFORMSCMD) -d 3      -i $(word 2, $(^D))/PathPIMOEgreen.nii.gz  -o $(@D)/PathPIMOEgreen.lmreg.nii.gz  -r $(word 3, $^)  -n Linear   -t $< 
+	$(ANTSAPPLYTRANSFORMSCMD) -d 3      -i $(word 2, $(^D))/PathPIMOEblue.nii.gz   -o $(@D)/PathPIMOEblue.lmreg.nii.gz   -r $(word 3, $^)  -n Linear   -t $< 
+	$(C3DEXE) $(@D)/PathPIMOEred.lmreg.nii.gz    $(@D)/PathPIMOEgreen.lmreg.nii.gz  $(@D)/PathPIMOEblue.lmreg.nii.gz   -omc $@
+$(DATADIR)/%/Pathology/PathPIMO.gmm.lmreg.nii.gz: $(DATADIR)/%/t2PIMOlmtransform.tfm $(DATADIR)/%/Pathology/PathPIMO.gmm.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
 	$(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n NearestNeighbor   -t $<  --float 0 
-	@echo vglrun $(ITKSNAP) -g $(word 3, $^)  -o $@
-%/DCE/DCEavg.lmreg.nii.gz: %/t2dcelmtransform.tfm %/DCE/DCEavg.nii.gz %/T2wReference/RefImgLM.nii.gz
+$(DATADIR)/%/DCE/DCEavg.lmreg.nii.gz: $(DATADIR)/%/t2dcelmtransform.tfm $(DATADIR)/%/DCE/DCEavg.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
 	$(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $<  --float 0 
-	@echo vglrun $(ITKSNAP) -g $(word 3, $^)  -o $@
-%/DCE/DCE.lmreg.nii.gz: %/t2dcelmtransform.tfm %/DCE/DCE.nii.gz %/T2wReference/RefImgLM.nii.gz
+$(DATADIR)/%/DCE/DCE.lmreg.nii.gz: $(DATADIR)/%/t2dcelmtransform.tfm $(DATADIR)/%/DCE/DCE.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
 	$(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $<  --float 0 
-	@echo vglrun $(ITKSNAP) -g $(word 3, $^)  -o $@
-%/T1Post/T1post.lmreg.nii.gz: %/t2t1lmtransform.tfm %/T1Post/T1post.nii.gz %/T2wReference/RefImgLM.nii.gz
+$(DATADIR)/%/T1Post/T1post.lmreg.nii.gz: $(DATADIR)/%/t2t1lmtransform.tfm $(DATADIR)/%/T1Post/T1post.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
 	$(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $<  --float 0 
-	@echo vglrun $(ITKSNAP) -g $(word 3, $^)  -o $@
-%/T1Pre/T1pre.lmreg.nii.gz: %/t2t1lmtransform.tfm %/T1Pre/T1pre.nii.gz %/T2wReference/RefImgLM.nii.gz
+$(DATADIR)/%/T1Pre/T1pre.lmreg.nii.gz: $(DATADIR)/%/t2t1lmtransform.tfm $(DATADIR)/%/T1Pre/T1pre.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz
 	$(ANTSAPPLYTRANSFORMSCMD) -d 3 -e 1 -i $(word 2, $^)  -o $@ -r $(word 3, $^)  -n Linear   -t $<  --float 0 
-	@echo vglrun $(ITKSNAP) -g $(word 3, $^)  -o $@
 
 # update transform lm
-%/updatetransform: %/Pathology/PathHELM.nii.gz %/Pathology/PathHE.nii.gz %/T2wReference/RefImgLM.nii.gz %/T2wReference/RefImg.hdr %/Pathology/PathPIMOLM.nii.gz %/Pathology/PathPIMO.nii.gz %/T1post/T1postLM.nii.gz %/T1post/T1post.hdr %/T1pre/T1pre.hdr %/DCE/DCEavgLM.nii.gz %/DCE/DCEavg.hdr  %/DCE/DCE.hdr 
-	-$(ITKSNAP) -l LMLabels.txt -s $(word 1, $^)  -g $(word 2, $^)  &  PIDPATH=$$!; \
-        $(ITKSNAP) -l LMLabels.txt -s $(word 3, $^)  -g $(word 4, $^)  &  PIDMRI=$$!; \
-        $(ITKSNAP) -l LMLabels.txt -s $(word 5, $^)  -g $(word 6, $^)  &  PIDPIMO=$$!; \
-        $(ITKSNAP) -l LMLabels.txt -s $(word 7, $^)  -g $(word 8, $^)  -o $(word 9, $^)  &  PIDT1=$$!; \
-        $(ITKSNAP) -l LMLabels.txt -s $(word 10, $^) -g $(word 11, $^) -o $(word 12, $^) &  PIDDCE=$$!; \
+# FIXME - add texture to dependencies
+$(DATADIR)/%/updatetransform: $(DATADIR)/%/Pathology/PathHELM.nii.gz $(DATADIR)/%/Pathology/PathHE.nii.gz $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/T2wReference/RefImg.hdr $(DATADIR)/%/Pathology/PathPIMOLM.nii.gz $(DATADIR)/%/Pathology/PathPIMO.nii.gz $(DATADIR)/%/T1post/T1postLM.nii.gz $(DATADIR)/%/T1post/T1post.hdr $(DATADIR)/%/T1pre/T1pre.hdr $(DATADIR)/%/DCE/DCEavgLM.nii.gz $(DATADIR)/%/DCE/DCEavg.hdr  $(DATADIR)/%/DCE/DCE.hdr $(DATADIR)/%/Pathology/PathHE.lmreg.nii.gz  $(DATADIR)/%/Pathology/PathHE.gmm.nii.gz  $(DATADIR)/%/Pathology/PathHE.mask.nii.gz $(DATADIR)/%/Pathology/PathPIMO.gmm.nii.gz  $(DATADIR)/%/Pathology/PathPIMO.mask.nii.gz
+	echo $@
+	-$(ITKSNAP) -l LMLabels.txt -g $(word  2, $^) -s $(word  1, $^) -o $(WORKDIR)/$*/Pathology/PathHE000.Entropy_$(OTBRADIUS).nii.gz &  PIDPATH=$$!;   \
+	 $(ITKSNAP) -l LMLabels.txt -g $(word  2, $^) -s $(word 14, $^) -o $(word 15, $^) &  PIDHEGMM=$$!; \
+	 $(ITKSNAP) -l LMLabels.txt -g $(word  6, $^) -s $(word 16, $^) -o $(word 17, $^) &  PIDPIMOGMM=$$!; \
+         $(ITKSNAP) -l LMLabels.txt -g $(word  4, $^) -s $(word  3, $^) -o $(word 13, $^) &  PIDLMREG=$$!; \
+         $(ITKSNAP) -l LMLabels.txt -g $(word  6, $^) -s $(word  5, $^) -o $(WORKDIR)/$*/Pathology/PathPIMO000.Entropy_$(OTBRADIUS).nii.gz &  PIDPIMO=$$!; \
+         $(ITKSNAP) -l LMLabels.txt -g $(word  8, $^) -s $(word  7, $^) -o $(word 9, $^)  &  PIDT1=$$!;  \
+         $(ITKSNAP) -l LMLabels.txt -g $(word 11, $^) -s $(word 10, $^) -o $(word 12, $^) &  PIDDCE=$$!; \
         zenity --info --title="OutputFile" --text="Tools -> Layer Inspector -> General -> Display Mode -> RGB $(word 4, $^)  "; \
-        kill -9 $$PIDPATH;kill -9 $$PIDMRI;kill -9 $$PIDPIMO; kill -9 $$PIDT1; kill -9 $$PIDDCE
+        kill -9 $$PIDPATH;kill -9 $$PIDLMREG;kill -9 $$PIDPIMO; kill -9 $$PIDT1; kill -9 $$PIDDCE; kill -9 $$PIDHEGMM; kill -9 $$PIDPIMOGMM
 
 # compute lm transformation
-%/t2HElmtransform.tfm:   %/T2wReference/RefImgLM.nii.gz %/Pathology/PathHELM.nii.gz 
+$(DATADIR)/%/t2HElmtransform.tfm:   $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/Pathology/PathHELM.nii.gz 
 	$(ANTSLANDMARKCMD) $^  rigid $@  >> $(basename $@).log 2>&1
-%/t2PIMOlmtransform.tfm: %/T2wReference/RefImgLM.nii.gz %/Pathology/PathPIMOLM.nii.gz 
+$(DATADIR)/%/t2PIMOlmtransform.tfm: $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/Pathology/PathPIMOLM.nii.gz 
 	$(ANTSLANDMARKCMD) $^  rigid $@  >> $(basename $@).log 2>&1
-%/t2t1lmtransform.tfm: %/T2wReference/RefImgLM.nii.gz %/T1post/T1postLM.nii.gz 
+$(DATADIR)/%/t2t1lmtransform.tfm: $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/T1post/T1postLM.nii.gz 
 	$(ANTSLANDMARKCMD) $^  rigid $@  >> $(basename $@).log 2>&1
-%/t2dcelmtransform.tfm: %/T2wReference/RefImgLM.nii.gz %/DCE/DCEavgLM.nii.gz 
+$(DATADIR)/%/t2dcelmtransform.tfm: $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/DCE/DCEavgLM.nii.gz 
 	$(ANTSLANDMARKCMD) $^  rigid $@  >> $(basename $@).log 2>&1
 
 #Convert svs to nifti using open slide to read header
 # http://openslide.org/    MPP = micron per pixel
-%/PathHE.nii.gz: %/PathHE.svs
+$(DATADIR)/%/PathHE.nii.gz: $(DATADIR)/%/PathHE.svs
 	$(CONVERTSVS) --svsfile=$< --outimage=$@
-%/PathPIMO.nii.gz: %/PathPIMO.svs
+$(DATADIR)/%/PathPIMO.nii.gz: $(DATADIR)/%/PathPIMO.svs
 	$(CONVERTSVS) --svsfile=$< --outimage=$@
 
-%/PathHE.mask.nii.gz: %/PathHE.nii.gz
-	$(C3DEXE) $<  -threshold 0% 40% 1 0 -erode 1 8x8x0vox  -comp -threshold 1 3 1 0 -o $@
+$(DATADIR)/%/PathHE.mask.nii.gz: $(DATADIR)/%/PathHE.nii.gz
+	$(C3DEXE) -verbose -mcs $< -popas b -popas g -popas r -push b -push g -scale -1 -add -dup -multiply -sqrt -popas bg  -push b -push r  -scale -1 -add -dup -multiply -sqrt -push bg -add -popas rgb -push g -push r -scale -1 -add -dup -multiply -sqrt -push rgb -add -threshold 0 10 0 1 -erode 1 8x8x0vox  -comp -threshold 1 3 1 0 -o $@
 	echo $(ITKSNAP) -s  $@ -g $<
 
-%/PathPIMO.mask.nii.gz: %/PathPIMO.nii.gz
-	$(C3DEXE) $<  -threshold 0% 40% 1 0 -erode 1 8x8x0vox  -comp -threshold 1 3 1 0 -o $@
+$(DATADIR)/%/PathPIMO.mask.nii.gz: $(DATADIR)/%/PathPIMO.nii.gz $(DATADIR)/%/PathPIMOLM.nii.gz
+	$(C3DEXE) -verbose -mcs $< -popas b -popas g -popas r -push b -push g -scale -1 -add -dup -multiply -sqrt -popas bg  -push b -push r  -scale -1 -add -dup -multiply -sqrt -push bg -add -popas rgb -push g -push r -scale -1 -add -dup -multiply -sqrt -push rgb -add -threshold 0 10 0 1 -erode 1 8x8x0vox  -comp -threshold 1 3 1 0  $(word 2,$^) -thresh 4 4 1 0 -multiply -o $@
 	echo $(ITKSNAP) -s  $@ -g $<
 
-%/PathHE.gmm.nii.gz: %/PathHE.nii.gz %/PathHE.mask.nii.gz
-	$(C3DEXE) -mcs $< -oo $*/PathHEred.nii.gz $*/PathHEgreen.nii.gz $*/PathHEblue.nii.gz
-	$(ATROPOSCMD) -i kmeans[$(NTISSUE)] -x $(word 2,$^) -a $*/PathHEred.nii.gz -a $*/PathHEgreen.nii.gz -a $*/PathHEblue.nii.gz   -o [$@,$*/PathHEgmmPOSTERIORS%d.nii.gz] 
+$(DATADIR)/%/PathHE.gmm.nii.gz: $(DATADIR)/%/PathHE.nii.gz $(DATADIR)/%/PathHE.mask.nii.gz $(DATADIR)/%/PathHELM.nii.gz
+	$(C3DEXE) -mcs $< -oo $(DATADIR)/$*/PathHEred.nii.gz $(DATADIR)/$*/PathHEgreen.nii.gz $(DATADIR)/$*/PathHEblue.nii.gz
+	$(ATROPOSCMD) -i kmeans[2] -x $(word 2,$^) -a $(DATADIR)/$*/PathHEred.nii.gz -a $(DATADIR)/$*/PathHEgreen.nii.gz -a $(DATADIR)/$*/PathHEblue.nii.gz   -o [$(DATADIR)/$*/PathHE.gmm02.nii.gz] 
+	$(ATROPOSCMD) -i kmeans[3] -x $(word 2,$^) -a $(DATADIR)/$*/PathHEred.nii.gz -a $(DATADIR)/$*/PathHEgreen.nii.gz -a $(DATADIR)/$*/PathHEblue.nii.gz   -o [$(DATADIR)/$*/PathHE.gmm03.nii.gz] 
+	$(ATROPOSCMD) -i kmeans[4] -x $(word 2,$^) -a $(DATADIR)/$*/PathHEred.nii.gz -a $(DATADIR)/$*/PathHEgreen.nii.gz -a $(DATADIR)/$*/PathHEblue.nii.gz   -o [$(DATADIR)/$*/PathHE.gmm04.nii.gz] 
+	$(C3DEXE) $(DATADIR)/$*/PathHE.gmm03.nii.gz $(word 3,$^) -thresh 4 4 1 0 -multiply -o $@ 
 	echo $(ITKSNAP) -s  $@ -g $<
 
-$(WORKDIR)/%/PathHE.HaralickCorrelation_200.nii.gz: $(DATADIR)/%/PathHE.gmm.nii.gz
-	mkdir -p $(CLUSTERDIR)/$(@D); rsync --exclude '*.svs' -avz $(<D) $(CLUSTERDIR)/$(dir $(WORKDIR)/$*);  
-	ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE.   4 200 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
-	echo $(ITKSNAP) -s  $< -g $*/PathHE.nii.gz -o $*/PathHE.Entropy_3.nii.gz
-
-%/PathPIMO.gmm.nii.gz: %/PathPIMO.nii.gz %/PathPIMO.mask.nii.gz
-	$(C3DEXE) -mcs $< -oo $*/PathPIMOred.nii.gz $*/PathPIMOgreen.nii.gz $*/PathPIMOblue.nii.gz
-	$(ATROPOSCMD) -i kmeans[$(NTISSUE)] -x $(word 2,$^) -a $*/PathPIMOred.nii.gz -a $*/PathPIMOgreen.nii.gz -a $*/PathPIMOblue.nii.gz   -o [$@,$*/PathPIMOgmmPOSTERIORS%d.nii.gz] 
+$(DATADIR)/%/PathPIMO.gmm.nii.gz: $(DATADIR)/%/PathPIMO.nii.gz $(DATADIR)/%/PathPIMO.mask.nii.gz
+	$(C3DEXE) -mcs $< -oo $(DATADIR)/$*/PathPIMOred.nii.gz $(DATADIR)/$*/PathPIMOgreen.nii.gz $(DATADIR)/$*/PathPIMOblue.nii.gz
+	$(ATROPOSCMD) -i kmeans[2] -x $(word 2,$^) -a $(DATADIR)/$*/PathPIMOred.nii.gz -a $(DATADIR)/$*/PathPIMOgreen.nii.gz -a $(DATADIR)/$*/PathPIMOblue.nii.gz   -o [$(DATADIR)/$*/PathPIMO.gmm02.nii.gz] 
+	$(ATROPOSCMD) -i kmeans[3] -x $(word 2,$^) -a $(DATADIR)/$*/PathPIMOred.nii.gz -a $(DATADIR)/$*/PathPIMOgreen.nii.gz -a $(DATADIR)/$*/PathPIMOblue.nii.gz   -o [$(DATADIR)/$*/PathPIMO.gmm03.nii.gz] 
+	$(ATROPOSCMD) -i kmeans[4] -x $(word 2,$^) -a $(DATADIR)/$*/PathPIMOred.nii.gz -a $(DATADIR)/$*/PathPIMOgreen.nii.gz -a $(DATADIR)/$*/PathPIMOblue.nii.gz   -o [$(DATADIR)/$*/PathPIMO.gmm04.nii.gz] 
+	$(C3DEXE) $(DATADIR)/$*/PathPIMO.gmm04.nii.gz -replace 4 2 3 2 -o $@
 	echo $(ITKSNAP) -s  $@ -g $<
 
-view:
-	vglrun itksnap -g pathology.nii.gz -s pathologyLM.nii.gz
-	vglrun itksnap -g dce.nii.gz -s dceLM.nii.gz
-	echo Tools -> Layer Inspector -> General -> Display Mode -> RGB
+# FIXME - push to cluster
+# ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE001.   3 50     0            0        $(OTBOFFSET) 0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+# ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE010.   3 50     0        $(OTBOFFSET)     0        0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+# ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE011.   3 50     0        $(OTBOFFSET) $(OTBOFFSET) 0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+# ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE100.   3 50 $(OTBOFFSET)     0            0        0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+# ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE101.   3 50 $(OTBOFFSET)     0        $(OTBOFFSET) 0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+# ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE110.   3 50 $(OTBOFFSET) $(OTBOFFSET)     0        0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+# ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(@D)/$(<F)  $(@D)/PathHE111.   3 50 $(OTBOFFSET) $(OTBOFFSET) $(OTBOFFSET) 0.5 3.5 > $(@D)/PathHE.otb.log 2>&1 '; rsync -avz $(CLUSTERDIR)/$(@D)/ $(@D)/ ; 
+# HE
+$(WORKDIR)/%/PathHE000.HaralickCorrelation_$(OTBRADIUS).nii.gz: $(DATADIR)/%/PathHE.gmm.nii.gz
+	mkdir -p $(CLUSTERDIR)/$*; rsync --exclude '*.svs' -avz $(<D)/ $(CLUSTERDIR)/$*/;  
+	ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathHE000.   3 $(OTBRADIUS)     0             0            0     0.5 3.5  > $(@D)/PathHE.otb.log 2>&1 '; 
+	echo $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathHE010.   3 $(OTBRADIUS)     0         $(OTBOFFSET)     0     0.5 3.5 
+	echo $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathHE110.   3 $(OTBRADIUS) $(OTBOFFSET)  $(OTBOFFSET)     0     0.5 3.5 
+	echo $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathHE100.   3 $(OTBRADIUS) $(OTBOFFSET)      0            0     0.5 3.5 
+	echo $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathHE120.   3 $(OTBRADIUS) $(OTBOFFSET) -$(OTBOFFSET)     0     0.5 3.5 
+	mkdir -p $(WORKDIR)/$*; rsync  -avz  $(CLUSTERDIR)/$*/ $(WORKDIR)/$*/;
+	echo $(ITKSNAP) -s  $< -g $(WORKDIR)/$*/PathHE.nii.gz -o $(WORKDIR)/$*/PathHE000.Entropy_$(OTBRADIUS).nii.gz
+
+# PIMO
+$(WORKDIR)/%/PathPIMO000.HaralickCorrelation_$(OTBRADIUS).nii.gz: $(DATADIR)/%/PathPIMO.gmm.nii.gz
+	mkdir -p $(CLUSTERDIR)/$*; rsync --exclude '*.svs' -avz $(<D)/ $(CLUSTERDIR)/$*/;  
+	ssh dtfuentes@eagle 'bsub -J glcm -Ip -cwd $(CLUSTERDIR)/ -n 6 -q short -W 0:30 -M 8192 -R rusage[mem=8192] -R span[ptile=6] $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathPIMO000.   3 $(OTBRADIUS)     0             0            0     0.5 3.5  > $(@D)/PathPIMO.otb.log 2>&1 '; 
+	echo $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathPIMO010.   3 $(OTBRADIUS)     0         $(OTBOFFSET)     0     0.5 3.5 
+	echo $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathPIMO110.   3 $(OTBRADIUS) $(OTBOFFSET)  $(OTBOFFSET)     0     0.5 3.5 
+	echo $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathPIMO100.   3 $(OTBRADIUS) $(OTBOFFSET)      0            0     0.5 3.5 
+	echo $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathPIMO120.   3 $(OTBRADIUS) $(OTBOFFSET) -$(OTBOFFSET)     0     0.5 3.5 
+	mkdir -p $(WORKDIR)/$*; rsync  -avz  $(CLUSTERDIR)/$*/ $(WORKDIR)/$*/;
+	echo $(ITKSNAP) -s  $< -g $(WORKDIR)/$*/PathPIMO.nii.gz -o $(WORKDIR)/$*/PathPIMO000.Entropy_$(OTBRADIUS).nii.gz
+
+# entropy
+$(WORKDIR)/%000.Entropy_$(OTBRADIUS)/lstat.csv: $(WORKDIR)/%000.Entropy_$(OTBRADIUS).nii.gz $(DATADIR)/%LM.nii.gz
+	mkdir -p $(@D)
+	$(C3DEXE) $< $(word 2,$^) -lstat > $(@D).txt
+	sed "s/^\s\+/$(word 1,$(subst /, ,$*)),$(word 2,$(^F)),$(<F),/g;s/\s\+/,/g;s/LabelID/SeriesInstanceUID,SegmentationID,FeatureID,LabelID/g;s/Vol(mm^3)/Vol.mm.3/g;s/Extent(Vox)/ExtentX,ExtentY,ExtentZ/g" $(@D).txt > $@
+
+# HaralickCorrelation
+$(WORKDIR)/%000.HaralickCorrelation_$(OTBRADIUS)/lstat.csv: $(WORKDIR)/%000.HaralickCorrelation_$(OTBRADIUS).nii.gz $(DATADIR)/%LM.nii.gz
+	mkdir -p $(@D)
+	$(C3DEXE) $< $(word 2,$^) -lstat > $(@D).txt
+	sed "s/^\s\+/$(word 1,$(subst /, ,$*)),$(word 2,$(^F)),$(<F),/g;s/\s\+/,/g;s/LabelID/SeriesInstanceUID,SegmentationID,FeatureID,LabelID/g;s/Vol(mm^3)/Vol.mm.3/g;s/Extent(Vox)/ExtentX,ExtentY,ExtentZ/g" $(@D).txt > $@
+
+# dist
+$(WORKDIR)/%LMdist/lstat.csv: $(DATADIR)/%LMdist.nii.gz  $(DATADIR)/%.gmm.nii.gz
+	mkdir -p $(@D)
+	$(C3DEXE) $< $(word 2,$^) -lstat > $(@D).txt
+	sed "s/^\s\+/$(word 1,$(subst /, ,$*)),$(word 2,$(^F)),$(<F),/g;s/\s\+/,/g;s/LabelID/SeriesInstanceUID,SegmentationID,FeatureID,LabelID/g;s/Vol(mm^3)/Vol.mm.3/g;s/Extent(Vox)/ExtentX,ExtentY,ExtentZ/g" $(@D).txt > $@
+
+# push to database
+$(WORKDIR)/%.sql: $(WORKDIR)/%/lstat.csv
+	$(MYSQLIMPORT) --replace --fields-terminated-by=',' --lines-terminated-by='\n' --ignore-lines 1 HCCPath $<
+
