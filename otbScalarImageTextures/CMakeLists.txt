@@ -1,5 +1,6 @@
 # This is the root ITK CMakeLists file.
-cmake_minimum_required(VERSION 2.8)
+#CMAKE_MINIMUM_REQUIRED(VERSION 2.4) OTB 4.2.0
+cmake_minimum_required(VERSION 3.2)
 #find_package(CUDA REQUIRED)
  
 IF(COMMAND CMAKE_POLICY)
@@ -17,9 +18,21 @@ ELSE(OTB_FOUND)
     MESSAGE(FATAL_ERROR "OTB not found. Please set OTB_DIR.")
 ENDIF(OTB_FOUND)
 
+# Find ITK.
+FIND_PACKAGE(ITK REQUIRED)
+IF(ITK_FOUND)
+    INCLUDE(${ITK_USE_FILE})
+ELSE(ITK_FOUND)
+    MESSAGE(FATAL_ERROR "ITK not found. Please set ITK_DIR.")
+ENDIF(ITK_FOUND)
+
+
 PROJECT(TutorialsExamples)
 
 ADD_EXECUTABLE(otbScalarImageToTexturesFilter  otbScalarImageToTexturesFilter.cxx)
-TARGET_LINK_LIBRARIES(otbScalarImageToTexturesFilter  OTBCommon OTBIO)
+# OTB 4.2.0
+# TARGET_LINK_LIBRARIES(otbScalarImageToTexturesFilter  OTBCommon OTBIO)
+# OTB 5.2.0
+TARGET_LINK_LIBRARIES(otbScalarImageToTexturesFilter OTBCommon OTBImageBase OTBImageIO ${ITK_LIBRARIES})
 
 
