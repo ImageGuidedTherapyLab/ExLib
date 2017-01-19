@@ -80,9 +80,9 @@ int main( int argc, char * argv[] )
   typedef  unsigned char                    InputPixelType;
   typedef  unsigned short                   OutputPixelType;
   typedef  unsigned char                    VoronoiPixelType;
-  typedef itk::Image< InputPixelType,  2 >  InputImageType;
-  typedef itk::Image< OutputPixelType, 2 >  OutputImageType;
-  typedef itk::Image< VoronoiPixelType, 2 > VoronoiImageType;
+  typedef itk::Image< InputPixelType,  3 >  InputImageType;
+  typedef itk::Image< OutputPixelType, 3 >  OutputImageType;
+  typedef itk::Image< VoronoiPixelType, 3 > VoronoiImageType;
   // Software Guide : EndCodeSnippet
 
 

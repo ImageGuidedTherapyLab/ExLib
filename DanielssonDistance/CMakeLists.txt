@@ -21,5 +21,8 @@ add_executable(DanielssonDistanceMapImageFilter DanielssonDistanceMapImageFilter
 target_link_libraries(DanielssonDistanceMapImageFilter ${ITK_LIBRARIES})
 
 
+add_executable(SignedMaurerDistanceMapImageFilter SignedMaurerDistanceMapImageFilter.cxx)
+target_link_libraries(SignedMaurerDistanceMapImageFilter ${ITK_LIBRARIES})
 
  
+
