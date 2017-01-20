@@ -44,23 +44,26 @@
 
 // Software Guide : BeginCodeSnippet
 #include "itkDanielssonDistanceMapImageFilter.h"
+#include "itkBresenhamLine.h"
 // Software Guide : EndCodeSnippet
 
 #include "itkImage.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-#include "itkConnectedComponentImageFilter.h"
-#include "itkRescaleIntensityImageFilter.h"
-
+#include "itkImageDuplicator.h"
+#include "itkImageRegionIteratorWithIndex.h"
+#include "itkImageRegionConstIteratorWithIndex.h"
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 5 )
+  if( argc < 7 )
     {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImageFile outputDistanceMapImageFile ";
     std::cerr << " outputVoronoiMapImageFile ";
     std::cerr << " outputVectorMapImageFile ";
+    std::cerr << " inputProfileImage";
+    std::cerr << " outputLineIntegralFile ";
     std::cerr << std::endl;
     return EXIT_FAILURE;
     }
@@ -78,10 +81,10 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef  unsigned char                    InputPixelType;
-  typedef  unsigned short                   OutputPixelType;
+  typedef           float                   FloatPixelType;
   typedef  unsigned char                    VoronoiPixelType;
   typedef itk::Image< InputPixelType,  3 >  InputImageType;
-  typedef itk::Image< OutputPixelType, 3 >  OutputImageType;
+  typedef itk::Image< FloatPixelType,  3 >  FloatImageType;
   typedef itk::Image< VoronoiPixelType, 3 > VoronoiImageType;
   // Software Guide : EndCodeSnippet
 
@@ -100,15 +103,15 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::DanielssonDistanceMapImageFilter<
-               InputImageType, OutputImageType, VoronoiImageType >  FilterType;
+               InputImageType, FloatImageType, VoronoiImageType >  FilterType;
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
 
   //
   // Reader and Writer types are instantiated.
   //
-  typedef itk::ImageFileReader< InputImageType  >  ReaderType;
-  typedef itk::ImageFileWriter< OutputImageType >  WriterType;
+  typedef itk::ImageFileReader< InputImageType >  ReaderType;
+  typedef itk::ImageFileWriter< FloatImageType >   WriterType;
   typedef itk::ImageFileWriter< VoronoiImageType > VoronoiWriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -218,7 +221,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  offsetWriter->SetInput(  filter->GetVectorDistanceMap()  );
+  OffsetImageType::Pointer distanceComponents  =  filter->GetVectorDistanceMap();
+  offsetWriter->SetInput(  distanceComponents  );
   // Software Guide : EndCodeSnippet
 
 
@@ -246,12 +250,78 @@ int main( int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
 
 
+  // Read Profile image
+  typedef itk::ImageFileReader< FloatImageType >  ProfileReaderType;
+  ProfileReaderType::Pointer profilereader = ProfileReaderType::New();
+  profilereader->SetFileName( argv[5] );
+  profilereader->Update();
+
+  // Duplicate Profile image with zeros
+  typedef itk::ImageDuplicator< FloatImageType > DuplicatorType;
+  DuplicatorType::Pointer duplicator = DuplicatorType::New();
+  duplicator->SetInputImage(profilereader->GetOutput());
+  duplicator->Update();
+  FloatImageType::Pointer LineProfileImage = duplicator->GetOutput();
+
   //  Software Guide : BeginLatex
   //
   //  Note that only the \doxygen{MetaImageIO} class supports reading and
   //  writing images of pixel type \doxygen{Offset}.
   //
   //  Software Guide : EndLatex
+
+  std::cout << "ComputeLineProfile Start" << std::endl;
+
+  typename FloatImageType::RegionType region  = LineProfileImage->GetRequestedRegion();
+
+  itk::ImageRegionIteratorWithIndex< FloatImageType   >  ot(LineProfileImage,    region);
+  itk::ImageRegionIteratorWithIndex< OffsetImageType  >  ct(distanceComponents,  region);
+
+  ot.GoToBegin();
+  ct.GoToBegin();
+  while ( !ot.IsAtEnd() )
+    {
+    itk::BresenhamLine<3> bhline;
+    FilterType::IndexType pixel0 = ct.GetIndex();
+    FilterType::IndexType pixel1 = ct.GetIndex() + ct.Get();
+ 
+    std::vector< FilterType::IndexType  > pixels = bhline.BuildLine(pixel0, pixel1);
+ 
+    for(unsigned int i = 0; i < pixels.size(); i++)
+      {
+      std::cout << pixels[i] << std::endl;
+      }
+
+    if ( region.IsInside(pixel0 ) )
+      {
+      ot.Set( LineProfileImage->GetPixel(pixel0 ) );
+      }
+
+ 
+
+    // OffsetType distanceVector = ct.Get();
+    // double     distance = 0.0;
+    // if ( m_UseImageSpacing )
+    //   {
+    //   for ( unsigned int i = 0; i < InputImageDimension; i++ )
+    //     {
+    //     double component = distanceVector[i] * static_cast< double >( m_InputSpacingCache[i] );
+    //     distance += component * component;
+    //     }
+    //   }
+    // else
+    //   {
+    //   for ( unsigned int i = 0; i < InputImageDimension; i++ )
+    //     {
+    //     distance += distanceVector[i] * distanceVector[i];
+    //     }
+    //   }
+
+    ++ot;
+    ++ct;
+    }
+  std::cout << "ComputeLineProfile End" << std::endl;
+
 
   return EXIT_SUCCESS;
 }

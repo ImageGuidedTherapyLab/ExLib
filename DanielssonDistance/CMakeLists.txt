@@ -20,9 +20,12 @@ ENDIF(ITK_FOUND)
 add_executable(DanielssonDistanceMapImageFilter DanielssonDistanceMapImageFilter.cxx)
 target_link_libraries(DanielssonDistanceMapImageFilter ${ITK_LIBRARIES})
 
-
 add_executable(SignedMaurerDistanceMapImageFilter SignedMaurerDistanceMapImageFilter.cxx)
 target_link_libraries(SignedMaurerDistanceMapImageFilter ${ITK_LIBRARIES})
 
+add_executable(BresenhamLine BresenhamLine.cxx)
+target_link_libraries(BresenhamLine ${ITK_LIBRARIES})
  
+add_executable(LineProfileFilter LineProfileFilter.cxx)
+target_link_libraries(LineProfileFilter ${ITK_LIBRARIES})
 
