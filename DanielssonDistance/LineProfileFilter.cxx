@@ -161,11 +161,12 @@ int main( int argc, char * argv[] )
   ProfileReaderType::Pointer profilereader = ProfileReaderType::New();
   profilereader->SetFileName( argv[2] );
   profilereader->Update();
+  FloatImageType::Pointer     ProfileImage = profilereader->GetOutput();
 
   // Duplicate Profile image with zeros
   typedef itk::ImageDuplicator< FloatImageType > DuplicatorType;
   DuplicatorType::Pointer duplicator = DuplicatorType::New();
-  duplicator->SetInputImage(profilereader->GetOutput());
+  duplicator->SetInputImage(ProfileImage );
   duplicator->Update();
   FloatImageType::Pointer LineProfileImage = duplicator->GetOutput();
 
@@ -183,6 +184,7 @@ int main( int argc, char * argv[] )
   itk::ImageRegionIteratorWithIndex< FloatImageType   >  ot(LineProfileImage,    region);
   itk::ImageRegionIteratorWithIndex< OffsetImageType  >  ct(distanceComponents,  region);
 
+  int count = 0;
   ot.GoToBegin();
   ct.GoToBegin();
   while ( !ot.IsAtEnd() )
@@ -193,14 +195,17 @@ int main( int argc, char * argv[] )
  
     std::vector< FilterType::IndexType  > pixels = bhline.BuildLine(pixel0, pixel1);
  
+    std::cout  << count << ": " ;
+    float lineintegral = 0.0;
     for(unsigned int i = 0; i < pixels.size(); i++)
       {
-      std::cout << pixels[i] << std::endl;
+      lineintegral = lineintegral + ProfileImage->GetPixel(pixels[i]);
       }
+    lineintegral = lineintegral /pixels.size();
 
     if ( region.IsInside(pixel0 ) )
       {
-      ot.Set( LineProfileImage->GetPixel(pixel0 ) );
+      ot.Set( lineintegral  );
       }
 
  
@@ -224,9 +229,10 @@ int main( int argc, char * argv[] )
     //   }
 
     ++ot;
-    ++ct;
+    ++ct; ++count;
     }
-  std::cout << "ComputeLineProfile End" << std::endl;
+    
+  std::cout<< std::endl  << "ComputeLineProfile End" << std::endl;
 
 
   // save line profile image
