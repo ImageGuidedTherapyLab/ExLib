@@ -54,6 +54,23 @@
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 
+#include <iomanip>      // std::setw
+
+static inline void loadbar(unsigned int x, unsigned int n, unsigned int w = 50)
+{
+    if ( (x != n) && (x % (n/100+1) != 0) ) return;
+ 
+    float ratio  =  x/(float)n;
+    int   c      =  ratio * w;
+ 
+    std::cout << std::setw(3) << (int)(ratio*100) << "% [";
+    for (int x=0; x<c; x++) std::cout << "=";
+    for (int x=c; x<w; x++) std::cout << " ";
+    std::cout << "]\r" << std::flush;
+}
+
+
+
 int main( int argc, char * argv[] )
 {
   if( argc < 4 )
@@ -169,6 +186,7 @@ int main( int argc, char * argv[] )
   duplicator->SetInputImage(ProfileImage );
   duplicator->Update();
   FloatImageType::Pointer LineProfileImage = duplicator->GetOutput();
+  LineProfileImage->FillBuffer(0.0);
 
   //  Software Guide : BeginLatex
   //
@@ -184,55 +202,40 @@ int main( int argc, char * argv[] )
   itk::ImageRegionIteratorWithIndex< FloatImageType   >  ot(LineProfileImage,    region);
   itk::ImageRegionIteratorWithIndex< OffsetImageType  >  ct(distanceComponents,  region);
 
+  int NumPixels = region.GetNumberOfPixels ();
+  //: 17741991: 17741992: 17741993: 17741994: 17741995: 17741996:
   int count = 0;
   ot.GoToBegin();
   ct.GoToBegin();
-  while ( !ot.IsAtEnd() )
+  while ( !ot.IsAtEnd()  ) 
     {
-    itk::BresenhamLine<3> bhline;
+    // display status
+    loadbar(count,NumPixels );
+
+    // get pixel index
     FilterType::IndexType pixel0 = ct.GetIndex();
     FilterType::IndexType pixel1 = ct.GetIndex() + ct.Get();
  
-    std::vector< FilterType::IndexType  > pixels = bhline.BuildLine(pixel0, pixel1);
+    if ( region.IsInside(pixel0 ) and pixel0 != pixel1  )
+      {
+       itk::BresenhamLine<3> bhline;
+       std::vector< FilterType::IndexType  > pixels = bhline.BuildLine(pixel0, pixel1);
  
-    std::cout  << count << ": " ;
-    float lineintegral = 0.0;
-    for(unsigned int i = 0; i < pixels.size(); i++)
-      {
-      lineintegral = lineintegral + ProfileImage->GetPixel(pixels[i]);
-      }
-    lineintegral = lineintegral /pixels.size();
+       float lineintegral = 0.0;
+       for(unsigned int i = 0; i < pixels.size(); i++)
+         {
+         lineintegral = lineintegral + ProfileImage->GetPixel(pixels[i]);
+         }
+       lineintegral = lineintegral /pixels.size();
 
-    if ( region.IsInside(pixel0 ) )
-      {
       ot.Set( lineintegral  );
       }
-
- 
-
-    // OffsetType distanceVector = ct.Get();
-    // double     distance = 0.0;
-    // if ( m_UseImageSpacing )
-    //   {
-    //   for ( unsigned int i = 0; i < InputImageDimension; i++ )
-    //     {
-    //     double component = distanceVector[i] * static_cast< double >( m_InputSpacingCache[i] );
-    //     distance += component * component;
-    //     }
-    //   }
-    // else
-    //   {
-    //   for ( unsigned int i = 0; i < InputImageDimension; i++ )
-    //     {
-    //     distance += distanceVector[i] * distanceVector[i];
-    //     }
-    //   }
 
     ++ot;
     ++ct; ++count;
     }
     
-  std::cout<< std::endl  << "ComputeLineProfile End" << std::endl;
+  std::cout<< "ComputeLineProfile End" << std::endl;
 
 
   // save line profile image
