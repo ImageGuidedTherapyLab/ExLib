@@ -56,12 +56,10 @@
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 7 )
+  if( argc < 4 )
     {
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImageFile outputDistanceMapImageFile ";
-    std::cerr << " outputVoronoiMapImageFile ";
-    std::cerr << " outputVectorMapImageFile ";
+    std::cerr << " inputVectorMapImageFile ";
     std::cerr << " inputProfileImage";
     std::cerr << " outputLineIntegralFile ";
     std::cerr << std::endl;
@@ -104,96 +102,12 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   typedef itk::DanielssonDistanceMapImageFilter<
                InputImageType, FloatImageType, VoronoiImageType >  FilterType;
-  FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
 
   //
   // Reader and Writer types are instantiated.
   //
-  typedef itk::ImageFileReader< InputImageType >  ReaderType;
-  typedef itk::ImageFileWriter< FloatImageType >   WriterType;
-  typedef itk::ImageFileWriter< VoronoiImageType > VoronoiWriterType;
-
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
-  VoronoiWriterType::Pointer voronoiWriter = VoronoiWriterType::New();
-
-  reader->SetFileName( argv[1] );
-  writer->SetFileName( argv[2] );
-  voronoiWriter->SetFileName( argv[3] );
-
-
-  //  Software Guide : BeginLatex
-  //
-  //  The input to the filter is taken from a reader and its output is passed
-  //  to a \doxygen{RescaleIntensityImageFilter} and then to a writer. The
-  //  scaler and writer are both templated over the image type, so we
-  //  instantiate a separate pipeline for the voronoi partition map starting
-  //  at the scaler.
-  //
-  //  \index{itk::Danielsson\-Distance\-Map\-Image\-Filter!SetInput()}
-  //  \index{itk::Danielsson\-Distance\-Map\-Image\-Filter!GetOutput()}
-  //
-  //  Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-  filter->SetInput( reader->GetOutput() );
-  filter->SetUseImageSpacing( true );
-  filter->SetInputIsBinary(   false );
-  writer->SetInput( filter->GetOutput() );
-  // Software Guide : EndCodeSnippet
-
-  //  Software Guide : BeginLatex
-  //
-  //  The Voronoi map is obtained with the \code{GetVoronoiMap()} method. In
-  //  the lines below we connect this output to the intensity rescaler.
-  //
-  //  \index{itk::Danielsson\-Distance\-Map\-Image\-Filter!GetVoronoiMap()}
-  //
-  //  Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-  voronoiWriter->SetInput( filter->GetVoronoiMap() );
-  // Software Guide : EndCodeSnippet
-
-  //  Software Guide : BeginLatex
-  //
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.32\textwidth]{FivePoints}
-  // \includegraphics[width=0.32\textwidth]{DanielssonDistanceMapImageFilterOutput1}
-  // \includegraphics[width=0.32\textwidth]{DanielssonDistanceMapImageFilterOutput2}
-  // \itkcaption[DanielssonDistanceMapImageFilter
-  // output]{DanielssonDistanceMapImageFilter output. Set of pixels, distance
-  // map and Voronoi partition.}
-  // \label{fig:DanielssonDistanceMapImageFilterInputOutput}
-  // \end{figure}
-  //
-  //  Figure \ref{fig:DanielssonDistanceMapImageFilterInputOutput} illustrates
-  //  the effect of this filter on a binary image with a set of points. The
-  //  input image is shown at the left, and the distance map at the center and
-  //  the Voronoi partition at the right. This filter computes distance maps in
-  //  N-dimensions and is therefore capable of producing $N$-dimensional Voronoi
-  //  partitions.
-  //
-  //  \index{Voronoi partitions}
-  //  \index{Voronoi partitions!itk::Danielsson\-Distance\-Map\-Image\-Filter}
-  //
-  //  Software Guide : EndLatex
-
-  writer->Update();
-  voronoiWriter->Update();
-
-  filter->Print(std::cout);
-
-  //  Software Guide : BeginLatex
-  //
-  //  The distance filter also produces an image of \doxygen{Offset} pixels
-  //  representing the vectorial distance to the closest object in the scene.
-  //  The type of this output image is defined by the VectorImageType
-  //  trait of the filter type.
-  //
-  //  Software Guide : EndLatex
+  typedef itk::ImageFileReader< InputImageType  >  ReaderType;
 
   // Software Guide : BeginCodeSnippet
   typedef FilterType::VectorImageType   OffsetImageType;
@@ -208,25 +122,11 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::ImageFileWriter< OffsetImageType >  WriterOffsetType;
-  WriterOffsetType::Pointer offsetWriter = WriterOffsetType::New();
+  typedef itk::ImageFileReader< OffsetImageType >  ReaderOffsetType;
+  ReaderOffsetType::Pointer offsetReader = ReaderOffsetType::New();
   // Software Guide : EndCodeSnippet
 
-
-  //  Software Guide : BeginLatex
-  //
-  //  The output of the distance filter can be connected as input to the
-  //  writer.
-  //
-  //  Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-  OffsetImageType::Pointer distanceComponents  =  filter->GetVectorDistanceMap();
-  offsetWriter->SetInput(  distanceComponents  );
-  // Software Guide : EndCodeSnippet
-
-
-  offsetWriter->SetFileName( argv[4]  );
+  offsetReader->SetFileName( argv[1]  );
 
 
   //  Software Guide : BeginLatex
@@ -240,7 +140,7 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   try
     {
-    offsetWriter->Update();
+    offsetReader->Update();
     }
   catch( itk::ExceptionObject & exp )
     {
@@ -248,12 +148,18 @@ int main( int argc, char * argv[] )
     std::cerr <<     exp    << std::endl;
     }
   // Software Guide : EndCodeSnippet
+  //
+  
+  //  Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+  OffsetImageType::Pointer distanceComponents  =  offsetReader->GetOutput();
 
 
   // Read Profile image
   typedef itk::ImageFileReader< FloatImageType >  ProfileReaderType;
   ProfileReaderType::Pointer profilereader = ProfileReaderType::New();
-  profilereader->SetFileName( argv[5] );
+  profilereader->SetFileName( argv[2] );
   profilereader->Update();
 
   // Duplicate Profile image with zeros
@@ -321,6 +227,14 @@ int main( int argc, char * argv[] )
     ++ct;
     }
   std::cout << "ComputeLineProfile End" << std::endl;
+
+
+  // save line profile image
+  typedef itk::ImageFileWriter< FloatImageType >  WriterType;
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName( argv[3] );
+  writer->SetInput( LineProfileImage  );
+  writer->Update();
 
 
   return EXIT_SUCCESS;

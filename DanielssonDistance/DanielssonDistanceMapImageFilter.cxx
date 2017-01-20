@@ -78,7 +78,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef  unsigned char                    InputPixelType;
-  typedef  unsigned short                   OutputPixelType;
+  typedef           float                   OutputPixelType;
   typedef  unsigned char                    VoronoiPixelType;
   typedef itk::Image< InputPixelType,  3 >  InputImageType;
   typedef itk::Image< OutputPixelType, 3 >  OutputImageType;
