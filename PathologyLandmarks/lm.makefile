@@ -31,6 +31,7 @@ HEGMM:=    $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE.gmm.nii.gz,$(Pathol
 PIMOGMM:=  $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO.gmm.nii.gz,$(PathologyPimo))) 
 HEOTB:=    $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE000.HaralickCorrelation_$(OTBRADIUS).nii.gz,$(PathologyHE)))
 PIMOOTB:=  $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO000.HaralickCorrelation_$(OTBRADIUS).nii.gz,$(PathologyPimo)))
+
 HESTAT:=   $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE000.HaralickCorrelation_$(OTBRADIUS).sql,$(PathologyHE))) $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHE000.Entropy_$(OTBRADIUS).sql,$(PathologyHE))) $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHELMdist.sql,$(PathologyHE)))
 PIMOSTAT:= $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO000.HaralickCorrelation_$(OTBRADIUS).sql,$(PathologyPimo))) $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMO000.Entropy_$(OTBRADIUS).sql,$(PathologyPimo))) $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMOLMdist.sql,$(PathologyPimo)))
 HEDIST:=    $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHELMdist.nii.gz,$(PathologyHE)))
@@ -43,6 +44,15 @@ transform: $(addprefix $(WORKDIR)/,$(UpdateTransform))
 otb: $(HEOTB) $(PIMOOTB)
 stat: $(HESTAT) $(PIMOSTAT)
 dist: $(HEDIST) $(PIMODIST)
+imagestat:  $(addprefix $(WORKDIR)/,$(subst .hdr,.sql,$(T2WeightedReference)))       \
+            $(addprefix $(WORKDIR)/,$(subst .hdr,.sql,$(T2starMapOxygen)))           \
+            $(addprefix $(WORKDIR)/,$(subst .hdr,.sql,$(T2statMapMedicalAir)))       \
+            $(addprefix $(WORKDIR)/,$(subst .hdr,.sql,$(T2starMapAbsoluteChange)))   \
+            $(addprefix $(WORKDIR)/,$(subst .hdr,.sql,$(T2statMapPercentageChange))) \
+            $(addprefix $(WORKDIR)/,$(subst .hdr,.sql,$(DCE)))                       \
+            $(addprefix $(WORKDIR)/,$(subst DCE.hdr,DCEavg.sql,$(DCE)))              \
+            $(addprefix $(WORKDIR)/,$(subst .hdr,.sql,$(T1PreContrast)))             \
+            $(addprefix $(WORKDIR)/,$(subst .hdr,.sql,$(T1PostContrast)))            
 
 # debug
 jobs:
@@ -204,6 +214,27 @@ $(WORKDIR)/%/PathPIMO000.HaralickCorrelation_$(OTBRADIUS).nii.gz: $(WORKDIR)/%/P
 	echo $(OTBTEXTURE) $(CLUSTERDIR)/$*/$(<F)  $(CLUSTERDIR)/$*/PathPIMO120.   3 $(OTBRADIUS) $(OTBOFFSET) -$(OTBOFFSET)     0     0.5 3.5 
 	mkdir -p $(WORKDIR)/$*; rsync  -avz  $(CLUSTERDIR)/$*/ $(WORKDIR)/$*/;
 	echo $(ITKSNAP) -s  $< -g $(WORKDIR)/$*/PathPIMO.nii.gz -o $(WORKDIR)/$*/PathPIMO000.Entropy_$(OTBRADIUS).nii.gz
+
+LSTATCMD = mkdir -p $(@D); $(C3DEXE) $< $(word 2,$^) -lstat > $(@D).txt && sed "s/^\s\+/$(word 1,$(subst /, ,$*)),$(word 2,$(^F)),$(<F),/g;s/\s\+/,/g;s/LabelID/SeriesInstanceUID,SegmentationID,FeatureID,LabelID/g;s/Vol(mm^3)/Vol.mm.3/g;s/Extent(Vox)/ExtentX,ExtentY,ExtentZ/g" $(@D).txt > $@
+#image parameters
+$(WORKDIR)/%/T2wReference/RefImg/lstat.csv:                       $(DATADIR)/%/T2wReference/RefImg.hdr               $(DATADIR)/%/T2wReference/RefImgLM.nii.gz           
+	$(LSTATCMD)
+$(WORKDIR)/%/BOLD/T2mapAbsChange/T2AbsChange/lstat.csv:           $(DATADIR)/%/BOLD/T2mapAbsChange/T2AbsChange.hdr   $(DATADIR)/%/T2wReference/RefImgLM.nii.gz           
+	$(LSTATCMD)
+$(WORKDIR)/%/BOLD/T2mapMedAir/MedAirT2/lstat.csv:                 $(DATADIR)/%/BOLD/T2mapMedAir/MedAirT2.hdr         $(DATADIR)/%/T2wReference/RefImgLM.nii.gz           
+	$(LSTATCMD)
+$(WORKDIR)/%/BOLD/T2mapOxy/OxyT2/lstat.csv:                       $(DATADIR)/%/BOLD/T2mapOxy/OxyT2.hdr               $(DATADIR)/%/T2wReference/RefImgLM.nii.gz           
+	$(LSTATCMD)
+$(WORKDIR)/%/BOLD/T2mapPctChange/T2PctChange/lstat.csv:           $(DATADIR)/%/BOLD/T2mapPctChange/T2PctChange.hdr   $(DATADIR)/%/T2wReference/RefImgLM.nii.gz           
+	$(LSTATCMD)
+$(WORKDIR)/%/T1post/T1post/lstat.csv:                             $(DATADIR)/%/T1post/T1post.hdr                     $(DATADIR)/%/T1post/T1postLM.nii.gz
+	$(LSTATCMD)
+$(WORKDIR)/%/T1pre/T1pre/lstat.csv:                               $(DATADIR)/%/T1pre/T1pre.hdr                       $(DATADIR)/%/T1post/T1postLM.nii.gz
+	$(LSTATCMD)
+$(WORKDIR)/%/DCE/DCEavg/lstat.csv:                                $(DATADIR)/%/DCE/DCEavg.hdr                        $(DATADIR)/%/DCE/DCEavgLM.nii.gz 
+	$(LSTATCMD)
+$(WORKDIR)/%/DCE/DCE/lstat.csv:                                   $(DATADIR)/%/DCE/DCE.hdr                           $(DATADIR)/%/DCE/DCEavgLM.nii.gz  
+	$(LSTATCMD)
 
 # entropy
 $(WORKDIR)/%000.Entropy_$(OTBRADIUS)/lstat.csv: $(WORKDIR)/%000.Entropy_$(OTBRADIUS).nii.gz $(DATADIR)/%LM.nii.gz
