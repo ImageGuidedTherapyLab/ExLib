@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS  HCCPath.metadata;
 CREATE TABLE HCCPath.metadata(
 id    bigint(20) NOT NULL AUTO_INCREMENT,
 Rat                         VARCHAR(64)  NOT  NULL ,
+Status                              INT       NULL COMMENT '0 = control, 1= treatment',
 TimePoint                   VARCHAR(64)       NULL ,
 DataDir                     VARCHAR(256) NOT  NULL COMMENT 'Root data direcrtory',
 T2WeightedReference         VARCHAR(256) NOT  NULL ,
@@ -87,7 +88,7 @@ INTO TABLE HCCPath.metadata
 FIELDS TERMINATED BY ','  ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES
-(DataDir, Rat                         ,TimePoint                   ,T2WeightedReference         ,T2starMapOxygen             ,T2statMapMedicalAir         ,T2starMapAbsoluteChange     ,T2statMapPercentageChange   ,DCE                         ,T1PreContrast               ,T1PostContrast              ,PathologyHE                 ,PathologyPimo               )
+(DataDir, Rat, Status,TimePoint                   ,T2WeightedReference         ,T2starMapOxygen             ,T2statMapMedicalAir         ,T2starMapAbsoluteChange     ,T2statMapPercentageChange   ,DCE                         ,T1PreContrast               ,T1PostContrast              ,PathologyHE                 ,PathologyPimo               )
 SET metadata =  JSON_OBJECT( "Rat",Rat ,
                          "Time",cast(REPLACE(TimePoint,"weeks","") as Decimal)) ;
 
