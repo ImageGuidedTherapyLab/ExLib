@@ -22,15 +22,7 @@ modelData$EntropyPimo[ is.na(modelData$EntropyPimo) ] <- 0
 modelData$HaralickPimo[is.na(modelData$HaralickPimo)] <- 0
 modelData$Status = modelData$Status + 1
 
-## #color code
-## colcode <- character(nrow(qoisubset))
-## colcode[] <- "black"
-## colcode[qoisubset$dirmethod == 'GR'] <- 1
-## colcode[qoisubset$dirmethod == 'S2'] <- 3
-## 
-## symcode <- integer(nrow(qoisubset))
-## symcode[qoisubset$dirmethod == 'GR'] <- 1
-## symcode[qoisubset$dirmethod == 'S2'] <- 3
+
 
 
 # lexical scope on color code and symbol code
@@ -206,19 +198,26 @@ panel.tacecor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
     text(0.5, 0.4, txtrfmodel , cex = 1.0,col="green")
 }
 
-## SorafenibList =  c("Train0001" ,"Train0002" ,"Train0003" ,"Train0004" ,"Train0005" ,"Train0006" ,"Train0007" ,"Train0008" ,"Train0009" ,"Train0010" ,"Train0011" ,"Train0012" ,"Train0013")
-## TACEList      =  c("Train0014" ,"Train0015" ,"Train0016" ,"Train0017" ,"Train0018" ,"Train0019" ,"Train0020" ,"Train0021" ,"Train0022" ,"Train0023" ,"Train0024" ,"Train0025" ,"Train0026" ,"Train0027" ,"Train0028" ,"Train0029" ,"Train0030" ,"Train0031" ,"Train0032" ,"Train0033")
-## 
-## SorafenibDataPrior = subset(modelData, (Anonymize %in% SorafenibList ) & timeinstance == 'prior' & timeinstance == 'prior' )
-## TACEDataPrior      = subset(modelData, (Anonymize %in% TACEList      ) & timeinstance == 'prior' & timeinstance == 'prior' )
-## SorafenibDataAfter = subset(modelData, (Anonymize %in% SorafenibList ) & timeinstance == 'after' & timeinstance == 'after' )
-## TACEDataAfter      = subset(modelData, (Anonymize %in% TACEList      ) & timeinstance == 'after' & timeinstance == 'after' )
-## 
-## SorafenibData = subset(modelData, (Anonymize %in% SorafenibList ) &  (VolDiffNecrosis < 60000) )
-## TACEData      = subset(modelData, (Anonymize %in% TACEList      ) &  (VolDiffNecrosis < 60000) )
 
-modelDataControl = subset(modelData,  Status == 0  )
-modelDataTreat   = subset(modelData,  Status == 1  )
+modelDataControl = subset(modelData,  Status == 1  )
+modelDataTreat   = subset(modelData,  Status == 2  )
+print(head(modelDataControl ,n=10))
+print(head(modelDataTreat   ,n=10))
+
+# select image features
+featureNames  = c("EntropyHE","HaralickHE","DistViableHE","DistNecrosisHE","EntropyPimo","HaralickPimo","DistO2Pimo","DCEAvg","T2Abs","MedAir","OxyT2","T2Pct","T1Pre","T1Pst")
+
+numtests= 2
+treatcontrolpvalue     <- matrix( NA, nrow = numtests, ncol = length( featureNames ) )
+colnames( treatcontrolpvalue    ) <- c( featureNames)
+for (iii in 1:length(featureNames))
+{
+  print(featureNames[iii] )
+  treatcontroltest     =      t.test( modelDataControl [[featureNames[iii]]], modelDataTreat   [[featureNames[iii]]])
+  print( treatcontroltest    )
+  treatcontrolpvalue[   1,iii]  =   2*pt( -abs(    treatcontroltest$statistic), df=    treatcontroltest$parameter,log=TRUE)
+}
+treatcontrolpvalue    =  treatcontrolpvalue[   ,order(treatcontrolpvalue[   1,])]
 
 ## # plot volume change 
 ## do.legend <- TRUE
