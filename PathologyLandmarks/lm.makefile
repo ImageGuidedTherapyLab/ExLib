@@ -127,7 +127,7 @@ $(WORKDIR)/%/Pathology/PathPIMO.hereg.nii.gz: $(WORKDIR)/%/Pathology/HEPIMOantsi
 	$(ANTSWarpImageMultiTransformCMD) 2 $(word 2, $(^D))/PathPIMOgreen.nii.gz     $(@D)/PathPIMOgreen.hereg.nii.gz  $< --use-NN -R  $(word 3, $^) 
 	$(ANTSWarpImageMultiTransformCMD) 2 $(word 2, $(^D))/PathPIMOblue.nii.gz      $(@D)/PathPIMOblue.hereg.nii.gz   $< --use-NN -R  $(word 3, $^) 
 	$(C3DEXE) $(@D)/PathPIMOred.hereg.nii.gz    $(@D)/PathPIMOgreen.hereg.nii.gz  $(@D)/PathPIMOblue.hereg.nii.gz   -omc $@
-$(WORKDIR)/%/Pathology/PathPIMO.gmm.hereg.nii.gz: $(WORKDIR)/%/Pathology/PathHE.nii.gz $(WORKDIR)/%/Pathology/PathPIMO.gmm.nii.gz  $(WORKDIR)/%/Pathology/HEPIMOantsintroAffine.txt
+$(WORKDIR)/%/Pathology/PathPIMO.gmm.hereg.nii.gz: $(WORKDIR)/%/Pathology/PathHE.nii.gz $(WORKDIR)/%/Pathology/PathPIMO.gmm.nii.gz  $(WORKDIR)/%/HEPIMOlmtransform.txt
 	$(ANTSWarpImageMultiTransformCMD) 2 $(word 2, $^)  $@ $(word 3,$^) --use-NN -R  $<
 
 # affine registration of pathology mask
@@ -135,15 +135,15 @@ $(WORKDIR)/%/Pathology/HEPIMOantsintroAffine.txt: $(WORKDIR)/%/Pathology/PathHE.
 	cd $(@D); ../../../../antsIntroduction.sh -d 2 -i $(word 2,$(^F))  -r $(<F)   -o HEPIMOantsintro  -n 0 -s MI -t RA -m 30x90x20 > HEPIMOantsintro.log 2>&1
 	cat $(@D)/HEPIMOantsintro.log
 # compute lm transformation
-$(WORKDIR)/%/HEPIMOlmtransform.tfm: $(DATADIR)/%/Pathology/PathHELM.nii.gz $(DATADIR)/%/Pathology/PathPIMOLM.nii.gz 
-	$(ANTSLANDMARKCMD) $^  affine $@  >> $(basename $@).log 2>&1
-$(WORKDIR)/%/t2HElmtransform.tfm:   $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/Pathology/PathHELM.nii.gz 
+$(WORKDIR)/%/HEPIMOlmtransform.txt: $(DATADIR)/%/Pathology/PathHELM.nii.gz $(DATADIR)/%/Pathology/PathPIMOLM.nii.gz 
 	$(ANTSLANDMARKCMD) $^  rigid $@  >> $(basename $@).log 2>&1
-$(WORKDIR)/%/t2PIMOlmtransform.tfm: $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/Pathology/PathPIMOLM.nii.gz 
+$(WORKDIR)/%/t2HElmtransform.txt:   $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/Pathology/PathHELM.nii.gz 
 	$(ANTSLANDMARKCMD) $^  rigid $@  >> $(basename $@).log 2>&1
-$(WORKDIR)/%/t2t1lmtransform.tfm: $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/T1post/T1postLM.nii.gz 
+$(WORKDIR)/%/t2PIMOlmtransform.txt: $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/Pathology/PathPIMOLM.nii.gz 
 	$(ANTSLANDMARKCMD) $^  rigid $@  >> $(basename $@).log 2>&1
-$(WORKDIR)/%/t2dcelmtransform.tfm: $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/DCE/DCEavgLM.nii.gz 
+$(WORKDIR)/%/t2t1lmtransform.txt: $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/T1post/T1postLM.nii.gz 
+	$(ANTSLANDMARKCMD) $^  rigid $@  >> $(basename $@).log 2>&1
+$(WORKDIR)/%/t2dcelmtransform.txt: $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/DCE/DCEavgLM.nii.gz 
 	$(ANTSLANDMARKCMD) $^  rigid $@  >> $(basename $@).log 2>&1
 
 #Convert svs to nifti using open slide to read header
