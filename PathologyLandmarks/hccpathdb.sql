@@ -127,7 +127,8 @@ BEGIN
 set  @varRadius=radius ;
 select md.Rat, md.Status, md.TimePoint,
        md.PathologyHE, hee.mean as EntropyHE,heh.mean as HaralickHE, hev.mean as DistViableHE, hen.mean as DistNecrosisHE, 
-       md.PathologyPimo ,pie.mean as EntropyPimo,pih.mean as HaralickPimo, pio.mean as DistO2Pimo,
+       md.PathologyPimo ,pie.mean as EntropyPimo,pih.mean as HaralickPimo, pio.mean as DistO2Pimo, 
+       ov.DiceSimilarity HEPIMOOverlap,
        md.DCE ,dce.mean as DCEMean,avg.mean as DCEAvg,
        md.T2WeightedReference , t2abs.mean T2Abs, t2air.mean MedAir, t2oxy.mean OxyT2, t2pct.mean T2Pct,
        t1pre.mean T1Pre, t1pst.mean T1Pst
@@ -146,7 +147,8 @@ left  join  HCCPath.lstat    t2pct  on (md.Rat=t2pct.InstanceUID and t2pct.Label
 left  join  HCCPath.lstat    t1pre  on (md.Rat=t1pre.InstanceUID and t1pre.LabelID = 4 and t1pre.FeatureID=CONCAT('T1pre.hdr')) 
 left  join  HCCPath.lstat    t1pst  on (md.Rat=t1pst.InstanceUID and t1pst.LabelID = 4 and t1pst.FeatureID=CONCAT('T1post.hdr')) 
 left  join  HCCPath.lstat    avg    on (md.Rat=avg.InstanceUID   and avg.LabelID   = 4 and avg.FeatureID=CONCAT('DCEavg.hdr')) 
-left  join  HCCPath.lstat    dce    on (md.Rat=dce.InstanceUID   and dce.LabelID   = 4 and dce.FeatureID=CONCAT('DCE.hdr'));
+left  join  HCCPath.lstat    dce    on (md.Rat=dce.InstanceUID   and dce.LabelID   = 4 and dce.FeatureID=CONCAT('DCE.hdr')) 
+left  join  HCCPath.overlap  ov     on (md.Rat=ov.InstanceUID    and ov.LabelID    = 1                                    );
 END //
 DELIMITER ;
 -- show create procedure HCCPath.HCCPathOutput;

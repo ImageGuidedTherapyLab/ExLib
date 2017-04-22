@@ -38,7 +38,8 @@ HEDIST:=    $(addprefix $(WORKDIR)/,$(subst PathHE.svs,PathHELMdist.nii.gz,$(Pat
 PIMODIST:=  $(addprefix $(WORKDIR)/,$(subst PathPIMO.svs,PathPIMOLMdist.nii.gz,$(PathologyPimo)))
 convert:   $(HENIFTI) $(PIMONIFTI)
 gmm:       $(HEGMM) $(PIMOGMM)
-lm:        $(HELMREG) $(PIMOLMREG) $(HEPIMOREG)
+#lm:        $(HELMREG) $(PIMOLMREG) $(HEPIMOREG)
+lm:        $(HEPIMOREG)
 overlap:   $(addprefix $(WORKDIR)/,$(subst PathHE.svs,overlap.sql,$(PathologyHE)))
 transform: $(addprefix $(WORKDIR)/,$(UpdateTransform))
 otb: $(HEOTB) $(PIMOOTB)
@@ -110,6 +111,7 @@ $(WORKDIR)/%/T1Pre/T1pre.t2reg.nii.gz: $(WORKDIR)/%/t2t1lmtransform.tfm $(WORKDI
 # FIXME - add texture to dependencies
 $(WORKDIR)/%/updatetransform: $(DATADIR)/%/Pathology/PathHELM.nii.gz                $(DATADIR)/%/T2wReference/RefImgLM.nii.gz             $(DATADIR)/%/Pathology/PathPIMOLM.nii.gz              $(DATADIR)/%/T1post/T1postLM.nii.gz                   $(DATADIR)/%/DCE/DCEavgLM.nii.gz                      $(DATADIR)/%/BOLD/T2mapAbsChange/T2AbsChangeLM.nii.gz 
 	echo $@
+	$(C3DEXE) $(WORKDIR)/$*/Pathology/PathHE.gmm.nii.gz -as AA  $(WORKDIR)/$*/Pathology/PathPIMO.gmm.hereg.nii.gz  -as BB -push AA -thresh 2 3 1 0 -push BB -thresh 1 1 1 0 -overlap 1 
 	-$(ITKSNAP) -l LMLabels.txt -g $(WORKDIR)/$*/Pathology/PathHE.nii.gz             -s $(DATADIR)/$*/Pathology/PathHELM.nii.gz                -o $(WORKDIR)/$*/Pathology/PathHE000.Entropy_$(OTBRADIUS).nii.gz $(WORKDIR)/$*/Pathology/PathHELMdist.nii.gz &  PIDPATH=$$!;  \
          $(ITKSNAP) -l LMLabels.txt -g $(WORKDIR)/$*/Pathology/PathPIMO.nii.gz           -s $(DATADIR)/$*/Pathology/PathPIMOLM.nii.gz              -o $(WORKDIR)/$*/Pathology/PathPIMO000.Entropy_$(OTBRADIUS).nii.gz  $(WORKDIR)/$*/Pathology/PathPIMOLMdist.nii.gz &  PIDPIMO=$$!; \
 	 $(ITKSNAP) -l LMLabels.txt -g $(WORKDIR)/$*/Pathology/PathHE.nii.gz             -s $(WORKDIR)/$*/Pathology/PathHE.gmm.nii.gz              -o $(WORKDIR)/$*/Pathology/PathPIMO.hereg.nii.gz         &  PIDHEGMM=$$!;  \
@@ -119,16 +121,16 @@ $(WORKDIR)/%/updatetransform: $(DATADIR)/%/Pathology/PathHELM.nii.gz            
          $(ITKSNAP) -l LMLabels.txt -g $(DATADIR)/$*/DCE/DCEavg.hdr                      -s $(DATADIR)/$*/DCE/DCEavgLM.nii.gz                      -o $(DATADIR)/$*/DCE/DCE.hdr                &  PIDDCE=$$!; \
          $(ITKSNAP) -l LMLabels.txt -g $(DATADIR)/$*/BOLD/T2mapAbsChange/T2AbsChange.hdr -s $(DATADIR)/$*/BOLD/T2mapAbsChange/T2AbsChangeLM.nii.gz -o $(DATADIR)/$*/BOLD/T2mapMedAir/MedAirT2.hdr $(DATADIR)/$*/BOLD/T2mapOxy/OxyT2.hdr $(DATADIR)/$*/BOLD/T2mapPctChange/T2PctChange.hdr  &  PIDBOLD=$$!; \
         zenity --info --title="OutputFile" --text="Tools -> Layer Inspector -> General -> Display Mode -> RGB   $*   "; \
-        kill -9 $$PIDPATH;kill -9 $$PIDLMREG;kill -9 $$PIDPIMO; kill -9 $$PIDT1; kill -9 $$PIDDCE; kill -9 $$PIDHEGMM; kill -9 $$PIDPIMOGMM; kill -9 $$PIDBOLD
+        pkill -9 ITK-SNAP
 
 # apply tranformation
-$(WORKDIR)/%/Pathology/PathPIMO.hereg.nii.gz: $(WORKDIR)/%/Pathology/HEPIMOantsintroAffine.txt  $(WORKDIR)/%/Pathology/PathPIMO.nii.gz  $(WORKDIR)/%/Pathology/PathHE.nii.gz 
-	$(ANTSWarpImageMultiTransformCMD) 2 $(word 2, $(^D))/PathPIMOred.nii.gz       $(@D)/PathPIMOred.hereg.nii.gz    $< --use-NN -R  $(word 3, $^) 
-	$(ANTSWarpImageMultiTransformCMD) 2 $(word 2, $(^D))/PathPIMOgreen.nii.gz     $(@D)/PathPIMOgreen.hereg.nii.gz  $< --use-NN -R  $(word 3, $^) 
-	$(ANTSWarpImageMultiTransformCMD) 2 $(word 2, $(^D))/PathPIMOblue.nii.gz      $(@D)/PathPIMOblue.hereg.nii.gz   $< --use-NN -R  $(word 3, $^) 
+$(WORKDIR)/%/Pathology/PathPIMO.hereg.nii.gz: $(WORKDIR)/%/HEPIMOlmtransform.txt  $(WORKDIR)/%/Pathology/PathPIMO.nii.gz  $(WORKDIR)/%/Pathology/PathHE.nii.gz 
+	$(ANTSWarpImageMultiTransformCMD) 3 $(word 2, $(^D))/PathPIMOred.nii.gz       $(@D)/PathPIMOred.hereg.nii.gz    $< --use-NN -R  $(word 3, $^) 
+	$(ANTSWarpImageMultiTransformCMD) 3 $(word 2, $(^D))/PathPIMOgreen.nii.gz     $(@D)/PathPIMOgreen.hereg.nii.gz  $< --use-NN -R  $(word 3, $^) 
+	$(ANTSWarpImageMultiTransformCMD) 3 $(word 2, $(^D))/PathPIMOblue.nii.gz      $(@D)/PathPIMOblue.hereg.nii.gz   $< --use-NN -R  $(word 3, $^) 
 	$(C3DEXE) $(@D)/PathPIMOred.hereg.nii.gz    $(@D)/PathPIMOgreen.hereg.nii.gz  $(@D)/PathPIMOblue.hereg.nii.gz   -omc $@
 $(WORKDIR)/%/Pathology/PathPIMO.gmm.hereg.nii.gz: $(WORKDIR)/%/Pathology/PathHE.nii.gz $(WORKDIR)/%/Pathology/PathPIMO.gmm.nii.gz  $(WORKDIR)/%/HEPIMOlmtransform.txt
-	$(ANTSWarpImageMultiTransformCMD) 2 $(word 2, $^)  $@ $(word 3,$^) --use-NN -R  $<
+	$(ANTSWarpImageMultiTransformCMD) 3 $(word 2, $^)  $@ $(word 3,$^) --use-NN -R  $<
 
 # affine registration of pathology mask
 $(WORKDIR)/%/Pathology/HEPIMOantsintroAffine.txt: $(WORKDIR)/%/Pathology/PathHE.mask.nii.gz $(WORKDIR)/%/Pathology/PathPIMO.mask.nii.gz 
@@ -166,7 +168,7 @@ $(WORKDIR)/%/PathHE.gmm.nii.gz: $(WORKDIR)/%/PathHE.nii.gz $(WORKDIR)/%/PathHE.m
 	$(ATROPOSCMD) -i kmeans[2] -x $(word 2,$^) -a $(WORKDIR)/$*/PathHEred.nii.gz -a $(WORKDIR)/$*/PathHEgreen.nii.gz -a $(WORKDIR)/$*/PathHEblue.nii.gz   -o [$(WORKDIR)/$*/PathHE.gmm02.nii.gz] 
 	$(ATROPOSCMD) -i kmeans[3] -x $(word 2,$^) -a $(WORKDIR)/$*/PathHEred.nii.gz -a $(WORKDIR)/$*/PathHEgreen.nii.gz -a $(WORKDIR)/$*/PathHEblue.nii.gz   -o [$(WORKDIR)/$*/PathHE.gmm03.nii.gz] 
 	$(ATROPOSCMD) -i kmeans[4] -x $(word 2,$^) -a $(WORKDIR)/$*/PathHEred.nii.gz -a $(WORKDIR)/$*/PathHEgreen.nii.gz -a $(WORKDIR)/$*/PathHEblue.nii.gz   -o [$(WORKDIR)/$*/PathHE.gmm04.nii.gz] 
-	$(C3DEXE) $(WORKDIR)/$*/PathHE.gmm03.nii.gz $(word 3,$^) -thresh 4 4 1 0 -multiply -o $@ 
+	$(C3DEXE) $(WORKDIR)/$*/PathHE.gmm02.nii.gz $(word 3,$^) -thresh 4 4 1 0 -multiply -o $@ 
 	echo $(ITKSNAP) -s  $@ -g $<
 
 $(WORKDIR)/%/PathPIMO.gmm.nii.gz: $(WORKDIR)/%/PathPIMO.nii.gz $(WORKDIR)/%/PathPIMO.mask.nii.gz
@@ -178,9 +180,9 @@ $(WORKDIR)/%/PathPIMO.gmm.nii.gz: $(WORKDIR)/%/PathPIMO.nii.gz $(WORKDIR)/%/Path
 	echo $(ITKSNAP) -s  $@ -g $<
 
 $(WORKDIR)/%/overlap.csv: $(WORKDIR)/%/PathHE.gmm.nii.gz  $(WORKDIR)/%/PathPIMO.gmm.hereg.nii.gz
-	mkdir -p $(@D)
+	mkdir -p $(@D) 
 	$(C3DEXE) $< -as AA  $(word 2,$^) -as BB -push AA -thresh 2 3 1 0 -push BB -thresh 1 1 1 0 -overlap 1 > $(@D)/overlap.txt
-	sed "s/OVL: \([0-9]\),/\1,overlap.0\1.nii.gz,/g;s/OVL: 1\([0-9]\),/1\1,overlap.1\1.nii.gz,/g;s/^/$(word 3,$(subst /, ,$*)),LABELSGMM.nii.gz,Truth.nii.gz,/g;"  $(@D)/overlap.txt | sed "1 i InstanceUID,FirstImage,SecondImage,LabelID,SegmentationID,MatchingFirst,MatchingSecond,SizeOverlap,DiceSimilarity,IntersectionRatio" > $@
+	sed "s/OVL: \([0-9]\),/\1,overlap.0\1.nii.gz,/g;s/OVL: 1\([0-9]\),/1\1,overlap.1\1.nii.gz,/g;s/^/$(firstword $(subst /, ,$*)),LABELSGMM.nii.gz,Truth.nii.gz,/g;"  $(@D)/overlap.txt | sed "1 i InstanceUID,FirstImage,SecondImage,LabelID,SegmentationID,MatchingFirst,MatchingSecond,SizeOverlap,DiceSimilarity,IntersectionRatio" > $@
 ## push to db
 $(WORKDIR)/%/overlap.sql: $(WORKDIR)/%/overlap.csv
 	$(MYSQLIMPORT) --replace --fields-terminated-by=',' --lines-terminated-by='\n' --ignore-lines 1 HCCPath $<
