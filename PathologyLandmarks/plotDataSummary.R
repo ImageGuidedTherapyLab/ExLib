@@ -205,7 +205,7 @@ print(head(modelDataControl ,n=10))
 print(head(modelDataTreat   ,n=10))
 
 # select image features
-featureNames  = c("EntropyHE","HaralickHE","DistViableHE","DistNecrosisHE","EntropyPimo","HaralickPimo","DistO2Pimo","DCEAvg","T2Abs","MedAir","OxyT2","T2Pct","T1Pre","T1Pst")
+featureNames  = c("EntropyHE","HaralickHE","DistViableHE","DistNecrosisHE","HEPIMOOverlap","EntropyPimo","HaralickPimo","DistO2Pimo","DCEAvg","T2Abs","MedAir","OxyT2","T2Pct","T1Pre","T1Pst")
 
 numtests= 2
 treatcontrolpvalue     <- matrix( NA, nrow = numtests, ncol = length( featureNames ) )
@@ -222,7 +222,7 @@ treatcontrolpvalue    =  treatcontrolpvalue[   ,order(treatcontrolpvalue[   1,])
 ## # plot volume change 
 ## do.legend <- TRUE
 pdf('DataSummary.pdf')
- pairs(~EntropyHE+HaralickHE+DistViableHE+DistNecrosisHE+EntropyPimo+HaralickPimo+DistO2Pimo+DCEAvg+T2Abs+MedAir+OxyT2+T2Pct,
+ pairs(~EntropyHE+HaralickHE+DistViableHE+DistNecrosisHE+HEPIMOOverlap+EntropyPimo+HaralickPimo+DistO2Pimo+DCEAvg+T2Abs+MedAir+OxyT2+T2Pct,
          data=modelData,
         diag.panel  = panel.hist, 
         lower.panel = panel.summarylinear,
