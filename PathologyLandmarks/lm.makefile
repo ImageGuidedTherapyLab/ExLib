@@ -136,16 +136,23 @@ $(WORKDIR)/%/Pathology/PathPIMO.gmm.hereg.nii.gz: $(WORKDIR)/%/Pathology/PathHE.
 $(WORKDIR)/%/Pathology/HEPIMOantsintroAffine.txt: $(WORKDIR)/%/Pathology/PathHE.mask.nii.gz $(WORKDIR)/%/Pathology/PathPIMO.mask.nii.gz 
 	cd $(@D); ../../../../antsIntroduction.sh -d 2 -i $(word 2,$(^F))  -r $(<F)   -o HEPIMOantsintro  -n 0 -s MI -t RA -m 30x90x20 > HEPIMOantsintro.log 2>&1
 	cat $(@D)/HEPIMOantsintro.log
+# preprocess landmarks
+$(WORKDIR)/%/Pathology/PathHELM.nii.gz: $(DATADIR)/%/Pathology/PathHELM.nii.gz 
+	$(C3DEXE) $< -replace 4 0 -o  $@
+$(WORKDIR)/%/Pathology/PathPIMOLM.nii.gz: $(DATADIR)/%/Pathology/PathPIMOLM.nii.gz 
+	$(C3DEXE) $< -replace 4 0 -o  $@
+$(WORKDIR)/%/T2wReference/RefImgLM.nii.gz: $(WORKDIR)/%/T2wReference/RefImgLM.nii.gz
+	$(C3DEXE) $< -replace 4 0 -o  $@
 # compute lm transformation
-$(WORKDIR)/%/HEPIMOlmtransform.txt: $(DATADIR)/%/Pathology/PathHELM.nii.gz $(DATADIR)/%/Pathology/PathPIMOLM.nii.gz 
+$(WORKDIR)/%/HEPIMOlmtransform.txt: $(WORKDIR)/%/Pathology/PathHELM.nii.gz $(WORKDIR)/%/Pathology/PathPIMOLM.nii.gz 
 	$(ANTSLANDMARKCMD) $^  rigid $@  >> $(basename $@).log 2>&1
-$(WORKDIR)/%/t2HElmtransform.txt:   $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/Pathology/PathHELM.nii.gz 
+$(WORKDIR)/%/t2HElmtransform.txt:   $(WORKDIR)/%/T2wReference/RefImgLM.nii.gz $(WORKDIR)/%/Pathology/PathHELM.nii.gz 
 	$(ANTSLANDMARKCMD) $^  rigid $@  >> $(basename $@).log 2>&1
-$(WORKDIR)/%/t2PIMOlmtransform.txt: $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/Pathology/PathPIMOLM.nii.gz 
+$(WORKDIR)/%/t2PIMOlmtransform.txt: $(WORKDIR)/%/T2wReference/RefImgLM.nii.gz $(WORKDIR)/%/Pathology/PathPIMOLM.nii.gz 
 	$(ANTSLANDMARKCMD) $^  rigid $@  >> $(basename $@).log 2>&1
-$(WORKDIR)/%/t2t1lmtransform.txt: $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/T1post/T1postLM.nii.gz 
+$(WORKDIR)/%/t2t1lmtransform.txt: $(WORKDIR)/%/T2wReference/RefImgLM.nii.gz $(WORKDIR)/%/T1post/T1postLM.nii.gz 
 	$(ANTSLANDMARKCMD) $^  rigid $@  >> $(basename $@).log 2>&1
-$(WORKDIR)/%/t2dcelmtransform.txt: $(DATADIR)/%/T2wReference/RefImgLM.nii.gz $(DATADIR)/%/DCE/DCEavgLM.nii.gz 
+$(WORKDIR)/%/t2dcelmtransform.txt: $(WORKDIR)/%/T2wReference/RefImgLM.nii.gz $(WORKDIR)/%/DCE/DCEavgLM.nii.gz 
 	$(ANTSLANDMARKCMD) $^  rigid $@  >> $(basename $@).log 2>&1
 
 #Convert svs to nifti using open slide to read header
