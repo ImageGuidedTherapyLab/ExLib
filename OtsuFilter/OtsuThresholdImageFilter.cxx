@@ -57,7 +57,7 @@ main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   using InputPixelType = unsigned char;
   using OutputPixelType = unsigned char;
-  constexpr unsigned int Dimension = 2;
+  constexpr unsigned int Dimension = 3;
   // Software Guide : EndCodeSnippet
 
 
