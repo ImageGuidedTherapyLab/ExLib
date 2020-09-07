@@ -55,7 +55,7 @@ main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  using InputPixelType = unsigned char;
+  using InputPixelType = float ;
   using OutputPixelType = unsigned char;
   constexpr unsigned int Dimension = 3;
   // Software Guide : EndCodeSnippet
@@ -199,7 +199,7 @@ main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  int threshold = filter->GetThreshold();
+  float threshold = filter->GetThreshold();
   std::cout << "Threshold = " << threshold << std::endl;
   // Software Guide : EndCodeSnippet
 
