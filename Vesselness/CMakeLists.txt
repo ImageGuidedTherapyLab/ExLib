@@ -19,8 +19,7 @@ project(itkhessian)
 find_package(ITK REQUIRED)
 include(${ITK_USE_FILE})
 
-add_executable(HessianToObjectnessMeasureImageFilter itkHessianToObjectnessMeasureImageFilterTest.cxx
-)
+add_executable(HessianToObjectnessMeasureImageFilter itkHessianToObjectnessMeasureImageFilterTest.cxx)
 target_link_libraries(HessianToObjectnessMeasureImageFilter ${ITK_LIBRARIES})
 
 

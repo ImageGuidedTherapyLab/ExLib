@@ -31,7 +31,7 @@ main(int argc, char * argv[])
   {
     std::cerr << "Missing parameters." << std::endl;
     std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv) << " inputImage"
-              << " outputImage [ObjectDimension] [Bright/Dark]" << std::endl;
+              << " outputImage [ObjectDimension] [Bright/Dark] [alpha] [beta] [gamma]" << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -114,6 +114,26 @@ main(int argc, char * argv[])
     ITK_TEST_SET_GET_VALUE(brightObject, objectnessFilter->GetBrightObject());
   }
 
+  if (argc >= 5)
+  {
+    alphaValue = std::stoi(argv[5]);
+    objectnessFilter->SetAlpha(alphaValue);
+  }
+
+  if (argc >= 6)
+  {
+    betaValue = std::stoi(argv[6]);
+    objectnessFilter->SetBeta(betaValue);
+  }
+
+  if (argc >= 7)
+  {
+    gammaValue = std::stoi(argv[7]);
+    objectnessFilter->SetGamma(gammaValue);
+  }
+
+  objectnessFilter->Print(std::cout);
+  
 
   ITK_TRY_EXPECT_NO_EXCEPTION(objectnessFilter->Update());
 
