@@ -71,6 +71,7 @@ main(int argc, char * argv[])
 
   // Connect the input images
   gaussianFilter->SetInput(imageReader->GetOutput());
+  gaussianFilter->SetNormalizeAcrossScale(true);
   objectnessFilter->SetInput(gaussianFilter->GetOutput());
 
   // Set the filter properties
