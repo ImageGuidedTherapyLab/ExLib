@@ -31,12 +31,12 @@ main(int argc, char * argv[])
   {
     std::cerr << "Missing parameters." << std::endl;
     std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv) << " inputImage"
-              << " outputImage [ObjectDimension] [Bright/Dark] [alpha] [beta] [gamma]" << std::endl;
+              << " outputImage [ObjectDimension] [Bright/Dark] [alpha] [beta] [gamma] [radius]" << std::endl;
     return EXIT_FAILURE;
   }
 
   // Define the dimension of the images
-  constexpr unsigned char Dimension = 2;
+  constexpr unsigned char Dimension = 3;
 
   using PixelType = float;
 
@@ -74,64 +74,52 @@ main(int argc, char * argv[])
   objectnessFilter->SetInput(gaussianFilter->GetOutput());
 
   // Set the filter properties
-  bool scaleObjectnessMeasure = false;
-  ITK_TEST_SET_GET_BOOLEAN(objectnessFilter, ScaleObjectnessMeasure, scaleObjectnessMeasure);
-
-  bool brightObject = true;
-  ITK_TEST_SET_GET_BOOLEAN(objectnessFilter, BrightObject, brightObject);
-
-  double alphaValue = 0.25;
-  objectnessFilter->SetAlpha(alphaValue);
-  ITK_TEST_SET_GET_VALUE(alphaValue, objectnessFilter->GetAlpha());
-
-  double betaValue = 0.25;
-  objectnessFilter->SetBeta(betaValue);
-  ITK_TEST_SET_GET_VALUE(betaValue, objectnessFilter->GetBeta());
-
-  double gammaValue = 10.0;
-  objectnessFilter->SetGamma(gammaValue);
-  ITK_TEST_SET_GET_VALUE(gammaValue, objectnessFilter->GetGamma());
-
-
-  // Check that an exception is thrown if the object dimension is larger than
-  // the image dimension
-  objectnessFilter->SetObjectDimension(3);
-
-  ITK_TRY_EXPECT_EXCEPTION(objectnessFilter->Update());
-
+  bool scaleObjectnessMeasure = true;
+  objectnessFilter->SetScaleObjectnessMeasure(scaleObjectnessMeasure); // why?
 
   if (argc >= 3)
   {
     unsigned int objectDimension = std::stoi(argv[3]);
     objectnessFilter->SetObjectDimension(objectDimension);
-    ITK_TEST_SET_GET_VALUE(objectDimension, objectnessFilter->GetObjectDimension());
   }
 
+  bool brightObject = true;
   if (argc >= 4)
   {
     brightObject = std::stoi(argv[4]);
     objectnessFilter->SetBrightObject(brightObject);
-    ITK_TEST_SET_GET_VALUE(brightObject, objectnessFilter->GetBrightObject());
   }
 
+  double alphaValue = 0.5;
   if (argc >= 5)
   {
-    alphaValue = std::stoi(argv[5]);
-    objectnessFilter->SetAlpha(alphaValue);
+    alphaValue = std::stof(argv[5]);
   }
+  objectnessFilter->SetAlpha(alphaValue);
 
+  double betaValue = 0.5;
   if (argc >= 6)
   {
-    betaValue = std::stoi(argv[6]);
-    objectnessFilter->SetBeta(betaValue);
+    betaValue = std::stof(argv[6]);
   }
+  objectnessFilter->SetBeta(betaValue);
 
+  double gammaValue = 5.0;
   if (argc >= 7)
   {
-    gammaValue = std::stoi(argv[7]);
-    objectnessFilter->SetGamma(gammaValue);
+    gammaValue = std::stof(argv[7]);
   }
+  objectnessFilter->SetGamma(gammaValue);
 
+  
+  double sigmaValue = 1.0;
+  if (argc >= 8)
+  {
+    sigmaValue = std::stof(argv[8]);
+  }
+  gaussianFilter->SetSigma(sigmaValue);
+
+  gaussianFilter->Print(std::cout);
   objectnessFilter->Print(std::cout);
   
 
@@ -142,7 +130,7 @@ main(int argc, char * argv[])
   using FileWriterType = itk::ImageFileWriter<ImageType>;
   FileWriterType::Pointer writer = FileWriterType::New();
   writer->SetFileName(argv[2]);
-  writer->UseCompressionOn();
+  // writer->UseCompressionOn();
   writer->SetInput(objectnessFilter->GetOutput());
 
 
