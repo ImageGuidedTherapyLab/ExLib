@@ -36,6 +36,7 @@ TOutputImage>::NeighborhoodConnectedSubsetImageFilter()
   m_Upper = NumericTraits<InputImagePixelType>::max();
   m_ReplaceValue = NumericTraits<OutputImagePixelType>::OneValue();
   m_Radius.Fill(1);
+  m_PercentInside = 0.5;
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -81,6 +82,7 @@ NeighborhoodConnectedSubsetImageFilter<TInputImage, TOutputImage>::PrintSelf(std
      << "ReplaceValue: " << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_ReplaceValue)
      << std::endl;
   os << indent << "Radius: " << m_Radius << std::endl;
+  os << indent << "PercentInside: " << m_PercentInside << std::endl;
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -122,6 +124,8 @@ NeighborhoodConnectedSubsetImageFilter<TInputImage, TOutputImage>::GenerateData(
   function->SetInputImage(inputImage);
   function->ThresholdBetween(m_Lower, m_Upper);
   function->SetRadius(m_Radius);
+  function->SetPercentInside(m_PercentInside);
+  //function->Print(std::cout);
   IteratorType it = IteratorType(outputImage, function, m_Seeds);
 
   ProgressReporter progress(this, 0, outputImage->GetRequestedRegion().GetNumberOfPixels());

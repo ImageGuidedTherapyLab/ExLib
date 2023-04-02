@@ -32,6 +32,7 @@ NeighborhoodSubsetThresholdImageFunction<TInputImage,
 TCoordRep>::NeighborhoodSubsetThresholdImageFunction()
 {
   m_Radius.Fill(1);
+  m_PercentInside=0.5;
 }
 
 /**
@@ -44,6 +45,7 @@ NeighborhoodSubsetThresholdImageFunction<TInputImage, TCoordRep>::PrintSelf(std:
   this->Superclass::PrintSelf(os, indent);
 
   os << indent << "Radius: " << m_Radius << std::endl;
+  os << indent << "Percent Inside: " << m_PercentInside << std::endl;
 }
 
 /**
@@ -71,7 +73,8 @@ NeighborhoodSubsetThresholdImageFunction<TInputImage, TCoordRep>::EvaluateAtInde
   it.SetLocation(index);
 
   // Walk the neighborhood
-  bool               allInside = true;
+  bool               mostInside = true;
+  int                countOutside = 0;
   PixelType          lower = this->GetLower();
   PixelType          upper = this->GetUpper();
   PixelType          value;
@@ -81,12 +84,14 @@ NeighborhoodSubsetThresholdImageFunction<TInputImage, TCoordRep>::EvaluateAtInde
     value = it.GetPixel(i);
     if (lower > value || value > upper)
     {
-      allInside = false;
-      break;
+      countOutside++;
     }
   }
-
-  return (allInside);
+  if ( countOutside/size > m_PercentInside )
+    {
+      mostInside = false;
+    }
+  return (mostInside);
 }
 } // end namespace itk
 

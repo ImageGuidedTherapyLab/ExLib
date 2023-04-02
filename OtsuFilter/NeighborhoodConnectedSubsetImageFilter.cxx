@@ -233,6 +233,7 @@ main(int argc, char * argv[])
   radius[2] = std::stoi(argv[10]); // two pixels along Z
 
   neighborhoodConnectedSubset->SetRadius(radius);
+  neighborhoodConnectedSubset->SetPercentInside(std::stof(argv[11]));
   // Software Guide : EndCodeSnippet
 
 

@@ -95,6 +95,9 @@ public:
   /** Set the radius of the neighborhood used for a mask. */
   itkSetMacro(Radius, InputImageSizeType);
 
+  /** Set the percentage of the neighborhood inside */
+  itkSetMacro(PercentInside, float);
+
   /** Get the radius of the neighborhood used to compute the median */
   itkGetConstReferenceMacro(Radius, InputImageSizeType);
 
@@ -123,6 +126,7 @@ protected:
   OutputImagePixelType m_ReplaceValue;
 
   InputImageSizeType m_Radius;
+  float m_PercentInside;
 
   // Override since the filter needs all the data for the algorithm
   void

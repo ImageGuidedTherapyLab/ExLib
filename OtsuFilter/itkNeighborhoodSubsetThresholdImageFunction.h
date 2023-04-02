@@ -83,6 +83,9 @@ public:
   /** Set the radius of the neighborhood used in computation. */
   itkSetMacro(Radius, InputSizeType);
 
+  /** Set the percentage of the neighborhood inside */
+  itkSetMacro(PercentInside, float);
+
   /** Get the radius of the neighborhood used in computation */
   itkGetConstReferenceMacro(Radius, InputSizeType);
 
@@ -117,6 +120,7 @@ protected:
 
 private:
   InputSizeType m_Radius;
+  float         m_PercentInside;
 };
 } // end namespace itk
 
