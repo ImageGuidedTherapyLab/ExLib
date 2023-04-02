@@ -87,7 +87,7 @@ NeighborhoodSubsetThresholdImageFunction<TInputImage, TCoordRep>::EvaluateAtInde
       countOutside++;
     }
   }
-  if ( countOutside/size > m_PercentInside )
+  if ( static_cast< float > (countOutside)/static_cast< float >(size) > m_PercentInside )
     {
       mostInside = false;
     }
