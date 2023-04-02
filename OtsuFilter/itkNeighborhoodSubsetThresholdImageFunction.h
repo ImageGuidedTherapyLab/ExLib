@@ -18,7 +18,7 @@
 #ifndef itkNeighborhoodSubsetThresholdImageFunction_h
 #define itkNeighborhoodSubsetThresholdImageFunction_h
 
-#include "itkSubsetThresholdImageFunction.h"
+#include "itkBinaryThresholdImageFunction.h"
 
 namespace itk
 {
@@ -39,15 +39,14 @@ namespace itk
  * \ingroup ITKImageFunction
  */
 template <typename TInputImage, typename TCoordRep = float>
-class ITK_TEMPLATE_EXPORT NeighborhoodSubsetThresholdImageFunction
-  : public SubsetThresholdImageFunction<TInputImage, TCoordRep>
+class ITK_TEMPLATE_EXPORT NeighborhoodSubsetThresholdImageFunction : public BinaryThresholdImageFunction<TInputImage, TCoordRep>
 {
 public:
   ITK_DISALLOW_COPY_AND_ASSIGN(NeighborhoodSubsetThresholdImageFunction);
 
   /** Standard class type aliases. */
   using Self = NeighborhoodSubsetThresholdImageFunction;
-  using Superclass = SubsetThresholdImageFunction<TInputImage, TCoordRep>;
+  using Superclass = NeighborhoodSubsetThresholdImageFunction<TInputImage, TCoordRep>;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
