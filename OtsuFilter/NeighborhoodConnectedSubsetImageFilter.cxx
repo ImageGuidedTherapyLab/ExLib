@@ -19,12 +19,12 @@
 // Software Guide : BeginLatex
 //
 // The following example illustrates the use of the
-// \doxygen{NeighborhoodConnectedImageFilter}.  This filter is a close variant
+// \doxygen{NeighborhoodConnectedSubsetImageFilter}.  This filter is a close variant
 // of the \doxygen{ConnectedThresholdImageFilter}. On one hand, the
 // \code{ConnectedThresholdImageFilter} considers only the value of the pixel
 // itself when determining whether it belongs to the region: if its value is
 // within the interval [lowerThreshold,upperThreshold] it is included,
-// otherwise it is excluded.  \code{NeighborhoodConnectedImageFilter},
+// otherwise it is excluded.  \code{NeighborhoodConnectedSubsetImageFilter},
 // on the other hand, considers a user-defined neighborhood surrounding the
 // pixel, requiring that the intensity of \textbf{each} neighbor be within
 // the interval for it to be included.
@@ -34,13 +34,13 @@
 // accepted in the region. The operation of this filter is equivalent to
 // applying \code{ConnectedThresholdImageFilter} followed by mathematical
 // morphology erosion using a structuring element of the same shape as
-// the neighborhood provided to the \code{NeighborhoodConnectedImageFilter}.
+// the neighborhood provided to the \code{NeighborhoodConnectedSubsetImageFilter}.
 //
 // Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
-#include "itkNeighborhoodConnectedImageFilter.h"
+#include "itkNeighborhoodConnectedSubsetImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 
@@ -139,13 +139,13 @@ main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   //  We now declare the type of the region growing filter. In this case it is
-  //  the NeighborhoodConnectedImageFilter.
+  //  the NeighborhoodConnectedSubsetSubsetImageFilter.
   //
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   using ConnectedFilterType =
-    itk::NeighborhoodConnectedImageFilter<InternalImageType, InternalImageType>;
+    itk::NeighborhoodConnectedSubsetImageFilter<InternalImageType, InternalImageType>;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -155,7 +155,7 @@ main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  ConnectedFilterType::Pointer neighborhoodConnected = ConnectedFilterType::New();
+  ConnectedFilterType::Pointer neighborhoodConnectedSubset = ConnectedFilterType::New();
   // Software Guide : EndCodeSnippet
 
 
@@ -171,8 +171,8 @@ main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   smoothing->SetInput(reader->GetOutput());
-  neighborhoodConnected->SetInput(smoothing->GetOutput());
-  caster->SetInput(neighborhoodConnected->GetOutput());
+  neighborhoodConnectedSubset->SetInput(smoothing->GetOutput());
+  caster->SetInput(neighborhoodConnectedSubset->GetOutput());
   writer->SetInput(caster->GetOutput());
   // Software Guide : EndCodeSnippet
 
@@ -194,15 +194,15 @@ main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   //
-  //  \code{NeighborhoodConnectedImageFilter} requires that two main parameters
+  //  \code{NeighborhoodConnectedSubsetImageFilter} requires that two main parameters
   //  are specified. They are the lower and upper thresholds of the interval
   //  in which intensity values must fall to be included in the
   //  region. Setting these two values too close will not allow enough
   //  flexibility for the region to grow. Setting them too far apart will
   //  result in a region that engulfs the image.
   //
-  //  \index{itk::NeighborhoodConnectedImageFilter!SetLower()}
-  //  \index{itk::NeighborhoodConnectedImageFilter!SetUppder()}
+  //  \index{itk::NeighborhoodConnectedSubsetImageFilter!SetLower()}
+  //  \index{itk::NeighborhoodConnectedSubsetImageFilter!SetUppder()}
   //
   //  Software Guide : EndLatex
 
@@ -210,8 +210,8 @@ main(int argc, char * argv[])
   const InternalPixelType upperThreshold = std::stod(argv[7]);
 
   // Software Guide : BeginCodeSnippet
-  neighborhoodConnected->SetLower(lowerThreshold);
-  neighborhoodConnected->SetUpper(upperThreshold);
+  neighborhoodConnectedSubset->SetLower(lowerThreshold);
+  neighborhoodConnectedSubset->SetUpper(upperThreshold);
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -232,7 +232,7 @@ main(int argc, char * argv[])
   radius[1] = std::stoi(argv[9]);  // two pixels along Y
   radius[2] = std::stoi(argv[10]); // two pixels along Z
 
-  neighborhoodConnected->SetRadius(radius);
+  neighborhoodConnectedSubset->SetRadius(radius);
   // Software Guide : EndCodeSnippet
 
 
@@ -242,8 +242,8 @@ main(int argc, char * argv[])
   //  provide the intensity value to be used for the output pixels accepted
   //  in the region and at least one seed point to define the starting point.
   //
-  //  \index{itk::NeighborhoodConnectedImageFilter!SetSeed()}
-  //  \index{itk::NeighborhoodConnectedImageFilter!SetReplaceValue()}
+  //  \index{itk::NeighborhoodConnectedSubsetImageFilter!SetSeed()}
+  //  \index{itk::NeighborhoodConnectedSubsetImageFilter!SetReplaceValue()}
   //
   //  Software Guide : EndLatex
 
@@ -255,9 +255,9 @@ main(int argc, char * argv[])
 
 
   // Software Guide : BeginCodeSnippet
-  neighborhoodConnected->SetSeed(index);
-  neighborhoodConnected->SetReplaceValue(255);
-  neighborhoodConnected->Print(std::cout);
+  neighborhoodConnectedSubset->SetSeed(index);
+  neighborhoodConnectedSubset->SetReplaceValue(255);
+  neighborhoodConnectedSubset->Print(std::cout);
   // Software Guide : EndCodeSnippet
 
 
@@ -295,27 +295,27 @@ main(int argc, char * argv[])
   //  \hline
   //  Structure & Seed Index & Lower & Upper & Output Image \\ \hline
   //  White matter & $(60,116)$ & 150 & 180 & Second from left in Figure
-  //  \ref{fig:NeighborhoodConnectedImageFilterOutput} \\  \hline Ventricle    &
+  //  \ref{fig:NeighborhoodConnectedSubsetImageFilterOutput} \\  \hline Ventricle    &
   //  $(81,112)$ & 210 & 250 & Third  from left in Figure
-  //  \ref{fig:NeighborhoodConnectedImageFilterOutput} \\  \hline Gray matter  &
+  //  \ref{fig:NeighborhoodConnectedSubsetImageFilterOutput} \\  \hline Gray matter  &
   //  $(107,69)$ & 180 & 210 & Fourth from left in Figure
-  //  \ref{fig:NeighborhoodConnectedImageFilterOutput} \\  \hline \end{tabular}
+  //  \ref{fig:NeighborhoodConnectedSubsetImageFilterOutput} \\  \hline \end{tabular}
   //  \end{center}
   //
   // \begin{figure} \center
   // \includegraphics[width=0.24\textwidth]{BrainProtonDensitySlice}
-  // \includegraphics[width=0.24\textwidth]{NeighborhoodConnectedImageFilterOutput1}
-  // \includegraphics[width=0.24\textwidth]{NeighborhoodConnectedImageFilterOutput2}
-  // \includegraphics[width=0.24\textwidth]{NeighborhoodConnectedImageFilterOutput3}
-  // \itkcaption[NeighborhoodConnected segmentation results ]{Segmentation results
-  // of the NeighborhoodConnectedImageFilter for various seed points.}
-  // \label{fig:NeighborhoodConnectedImageFilterOutput}
+  // \includegraphics[width=0.24\textwidth]{NeighborhoodConnectedSubsetImageFilterOutput1}
+  // \includegraphics[width=0.24\textwidth]{NeighborhoodConnectedSubsetImageFilterOutput2}
+  // \includegraphics[width=0.24\textwidth]{NeighborhoodConnectedSubsetImageFilterOutput3}
+  // \itkcaption[NeighborhoodConnectedSubset segmentation results ]{Segmentation results
+  // of the NeighborhoodConnectedSubsetImageFilter for various seed points.}
+  // \label{fig:NeighborhoodConnectedSubsetImageFilterOutput}
   // \end{figure}
   //
   //  As with the \code{ConnectedThresholdImageFilter} example, several seeds could
   //  be provided to the filter by repetedly calling the \code{AddSeed()} method
   //  with different indices.  Compare Figures
-  //  \ref{fig:NeighborhoodConnectedImageFilterOutput} and
+  //  \ref{fig:NeighborhoodConnectedSubsetImageFilterOutput} and
   //  \ref{fig:ConnectedThresholdOutput}, demonstrating the outputs of
   //  \code{NeighborhoodConnectedThresholdImageFilter} and
   //  \code{ConnectedThresholdImageFilter}, respectively.  It is instructive to adjust

@@ -24,7 +24,11 @@ target_link_libraries(OtsuThresholdImageFilter  ${ITK_LIBRARIES})
 add_executable(OtsuMultipleThresholdImageFilter OtsuMultipleThresholdImageFilter.cxx )
 target_link_libraries(OtsuMultipleThresholdImageFilter ${ITK_LIBRARIES})
 
+add_executable(NeighborhoodConnectedImageFilter NeighborhoodConnectedImageFilter.cxx )
+target_link_libraries(NeighborhoodConnectedImageFilter ${ITK_LIBRARIES})
 
+add_executable(NeighborhoodConnectedSubsetImageFilter  NeighborhoodConnectedSubsetImageFilter.cxx  )
+target_link_libraries(NeighborhoodConnectedSubsetImageFilter itkNeighborhoodConnectedSubsetImageFilter.o ${ITK_LIBRARIES})
 
 #project(FilteringExamples)
 #
