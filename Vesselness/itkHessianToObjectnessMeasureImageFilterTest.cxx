@@ -31,7 +31,7 @@ main(int argc, char * argv[])
   {
     std::cerr << "Missing parameters." << std::endl;
     std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv) << " inputImage"
-              << " outputImage [ObjectDimension] [Bright/Dark] [alpha] [beta] [gamma] [radius]" << std::endl;
+              << " outputImage [ObjectDimension] [Bright/Dark] [alpha] [beta] [gamma] [radius] [scaleObjectness]" << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -74,39 +74,36 @@ main(int argc, char * argv[])
   gaussianFilter->SetNormalizeAcrossScale(true);
   objectnessFilter->SetInput(gaussianFilter->GetOutput());
 
-  // Set the filter properties
-  bool scaleObjectnessMeasure = true;
-  objectnessFilter->SetScaleObjectnessMeasure(scaleObjectnessMeasure); // why?
-
-  if (argc >= 3)
+  unsigned int objectDimension = 1; 
+  if (argc >  3)
   {
     unsigned int objectDimension = std::stoi(argv[3]);
-    objectnessFilter->SetObjectDimension(objectDimension);
   }
+  objectnessFilter->SetObjectDimension(objectDimension);
 
   bool brightObject = true;
-  if (argc >= 4)
+  if (argc >  4)
   {
     brightObject = std::stoi(argv[4]);
-    objectnessFilter->SetBrightObject(brightObject);
   }
+  objectnessFilter->SetBrightObject(brightObject);
 
   double alphaValue = 0.5;
-  if (argc >= 5)
+  if (argc >  5)
   {
     alphaValue = std::stof(argv[5]);
   }
   objectnessFilter->SetAlpha(alphaValue);
 
   double betaValue = 0.5;
-  if (argc >= 6)
+  if (argc >  6)
   {
     betaValue = std::stof(argv[6]);
   }
   objectnessFilter->SetBeta(betaValue);
 
   double gammaValue = 5.0;
-  if (argc >= 7)
+  if (argc >  7)
   {
     gammaValue = std::stof(argv[7]);
   }
@@ -114,11 +111,19 @@ main(int argc, char * argv[])
 
   
   double sigmaValue = 1.0;
-  if (argc >= 8)
+  if (argc >  8)
   {
     sigmaValue = std::stof(argv[8]);
   }
   gaussianFilter->SetSigma(sigmaValue);
+
+  // Set the filter properties
+  bool scaleObjectnessMeasure = true;
+  if (argc >  9)
+  {
+    scaleObjectnessMeasure = std::stoi(argv[9]);
+  }
+  objectnessFilter->SetScaleObjectnessMeasure(scaleObjectnessMeasure); // why?
 
   gaussianFilter->Print(std::cout);
   objectnessFilter->Print(std::cout);
