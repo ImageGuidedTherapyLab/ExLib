@@ -77,7 +77,7 @@ main(int argc, char * argv[])
   unsigned int objectDimension = 1; 
   if (argc >  3)
   {
-    unsigned int objectDimension = std::stoi(argv[3]);
+    objectDimension = std::stoi(argv[3]);
   }
   objectnessFilter->SetObjectDimension(objectDimension);
 
